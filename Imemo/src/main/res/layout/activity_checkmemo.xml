@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f5a631">
+
+        <ImageView
+            android:id="@+id/check_iv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/check_iv_edit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@+id/check_iv_delete"
+            android:src="@drawable/edit" />
+
+        <ImageView
+            android:id="@+id/check_iv_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:tag="delete"
+            android:background="@drawable/delete" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/check_rv_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/check_iv_date"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/date" />
+
+        <TextView
+            android:id="@+id/check_tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="今天-9月29日,周五"
+            android:textColor="#545454"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/check_iv_date"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/check_rv_time_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/check_iv_time_start"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/time"
+                android:layout_margin="8dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/check_tv_time_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/check_iv_time_start"
+                android:text="开始-09:00"
+                android:textColor="#545454"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <TimePicker
+            android:id="@+id/check_tp_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/check_rv_time_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/check_iv_time_finish"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/time_finish"
+                android:layout_margin="8dp"
+                android:layout_alignParentLeft="true" />
+            <TextView
+                android:id="@+id/check_tv_time_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束-10:00"
+                android:textSize="18sp"
+                android:textColor="#545454"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/check_iv_time_finish"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <TimePicker
+            android:id="@+id/check_tp_finish_time"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:id="@+id/check_lv_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/check_tv_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="#fafafa"
+                android:enabled="false"
+                android:hint="现在开始写点什么吧..."
+                android:textColor="#545454"
+                android:textSize="15sp" />
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

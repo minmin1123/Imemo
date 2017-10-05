@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f5a631">
+
+        <ImageView
+            android:id="@+id/edit_iv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/back"
+            android:layout_margin="10dp"
+            android:layout_alignParentLeft="true"/>
+
+        <ImageView
+            android:id="@+id/edit_iv_save"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/save"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/edit_rv_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/edit_iv_date"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/date" />
+
+        <TextView
+            android:id="@+id/edit_tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="今天-9月29日,周五"
+            android:textColor="#545454"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/edit_iv_date"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/edit_rv_time_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/edit_iv_time_start"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/time"
+                android:layout_margin="8dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/edit_tv_time_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/edit_iv_time_start"
+                android:text="开始-09:00"
+                android:textColor="#545454"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <TimePicker
+            android:id="@+id/edit_tp_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/edit_rv_time_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/edit_iv_time_finish"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/time_finish"
+                android:layout_margin="8dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:id="@+id/edit_tv_time_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束-10:00"
+                android:textSize="18sp"
+                android:textColor="#545454"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/edit_iv_time_finish"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <TimePicker
+            android:id="@+id/edit_tp_finish_time"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
+    <LinearLayout
+        android:id="@+id/edit_lv_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/edit_tv_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:hint="现在开始写点什么吧..."
+                android:background="#fafafa"
+                android:textColor="#545454"
+                android:textSize="15sp" />
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>
