@@ -56,7 +56,7 @@ public class MemoDatabase {
         getEveryDayMemo(memo.getYear(),memo.getMonth(),memo.getDay());
     }
 
-    //遍历当天全部备忘录，对is_first进行判断和重置
+    //遍历当天全部备忘录（按顺序），对is_first进行重新赋值
     public void getEveryDayMemo(String year,String month,String day){
         sqLiteDatabase=helper.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.query("Memo", null, "year=? and month=? and day=?", new String[]{year,month,day}, null, null," id asc");
@@ -82,7 +82,7 @@ public class MemoDatabase {
         sqLiteDatabase.update("Memo",values,"id=?",new String[]{id});
     }
 
-    //新建一条指定日期的备忘录
+    //新建指定日期的备忘录列表--先将被复制备忘录改为指定日期备忘录，再插入一条被复制备忘录
     public void insertSelectMemoList(List<Memo> memoList,String year,String month,String day){
         sqLiteDatabase=helper.getReadableDatabase();
         for(Memo memo:memoList){
@@ -98,6 +98,8 @@ public class MemoDatabase {
             sqLiteDatabase.update("Memo",values,"id=?",new String[]{memo.getId()});
             insertMemo(memo);
         }
+        //对指定日期的备忘录Is_first进行重新赋值
+        getEveryDayMemo(year,month,day);
     }
 
     //删除指定日期的备忘录

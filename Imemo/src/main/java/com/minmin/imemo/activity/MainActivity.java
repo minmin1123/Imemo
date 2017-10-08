@@ -3,10 +3,12 @@ package com.minmin.imemo.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaMetadata;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +58,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private String[] moreList = {"批量删除", "批量复制"};
     private final int REQUESTCODE_MAIN = 1;
     private final int RESULTCODE_EDIT = 2;
-    private final int RESULTCODE_CHECK = 3;
+    private final int RESULTCODE_DELETE = 3;
+    private final int RESULTCODE_UPDATE = 4;
     private String copy_year=selected_year;
     private String copy_month=selected_month;
     private String copy_day=myCalendar.getNow_day();
@@ -66,6 +69,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //初始化dataList和adapter
+        memoList = memoDatabase.quaryEveryMonthMemoList(selected_year, selected_month);
+        memoListAdapter= new MemoListAdapter(this, R.layout.item_memo, memoList);
+        //页面初始化
         initView();
         updateMemoList();
     }
@@ -88,6 +95,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         main_tv_date.setText(selected_year + "-" + selected_month);
         main_lv_list.setOnItemClickListener(this);
         main_iv_more.setOnClickListener(this);
+        main_lv_list.setAdapter(memoListAdapter);
     }
 
     @Override
@@ -107,6 +115,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                     selected_month = DateUtils.toNormalTime(Integer.parseInt(selected_month) - 1);
                 }
                 main_tv_date.setText(selected_year + "-" + selected_month);
+                memoList = memoDatabase.quaryEveryMonthMemoList(selected_year, selected_month);
                 updateMemoList();
                 break;
             //点击了查看后一个月备忘录记录
@@ -118,6 +127,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                     selected_month = DateUtils.toNormalTime(Integer.parseInt(selected_month) + 1);
                 }
                 main_tv_date.setText(selected_year + "-" + selected_month);
+                memoList = memoDatabase.quaryEveryMonthMemoList(selected_year, selected_month);
                 updateMemoList();
                 break;
             //点击了更多（批量删除、批量复制）
@@ -157,24 +167,89 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
     }
 
-    @Override//点击了新建备忘录，返回新建memo的信息并进行更新datalist
+    @Override//新建、更改、删除三种操作对dataList的更改
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_EDIT) {
+            Memo new_memo = (Memo) data.getSerializableExtra("new_memo");
+            if(new_memo.getYear().equals(selected_year)&&new_memo.getMonth().equals(selected_month)){
+                insertMemo(new_memo);
+            }
+            MemoDatabase.getInstance(this).insertMemo(new_memo);
+            Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
             updateMemoList();
-        } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_CHECK) {
+        } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_UPDATE) {
+            Memo update_memo = (Memo) data.getSerializableExtra("update_memo");
+            Memo old_memo = (Memo) data.getSerializableExtra("old_memo");
+            deleteMemo(old_memo);
+            if(update_memo.getYear().equals(selected_year)&&update_memo.getMonth().equals(selected_month)){
+                insertMemo(update_memo);
+            }
+            MemoDatabase.getInstance(this).updateMemo(old_memo,update_memo);
+            Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            updateMemoList();
+        } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_DELETE) {
+            Memo old_memo = (Memo) data.getSerializableExtra("old_memo");
+            deleteMemo(old_memo);
+            MemoDatabase.getInstance(this).deleteMemo(old_memo);
+            Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
             updateMemoList();
         }
     }
 
-    //更新datalist操作
+    //向dataList增添一条memo
+    public void insertMemo(Memo memo){
+        int index = -1;
+        for(int i=0;i<memoList.size();i++){
+            //如果比前者大后者小记录后者位置
+            if(memoList.get(i).getId().compareTo(memo.getId())==1){
+                index=i;
+                break;
+            }
+        }
+        if(index!=-1){
+            memoList.add(index,memo);
+        }else{
+            memoList.add(memo);
+        }
+        //每插入一条memo就对dataList的Is_first进行一次重新赋值
+        String cursor=null;
+        for(Memo eachmemo:memoList){
+            if(!eachmemo.getDay().equals(cursor)){
+                eachmemo.setIs_first(1);
+                cursor = eachmemo.getDay();
+            }else{
+                eachmemo.setIs_first(0);
+            }
+        }
+    }
+
+    //从dataList删除一条memo
+    public void deleteMemo(Memo memo){
+        for(Memo eachmemo:memoList){
+            if(eachmemo.getId().equals(memo.getId())){
+                memoList.remove(eachmemo);
+                break;
+            }
+        }
+        //每删除一条memo就对dataList的Is_first进行一次重新赋值
+        String cursor=null;
+        for(Memo eachmemo:memoList){
+            if(!eachmemo.getDay().equals(cursor)){
+                eachmemo.setIs_first(1);
+                cursor = eachmemo.getDay();
+            }else{
+                eachmemo.setIs_first(0);
+            }
+        }
+    }
+
+    //更新当前显示的dataList
     public void updateMemoList() {
-        memoList = memoDatabase.quaryEveryMonthMemoList(selected_year, selected_month);
+        Log.i("Main", "当前dataList的个数："+String.valueOf(memoList.size()));
         if (memoList.size() != 0) {
             main_tv_none.setVisibility(View.GONE);
             main_lv_list.setVisibility(View.VISIBLE);
-            memoListAdapter = new MemoListAdapter(this, R.layout.item_memo, memoList);
-            main_lv_list.setAdapter(memoListAdapter);
             memoListAdapter.notifyDataSetChanged();
             main_lv_list.setSelection(0);
         } else {
@@ -189,7 +264,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             //非更多（批量删除、批量复制）状态，点击后查看选定子项的备忘录详情
            Intent toCheckMemo_intent = new Intent(MainActivity.this, CheckMemoActivity.class);
            Memo memo = memoList.get(position);
-           Log.i("Main", memo.getId());
            toCheckMemo_intent.putExtra("memo", memo);
            startActivityForResult(toCheckMemo_intent, REQUESTCODE_MAIN);
        }else{
@@ -199,11 +273,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 item_tv_text.setTag("selected");
                 item_tv_text.setBackgroundResource(R.drawable.paper_select);
                 memoList.get(position).setIs_chosen(1);
+                MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memoList.get(position), 1);
                 selectedMemoList.add(memoList.get(position));
             }else{
                 item_tv_text.setTag("unselected");
                 item_tv_text.setBackgroundResource(R.drawable.paper);
                 memoList.get(position).setIs_chosen(0);
+                MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memoList.get(position), 0);
                 selectedMemoList.remove(memoList.get(position));
             }
             main_tv_chosen.setText("已选择"+ selectedMemoList.size()+"项");
@@ -226,6 +302,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         builder_isDeleteMemo.setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                for(Memo eachmemo:selectedMemoList){
+                    deleteMemo(eachmemo);
+                }
                 MemoDatabase.getInstance(MainActivity.this).deleteSelectMemoList(selectedMemoList);
                 selectedMemoList.clear();
                 MORE_STATUS=0;
@@ -280,7 +359,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 newCopyDialog();
-
             }
         });
         builder_select_day.setNeutralButton("取消", new DialogInterface.OnClickListener() {
@@ -309,11 +387,26 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         builder_isCopyMemo.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                MemoDatabase.getInstance(MainActivity.this).insertSelectMemoList(selectedMemoList,copy_year,copy_month,copy_day);
                 MORE_STATUS=0;
+                MemoDatabase.getInstance(MainActivity.this).insertSelectMemoList(selectedMemoList,copy_year,copy_month,copy_day);
                 for(Memo memo:selectedMemoList){
                     memo.setIs_chosen(0);
                     MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    Memo copy_memo = new Memo();
+                    copy_memo.setId(copy_year + copy_month + copy_day +  memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute()+new MyCalendar().getNow_second());
+                    copy_memo.setYear(copy_year);
+                    copy_memo.setMonth(copy_month);
+                    copy_memo.setDay(copy_day);
+                    copy_memo.setWeek(DateUtils.getSelectedWeek(Integer.parseInt(copy_year),Integer.parseInt(copy_month),Integer.parseInt(copy_day)));
+                    copy_memo.setStart_hour(memo.getStart_hour());
+                    copy_memo.setStart_minute(memo.getStart_minute());
+                    copy_memo.setFinish_hour(memo.getFinish_hour());
+                    copy_memo.setFinish_minute(memo.getFinish_minute());
+                    copy_memo.setText(memo.getText());
+                    copy_memo.setIs_first(0);
+                    copy_memo.setIs_completed(0);
+                    copy_memo.setIs_chosen(0);
+                    insertMemo(copy_memo);
                 }
                 selectedMemoList.clear();
                 main_tv_chosen.setVisibility(View.INVISIBLE);

@@ -54,12 +54,13 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     private String selected_year;
     private String selected_month;
     private String selected_day;
-    private String selected_week ;
+    private String selected_week;
     private String selected_start_hour;
     private String selected_start_minute;
-    private String selected_finish_hour ;
+    private String selected_finish_hour;
     private String selected_finish_minute;
-    private final int RESULTCODE_CHECK = 3;
+    private final int RESULTCODE_DELETE = 3;
+    private final int RESULTCODE_UPDATE = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         selected_year = memo.getYear();
         selected_month = memo.getMonth();
         selected_day = memo.getDay();
-        selected_week =memo.getWeek();
+        selected_week = memo.getWeek();
         selected_start_hour = memo.getStart_hour();
         selected_start_minute = memo.getStart_minute();
         selected_finish_hour = memo.getFinish_hour();
@@ -85,7 +86,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         check_rv_time_start = findViewById(R.id.check_rv_time_start);
         check_rv_time_finish = findViewById(R.id.check_rv_time_finish);
         check_tv_date = findViewById(R.id.check_tv_date);
-        check_iv_edit=findViewById(R.id.check_iv_edit);
+        check_iv_edit = findViewById(R.id.check_iv_edit);
         if (myCalendar.getNow_year().equals(memo.getYear()) && myCalendar.getNow_month().equals(memo.getMonth()) && myCalendar.getNow_day().equals(memo.getDay())) {
             check_tv_date.setText("今天-" + memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
         } else if (DateUtils.isTomorrow(myCalendar.getNow_year(), myCalendar.getNow_month(), myCalendar.getNow_day(), memo.getYear(), memo.getMonth(), memo.getDay())) {
@@ -138,14 +139,14 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                 break;
             //点击了删除
             case R.id.check_iv_delete:
-                if(check_iv_delete.getTag().equals("delete")){
+                if (check_iv_delete.getTag().equals("delete")) {
                     newDeleteDialog();
-                }else if(check_iv_delete.getTag().equals("save")){
+                } else if (check_iv_delete.getTag().equals("save")) {
                     if (Integer.parseInt(selected_start_hour + selected_start_minute) >= Integer.parseInt(selected_finish_hour + selected_finish_minute)) {
                         Toast.makeText(this, "时间不合法,我不会穿越o~", Toast.LENGTH_SHORT).show();
-                    }else if(isUpdate()) {
-                       updateMemo();
-                    }else{
+                    } else if (isUpdate()) {
+                        updateMemo();
+                    } else {
                         finish();
                     }
                 }
@@ -154,7 +155,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
             case R.id.check_iv_back:
                 if (isUpdate()) {
                     newUpdateDialog();
-                } else{
+                } else {
                     finish();
                 }
                 break;
@@ -167,7 +168,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                         String weekOfday = DateUtils.getSelectedWeek(year, month, day);
                         selected_year = String.valueOf(year);
                         selected_month = DateUtils.toNormalTime(month + 1);
-                        selected_day =  DateUtils.toNormalTime(day);
+                        selected_day = DateUtils.toNormalTime(day);
                         selected_week = weekOfday;
                         if (myCalendar.getNow_year().equals(selected_year) && myCalendar.getNow_month().equals(selected_month) && myCalendar.getNow_day().equals(selected_day)) {
                             check_tv_date.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
@@ -246,15 +247,14 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     //用户确认删除，数据库删除操作
     public void deleteMemo() {
-        MemoDatabase.getInstance(this).deleteMemo(memo);
-        Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
         Intent intent_deleteSuccessful = new Intent();
-        setResult(RESULTCODE_CHECK,intent_deleteSuccessful);
+        intent_deleteSuccessful.putExtra("old_memo", memo);
+        setResult(RESULTCODE_DELETE, intent_deleteSuccessful);
         finish();
     }
 
     //当选择返回而用户有更改痕迹，弹出是否保存的对话框的提示
-    public void newUpdateDialog(){
+    public void newUpdateDialog() {
         AlertDialog.Builder builder_isUpdateMemo = new AlertDialog.Builder(this);
         builder_isUpdateMemo.setMessage("保存更改?");
         builder_isUpdateMemo.setPositiveButton("保存", new DialogInterface.OnClickListener() {
@@ -279,9 +279,9 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     }
 
     //用户确认更改，数据库更改操作
-    public void updateMemo(){
-        Memo update_memo=new Memo();
-        update_memo.setId(selected_year+selected_month+selected_day+selected_start_hour+selected_start_minute+selected_finish_hour+selected_finish_minute+ DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_hour()))+DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_minute()))+DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_second())));
+    public void updateMemo() {
+        Memo update_memo = new Memo();
+        update_memo.setId(selected_year + selected_month + selected_day + selected_start_hour + selected_start_minute + selected_finish_hour + selected_finish_minute + DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(myCalendar.getNow_second())));
         update_memo.setYear(selected_year);
         update_memo.setMonth(selected_month);
         update_memo.setDay(selected_day);
@@ -294,19 +294,19 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         update_memo.setIs_completed(0);
         update_memo.setIs_first(0);
         update_memo.setIs_chosen(0);
-        MemoDatabase.getInstance(this).updateMemo(memo,update_memo);
-        Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
         Intent intent_updateSuccessful = new Intent();
-        setResult(RESULTCODE_CHECK,intent_updateSuccessful);
+        intent_updateSuccessful.putExtra("update_memo", update_memo);
+        intent_updateSuccessful.putExtra("old_memo", memo);
+        setResult(RESULTCODE_UPDATE, intent_updateSuccessful);
         finish();
     }
 
     //判断当前memo是否被修改
-    public boolean isUpdate(){
-        if(selected_year.equals(memo.getYear())&&selected_month.equals(memo.getMonth())&&selected_day.equals(memo.getDay())
-                && selected_week.equals(memo.getWeek())&& selected_start_hour.equals( memo.getStart_hour())
-                && selected_start_minute.equals(memo.getStart_minute())&& selected_finish_hour.equals(memo.getFinish_hour())
-                && selected_finish_minute.equals(memo.getFinish_minute())&&check_tv_text.getText().toString().trim().equals(memo.getText())){
+    public boolean isUpdate() {
+        if (selected_year.equals(memo.getYear()) && selected_month.equals(memo.getMonth()) && selected_day.equals(memo.getDay())
+                && selected_week.equals(memo.getWeek()) && selected_start_hour.equals(memo.getStart_hour())
+                && selected_start_minute.equals(memo.getStart_minute()) && selected_finish_hour.equals(memo.getFinish_hour())
+                && selected_finish_minute.equals(memo.getFinish_minute()) && check_tv_text.getText().toString().trim().equals(memo.getText())) {
 
             return false;
         }
@@ -315,9 +315,9 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     @Override//重写返回键事件
     public void onBackPressed() {
-        if(isUpdate()){
+        if (isUpdate()) {
             newUpdateDialog();
-        }else{
+        } else {
             finish();
         }
     }

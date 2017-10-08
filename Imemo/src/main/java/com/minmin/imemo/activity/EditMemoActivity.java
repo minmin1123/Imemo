@@ -238,10 +238,8 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
         memo.setIs_completed(0);
         memo.setIs_first(0);
         memo.setIs_chosen(0);
-        MemoDatabase memoDatabase = MemoDatabase.getInstance(this);
-        memoDatabase.insertMemo(memo);
-        Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
         Intent intent_SaveSuccessful = new Intent();
+        intent_SaveSuccessful.putExtra("new_memo", memo);
         setResult(RESULTCODE_EDIT, intent_SaveSuccessful);
         finish();
     }
