@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.minmin.imemo.model.Memo;
 import com.minmin.imemo.util.DateUtils;
@@ -14,17 +13,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by minmin on 2017/10/1.
+ * <pre>
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2017/10/11
+ *   desc:
+ *   version:1.0
+ * </pre>
  */
 
 public class MemoDatabase {
 
     private MemoDatabaseHelper helper;
+
     private static MemoDatabase memoDatabase;
+
     private SQLiteDatabase sqLiteDatabase;
 
+    private final static String DATABASE_NAME="IMemo.db";
+
+    private final static int VERSION = 1;
+
+    private final static String ID = "id";
+
+    private final static String YEAR = "year";
+
+    private final static String MONTH = "month";
+
+    private final static String DAY = "day";
+
+    private final static String WEEK = "week";
+
+    private final static String START_HOUR = "start_hour";
+
+    private final static String START_MINUTE = "start_minute";
+
+    private final static String FINISH_HOUR = "finish_hour";
+
+    private final static String FINISH_MINUTE = "finish_minute";
+
+    private final static String TEXT = "text";
+
+    private final static String IS_CHOSEN = "is_chosen";
+
+    private final static String IS_COMPLETE = "is_completed";
+
+    private final static String IS_FIRST = "is_first";
+
+    private final static String TABLE = "Memo";
+
     private MemoDatabase(Context context){
-        helper = new MemoDatabaseHelper(context, "IMemo.db", null, 1);
+        helper = new MemoDatabaseHelper(context, DATABASE_NAME, null, VERSION);
     }
 
     public static MemoDatabase getInstance(Context context){
@@ -38,20 +77,20 @@ public class MemoDatabase {
     public void insertMemo(Memo memo){
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put("id", memo.getId());
-        values.put("year",memo.getYear());
-        values.put("month",memo.getMonth());
-        values.put("day",memo.getDay());
-        values.put("week",memo.getWeek());
-        values.put("start_hour",memo.getStart_hour());
-        values.put("start_minute",memo.getStart_minute());
-        values.put("finish_hour",memo.getFinish_hour());
-        values.put("finish_minute",memo.getFinish_minute());
-        values.put("text",memo.getText());
-        values.put("is_completed", memo.getIs_completed());
-        values.put("is_first", memo.getIs_first());
-        values.put("is_chosen", memo.getIs_chosen());
-        sqLiteDatabase.insert("Memo", null, values);
+        values.put(ID, memo.getId());
+        values.put(YEAR,memo.getYear());
+        values.put(MONTH,memo.getMonth());
+        values.put(DAY,memo.getDay());
+        values.put(WEEK,memo.getWeek());
+        values.put(START_HOUR,memo.getStart_hour());
+        values.put(START_MINUTE,memo.getStart_minute());
+        values.put(FINISH_HOUR,memo.getFinish_hour());
+        values.put(FINISH_MINUTE,memo.getFinish_minute());
+        values.put(TEXT,memo.getText());
+        values.put(IS_COMPLETE,memo.getIs_completed());
+        values.put(IS_FIRST, memo.getIs_first());
+        values.put(IS_CHOSEN, memo.getIs_chosen());
+        sqLiteDatabase.insert(TABLE, null, values);
         //之后进行是否是当天第一条的检查
         getEveryDayMemo(memo.getYear(),memo.getMonth(),memo.getDay());
     }
@@ -59,11 +98,11 @@ public class MemoDatabase {
     //遍历当天全部备忘录（按顺序），对is_first进行重新赋值
     public void getEveryDayMemo(String year,String month,String day){
         sqLiteDatabase=helper.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.query("Memo", null, "year=? and month=? and day=?", new String[]{year,month,day}, null, null," id asc");
+        Cursor cursor=sqLiteDatabase.query(TABLE, null, YEAR+"=? and "+MONTH+"=? and "+DAY+"=?", new String[]{year,month,day}, null, null,ID+" asc");
         int hasFirst=0;
         if(cursor!=null){
             while(cursor.moveToNext()){
-                String id=cursor.getString(cursor.getColumnIndex("id"));
+                String id=cursor.getString(cursor.getColumnIndex(ID));
                 if(hasFirst==1){
                     toChangeEveryDayFirstMemo(id,0);
                 }else{
@@ -78,8 +117,8 @@ public class MemoDatabase {
     public void toChangeEveryDayFirstMemo(String id,int isFirst){
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put("is_first", isFirst);
-        sqLiteDatabase.update("Memo",values,"id=?",new String[]{id});
+        values.put(IS_FIRST, isFirst);
+        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{id});
     }
 
     //新建指定日期的备忘录列表--先将被复制备忘录改为指定日期备忘录，再插入一条被复制备忘录
@@ -87,15 +126,15 @@ public class MemoDatabase {
         sqLiteDatabase=helper.getReadableDatabase();
         for(Memo memo:memoList){
             ContentValues values = new ContentValues();
-            values.put("id",year + month + day +  memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute()+new MyCalendar().getNow_second());
-            values.put("year",year);
-            values.put("month",month);
-            values.put("day",day);
-            values.put("week",DateUtils.getSelectedWeek(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day)));
-            values.put("is_completed",0);
-            values.put("is_first",0);
-            values.put("is_chosen",0);
-            sqLiteDatabase.update("Memo",values,"id=?",new String[]{memo.getId()});
+            values.put(ID,year + month + day +  memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute()+new MyCalendar().getNow_second());
+            values.put(YEAR,year);
+            values.put(MONTH,month);
+            values.put(DAY,day);
+            values.put(WEEK,DateUtils.getSelectedWeek(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day)));
+            values.put(IS_COMPLETE,0);
+            values.put(IS_FIRST,0);
+            values.put(IS_CHOSEN,0);
+            sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
             insertMemo(memo);
         }
         //对指定日期的备忘录Is_first进行重新赋值
@@ -106,7 +145,7 @@ public class MemoDatabase {
     public void deleteMemo(Memo memo){
         sqLiteDatabase=helper.getReadableDatabase();
         String id = memo.getId();
-        sqLiteDatabase.delete("Memo","id=?",new String[]{id});
+        sqLiteDatabase.delete(TABLE,ID+"=?",new String[]{id});
     }
 
     //批量删除指定日期的备忘录
@@ -130,39 +169,39 @@ public class MemoDatabase {
     public void updateMemoCompleteStatus(Memo memo,int isCompleted){
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put("is_completed", isCompleted);
-        sqLiteDatabase.update("Memo",values,"id=?",new String[]{memo.getId()});
+        values.put(IS_COMPLETE, isCompleted);
+        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
     }
 
     //更改备忘录的选中状态--对应is_chosen属性
     public void updateMemoChosenStatus(Memo memo,int isChosen){
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put("is_chosen", isChosen);
-        sqLiteDatabase.update("Memo",values,"id=?",new String[]{memo.getId()});
+        values.put(IS_CHOSEN, isChosen);
+        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
     }
 
     //查询指定年月的所有备忘录
     public List<Memo> quaryEveryMonthMemoList(String year,String month){
         List<Memo> memoList=new ArrayList<>();
         sqLiteDatabase=helper.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.query("Memo", null, "year=? and month=?", new String[]{year,month}, null, null," id asc");
+        Cursor cursor=sqLiteDatabase.query(TABLE, null, YEAR+"=? and "+MONTH+"=?", new String[]{year,month}, null, null,ID+" asc");
         if(cursor!=null){
             while(cursor.moveToNext()){
                 Memo memo = new Memo();
-                memo.setId(cursor.getString(cursor.getColumnIndex("id")));
+                memo.setId(cursor.getString(cursor.getColumnIndex(ID)));
                 memo.setYear(year);
                 memo.setMonth(month);
-                memo.setDay(cursor.getString(cursor.getColumnIndex("day")));
-                memo.setWeek(cursor.getString(cursor.getColumnIndex("week")));
-                memo.setStart_hour(cursor.getString(cursor.getColumnIndex("start_hour")));
-                memo.setStart_minute(cursor.getString(cursor.getColumnIndex("start_minute")));
-                memo.setFinish_hour(cursor.getString(cursor.getColumnIndex("finish_hour")));
-                memo.setFinish_minute(cursor.getString(cursor.getColumnIndex("finish_minute")));
-                memo.setText(cursor.getString(cursor.getColumnIndex("text")));
-                memo.setIs_completed(cursor.getInt(cursor.getColumnIndex("is_completed")));
-                memo.setIs_first(cursor.getInt(cursor.getColumnIndex("is_first")));
-                memo.setIs_chosen(cursor.getInt(cursor.getColumnIndex("is_chosen")));
+                memo.setDay(cursor.getString(cursor.getColumnIndex(DAY)));
+                memo.setWeek(cursor.getString(cursor.getColumnIndex(WEEK)));
+                memo.setStart_hour(cursor.getString(cursor.getColumnIndex(START_HOUR)));
+                memo.setStart_minute(cursor.getString(cursor.getColumnIndex(START_MINUTE)));
+                memo.setFinish_hour(cursor.getString(cursor.getColumnIndex(FINISH_HOUR)));
+                memo.setFinish_minute(cursor.getString(cursor.getColumnIndex(FINISH_MINUTE)));
+                memo.setText(cursor.getString(cursor.getColumnIndex(TEXT)));
+                memo.setIs_completed(cursor.getInt(cursor.getColumnIndex(IS_COMPLETE)));
+                memo.setIs_first(cursor.getInt(cursor.getColumnIndex(IS_FIRST)));
+                memo.setIs_chosen(cursor.getInt(cursor.getColumnIndex(IS_CHOSEN)));
                 memoList.add(memo);
             }
             cursor.close();

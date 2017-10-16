@@ -1,22 +1,33 @@
 package com.minmin.imemo.util;
 
-import android.content.Context;
-
 import java.util.Calendar;
 
 /**
- * Created by minmin on 2017/10/1.
+ * <pre>
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2017/10/11
+ *   desc:
+ *   version:1.0
+ * </pre>
  */
 
 public class MyCalendar{//该类用于获取当前年月日时分秒星期，并化为标准形式
 
     private Calendar calendar;
+
     private String now_year;
+
     private String now_month;
+
     private String now_day;
+
     private String now_week;
+
     private String now_hour;
+
     private String now_minute;
+
     private String now_second;
 
     public MyCalendar() {

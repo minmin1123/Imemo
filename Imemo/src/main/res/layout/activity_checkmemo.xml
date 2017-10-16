@@ -10,7 +10,7 @@
         android:background="#f5a631">
 
         <ImageView
-            android:id="@+id/check_iv_back"
+            android:id="@+id/backIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
@@ -18,26 +18,26 @@
             android:src="@drawable/back" />
 
         <ImageView
-            android:id="@+id/check_iv_edit"
+            android:id="@+id/editIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/check_iv_delete"
+            android:layout_toLeftOf="@+id/deleteIv"
             android:src="@drawable/edit" />
 
         <ImageView
-            android:id="@+id/check_iv_delete"
+            android:id="@+id/deleteIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:tag="delete"
-            android:background="@drawable/delete" />
+            android:background="@drawable/delete"
+            android:tag="delete" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/check_rv_date"
+        android:id="@+id/dateRl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -50,7 +50,7 @@
             android:src="@drawable/date" />
 
         <TextView
-            android:id="@+id/check_tv_date"
+            android:id="@+id/dateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -72,7 +72,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/check_rv_time_start"
+            android:id="@+id/startTimeRl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -86,7 +86,7 @@
                 android:layout_alignParentStart="true" />
 
             <TextView
-                android:id="@+id/check_tv_time_start"
+                android:id="@+id/startTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -98,7 +98,7 @@
         </RelativeLayout>
 
         <TimePicker
-            android:id="@+id/check_tp_start_time"
+            android:id="@+id/startTimeTp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -117,7 +117,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/check_rv_time_finish"
+            android:id="@+id/finishTimeRl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -129,7 +129,7 @@
                 android:layout_margin="8dp"
                 android:layout_alignParentLeft="true" />
             <TextView
-                android:id="@+id/check_tv_time_finish"
+                android:id="@+id/finishTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="结束-10:00"
@@ -141,19 +141,14 @@
         </RelativeLayout>
 
         <TimePicker
-            android:id="@+id/check_tp_finish_time"
+            android:id="@+id/finishTimeTp"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#bababa"/>
-
     <LinearLayout
-        android:id="@+id/check_lv_text"
+        android:id="@+id/contextLl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -162,7 +157,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/check_tv_text"
+                android:id="@+id/contextEt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
@@ -174,5 +169,10 @@
         </ScrollView>
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
 
 </LinearLayout>

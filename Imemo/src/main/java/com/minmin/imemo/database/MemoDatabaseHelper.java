@@ -5,7 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by minmin on 2017/10/1.
+ * <pre>
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2017/10/11
+ *   desc:
+ *   version:1.0
+ * </pre>
  */
 
 public class MemoDatabaseHelper extends SQLiteOpenHelper{

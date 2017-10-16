@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">I记</string>
+    <string name="bulk_copy">批量复制</string>
+    <string name="bulk_delete">批量删除</string>
+    <string name="update_success">修改成功</string>
+    <string name="delete_success">删除成功</string>
+    <string name="save_success">保存成功</string>
+    <string name="copy_success">复制成功</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
+    <string name="delete">删除</string>
+    <string name="save">保存</string>
+    <string name="give_up">放弃</string>
+    <string name="select_item">选择项目</string>
+    <string name="select_date">选择这些备忘录的日期:</string>
+    <string name="ensure_delete_selected">选定的备忘录将被删除</string>
+    <string name="ensure_save">保存更改?</string>
+    <string name="ensure_delete">备忘录将被删除</string>
+    <string name="nothing_to_delete">没有项目可以删除o~</string>
+    <string name="nothing_to_copy">没有项目可以复制o~</string>
+    <string name="none_content">什么内容也没有o~</string>
+    <string name="time_error">时间不合法,我不会穿越o~</string>
+    <string name="complete">你很棒棒o~</string>
+    <string name="incomplete">还要继续加油o~</string>
 </resources>

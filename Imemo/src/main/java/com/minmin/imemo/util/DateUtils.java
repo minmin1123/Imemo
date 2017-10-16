@@ -3,7 +3,13 @@ package com.minmin.imemo.util;
 import android.os.Build;
 
 /**
- * Created by minmin on 2017/10/3.
+ * <pre>
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2017/10/11
+ *   desc:
+ *   version:1.0
+ * </pre>
  */
 
 public class DateUtils {

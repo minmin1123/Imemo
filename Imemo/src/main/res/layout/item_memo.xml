@@ -6,7 +6,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/item_rl_date"
+        android:id="@+id/dateRl"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal">
@@ -59,7 +59,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/item_tv_date"
+            android:id="@+id/dateTv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
@@ -73,7 +73,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/item_iv_add"
+            android:id="@+id/addIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -84,7 +84,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/item_rl_paper"
+        android:id="@+id/mPaperRl"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal">
@@ -97,7 +97,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_tv_start_time"
+                android:id="@+id/startTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -106,7 +106,7 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/item_tv_finish_time"
+                android:id="@+id/finishTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -130,7 +130,7 @@
                 android:background="#bababa" />
 
             <ImageView
-                android:id="@+id/item_iv_incomplete"
+                android:id="@+id/completeIv"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -149,7 +149,7 @@
             >
 
             <TextView
-                android:id="@+id/item_tv_text"
+                android:id="@+id/contextTv"
                 android:background="@drawable/paper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
