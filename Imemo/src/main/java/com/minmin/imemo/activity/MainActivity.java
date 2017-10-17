@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -153,13 +152,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             //点击了查看前一个月备忘录记录
             case R.id.leftIv:
                 changeDateTV(LEFT);
-                mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
+                mMemoList.clear();
+                mMemoList.addAll(mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth));
                 updateMemoList();
                 break;
             //点击了查看后一个月备忘录记录
             case R.id.rightIv:
                 changeDateTV(RIGHT);
-                mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
+                mMemoList.clear();
+                mMemoList.addAll(mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth));
                 updateMemoList();
                 break;
             //点击了更多（批量删除、批量复制）
@@ -180,7 +181,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         if(flag==LEFT){
             if (Integer.parseInt(mSelectedMonth) == 1) {
                 mSelectedMonth = "12";
-                mSelectedYear = String.valueOf(Integer.parseInt(mSelectedYear) - 1);
+                mSelectedYear = Integer.parseInt(mSelectedYear) - 1+"";
             } else {
                 mSelectedMonth = DateUtils.toNormalTime(Integer.parseInt(mSelectedMonth) - 1);
             }
@@ -188,7 +189,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }else if(flag==RIGHT){
             if (Integer.parseInt(mSelectedMonth) == 12) {
                 mSelectedMonth = "01";
-                mSelectedYear = String.valueOf(Integer.parseInt(mSelectedYear) + 1);
+                mSelectedYear = Integer.parseInt(mSelectedYear) + 1+"";
             } else {
                 mSelectedMonth = DateUtils.toNormalTime(Integer.parseInt(mSelectedMonth) + 1);
             }
@@ -228,7 +229,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     //更新当前显示的dataList
     public void updateMemoList() {
-        Log.i("Main", "当前dataList的个数："+String.valueOf(mMemoList.size()));
         if (mMemoList.size() != 0) {
             mNothingTv.setVisibility(View.GONE);
             mListLv.setVisibility(View.VISIBLE);
@@ -263,6 +263,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 mMemoList.get(position).setIs_chosen(0);
                 MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(mMemoList.get(position), 0);
                 mSelectedMemoList.remove(mMemoList.get(position));
+                for(Memo selectMemo:mSelectedMemoList){
+                    if(selectMemo.getId().equals(mMemoList.get(position).getId())){
+                        mSelectedMemoList.remove(selectMemo);
+                        break;
+                    }
+                }
             }
             mChosenTv.setText("已选择"+ mSelectedMemoList.size()+"项");
        }
@@ -391,21 +397,27 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 for(Memo memo:mSelectedMemoList){
                     memo.setIs_chosen(0);
                     MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
-                    Memo copyMemo = new Memo();
-                    copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay +  memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute()+new MyCalendar().getNow_second());
-                    copyMemo.setYear(mCopyYear);
-                    copyMemo.setMonth(mCopyMonth);
-                    copyMemo.setDay(mCopyDay);
-                    copyMemo.setWeek(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear),Integer.parseInt(mCopyMonth),Integer.parseInt(mCopyDay)));
-                    copyMemo.setStart_hour(memo.getStart_hour());
-                    copyMemo.setStart_minute(memo.getStart_minute());
-                    copyMemo.setFinish_hour(memo.getFinish_hour());
-                    copyMemo.setFinish_minute(memo.getFinish_minute());
-                    copyMemo.setText(memo.getText());
-                    copyMemo.setIs_first(0);
-                    copyMemo.setIs_completed(0);
-                    copyMemo.setIs_chosen(0);
-                    mMemoList=MemoListManager.insertMemo(mMemoList,copyMemo);
+                }
+                if(mCopyYear.equals(mSelectedYear)&&mCopyMonth.equals(mSelectedMonth)){
+                    for(Memo memo:mSelectedMemoList){
+                        memo.setIs_chosen(0);
+                        MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                        Memo copyMemo = new Memo();
+                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay +  memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute()+new MyCalendar().getNow_second());
+                        copyMemo.setYear(mCopyYear);
+                        copyMemo.setMonth(mCopyMonth);
+                        copyMemo.setDay(mCopyDay);
+                        copyMemo.setWeek(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear),Integer.parseInt(mCopyMonth),Integer.parseInt(mCopyDay)));
+                        copyMemo.setStart_hour(memo.getStart_hour());
+                        copyMemo.setStart_minute(memo.getStart_minute());
+                        copyMemo.setFinish_hour(memo.getFinish_hour());
+                        copyMemo.setFinish_minute(memo.getFinish_minute());
+                        copyMemo.setText(memo.getText());
+                        copyMemo.setIs_first(0);
+                        copyMemo.setIs_completed(0);
+                        copyMemo.setIs_chosen(0);
+                        mMemoList=MemoListManager.insertMemo(mMemoList,copyMemo);
+                    }
                 }
                 mSelectedMemoList.clear();
                 mChosenTv.setVisibility(View.INVISIBLE);
