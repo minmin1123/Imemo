@@ -35,7 +35,7 @@ public class MyCalendar{//该类用于获取当前年月日时分秒星期，并
     }
 
     public String getNow_year() {
-        now_year=String.valueOf(calendar.get(Calendar.YEAR));
+        now_year=calendar.get(Calendar.YEAR)+"";
         return now_year;
     }
 
@@ -45,12 +45,12 @@ public class MyCalendar{//该类用于获取当前年月日时分秒星期，并
     }
 
     public String getNow_day() {
-        now_day=DateUtils .toNormalTime(calendar.get(Calendar.DAY_OF_MONTH));
+        now_day=DateUtils.toNormalTime(calendar.get(Calendar.DAY_OF_MONTH));
         return now_day;
     }
 
     public String getNow_week() {
-        now_week=String.valueOf(calendar.get(Calendar.DAY_OF_WEEK));
+        now_week=calendar.get(Calendar.DAY_OF_WEEK)+"";
         if("1".equals(now_week)){
             now_week ="周日";
         }else if("2".equals(now_week)){

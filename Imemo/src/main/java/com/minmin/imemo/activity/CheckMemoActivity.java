@@ -220,7 +220,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mContextEt.setSelection(memo.getText().length());
         mEditIv.setVisibility(View.INVISIBLE);
         mDeleteIv.setBackgroundResource(R.drawable.save);
-        mDeleteIv.setTag(DELETE);
+        mDeleteIv.setTag(SAVE);
     }
 
     //检查文本内容是否合法
@@ -250,7 +250,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String weekOfday = DateUtils.getSelectedWeek(year, month, day);
-                selectedYear = String.valueOf(year);
+                selectedYear = year+"";
                 mSelectedMonth = DateUtils.toNormalTime(month + 1);
                 mSelectedDay = DateUtils.toNormalTime(day);
                 mSelectedWeek = weekOfday;
@@ -354,7 +354,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         updateMemo.setFinish_minute(mSelectedFinishMinute);
         updateMemo.setText(mContextEt.getText().toString().trim());
         updateMemo.setIs_completed(0);
-        updateMemo.setIs_first(0);
+//        updateMemo.setIs_first(0);
         updateMemo.setIs_chosen(0);
         Intent updateSuccessfulIntent = new Intent();
         updateSuccessfulIntent.putExtra(RETURN_UPDATEMEMO, updateMemo);

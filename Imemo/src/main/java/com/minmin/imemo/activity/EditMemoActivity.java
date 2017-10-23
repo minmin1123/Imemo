@@ -222,7 +222,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String weekOfday = DateUtils.getSelectedWeek(year, month, day);
-                mSelectedYear = String.valueOf(year);
+                mSelectedYear = year+"";
                 mSelectedMonth = DateUtils.toNormalTime(month + 1);
                 mSelectedDay = DateUtils.toNormalTime(day);
                 mSelectedWeek = weekOfday;
@@ -299,7 +299,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
         memo.setFinish_minute(mSelectedFinishMinute);
         memo.setText(mContextEt.getText().toString().trim());
         memo.setIs_completed(0);
-        memo.setIs_first(0);
+//        memo.setIs_first(0);
         memo.setIs_chosen(0);
         Intent saveSuccessfulIntent = new Intent();
         saveSuccessfulIntent.putExtra(RETURN_NEWMEMO, memo);

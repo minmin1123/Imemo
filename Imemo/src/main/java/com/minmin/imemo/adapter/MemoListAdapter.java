@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,10 +72,10 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final Memo memo = getItem(position);
-//        Log.i("Main", "该item所处的的位置是："+String.valueOf(position));
+        Log.i("Main", "该item所处的的位置是："+String.valueOf(position));
         View view;
-//        if(convertView==null){
-//            Log.i("Main", "该item初次被记录");
+        if(convertView==null){
+            Log.i("Main", "该item初次被记录");
         view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         holder = new ViewHolder();
         holder.mDateTv = view.findViewById(R.id.dateTv);
@@ -86,25 +87,25 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
         holder.mCompleteIv = view.findViewById(R.id.completeIv);
         holder.mAddIv = view.findViewById(R.id.addIv);
         view.setTag(holder);
-//        }else{
-//            Log.i("Main", "该item已经存在");
-//            view=convertView;
-//            holder = (ViewHolder) view.getTag();
-//        }
-//        Log.i("Main", "该memo是不是第一个："+memo.getIs_first());
-//        Log.i("Main", "该memo日期："+memo.getDay());
-        //该项item是当日第一项->有日期头
-        if (memo.getIs_first() == 1) {
-            holder.mDateTv.setText(memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
-            holder.mStartTimeTv.setText(memo.getStart_hour() + ":" + memo.getStart_minute());
-            holder.mFinishTimeTv.setText(memo.getFinish_hour() + ":" + memo.getFinish_minute());
-            holder.mContextTv.setText(memo.getText());
-        } else {
-            holder.mDateRl.setVisibility(View.GONE);
-            holder.mStartTimeTv.setText(memo.getStart_hour() + ":" + memo.getStart_minute());
-            holder.mFinishTimeTv.setText(memo.getFinish_hour() + ":" + memo.getFinish_minute());
-            holder.mContextTv.setText(memo.getText());
+        }else{
+            Log.i("Main", "该item已经存在");
+            view=convertView;
+            holder = (ViewHolder) view.getTag();
         }
+//        Log.i("Main", "该memo是不是第一个："+memo.getIs_first());
+        Log.i("Main", "该memo日期："+memo.getDay());
+        //该项item是当日第一项->有日期头
+//        if (memo.getIs_first() == 1) {
+//            holder.mDateTv.setText(memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
+//            holder.mStartTimeTv.setText(memo.getStart_hour() + ":" + memo.getStart_minute());
+//            holder.mFinishTimeTv.setText(memo.getFinish_hour() + ":" + memo.getFinish_minute());
+//            holder.mContextTv.setText(memo.getText());
+//        } else {
+//            holder.mDateRl.setVisibility(View.GONE);
+//            holder.mStartTimeTv.setText(memo.getStart_hour() + ":" + memo.getStart_minute());
+//            holder.mFinishTimeTv.setText(memo.getFinish_hour() + ":" + memo.getFinish_minute());
+//            holder.mContextTv.setText(memo.getText());
+//        }
         //该项item已被完成->圆圈打勾
         if (memo.getIs_completed() == 0) {
             holder.mCompleteIv.setBackgroundResource(R.drawable.incomplete);
@@ -125,19 +126,19 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
         holder.mCompleteIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Memo selected_memo = memoList.get(position);
+                Memo selectMemo = memoList.get(position);
                 if (view.getTag().equals(INCOMPLETE)) {
                     view.setTag(COMPLETE);
                     view.setBackgroundResource(R.drawable.complete);
                     Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
-                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selected_memo, 1);
-                    selected_memo.setIs_completed(1);
+                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
+                    selectMemo.setIs_completed(1);
                 } else {
                     view.setTag(INCOMPLETE);
                     view.setBackgroundResource(R.drawable.incomplete);
                     Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
-                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selected_memo, 0);
-                    selected_memo.setIs_completed(0);
+                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
+                    selectMemo.setIs_completed(0);
                 }
             }
         });
@@ -145,13 +146,13 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
         holder.mAddIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Memo selected_memo = memoList.get(position);
-                Intent intent_addSelectDayMemo = new Intent(mContext, EditMemoActivity.class);
-                intent_addSelectDayMemo.putExtra(YEAR, selected_memo.getYear());
-                intent_addSelectDayMemo.putExtra(MONTH, selected_memo.getMonth());
-                intent_addSelectDayMemo.putExtra(DAY, selected_memo.getDay());
-                intent_addSelectDayMemo.putExtra(WEEK,selected_memo.getWeek());
-                ((Activity) mContext).startActivityForResult(intent_addSelectDayMemo, REQUESTCODE_MAIN);
+                Memo selectMemo = memoList.get(position);
+                Intent addSelectDayMemoIntent = new Intent(mContext, EditMemoActivity.class);
+                addSelectDayMemoIntent.putExtra(YEAR, selectMemo.getYear());
+                addSelectDayMemoIntent.putExtra(MONTH, selectMemo.getMonth());
+                addSelectDayMemoIntent.putExtra(DAY, selectMemo.getDay());
+                addSelectDayMemoIntent.putExtra(WEEK,selectMemo.getWeek());
+                ((Activity) mContext).startActivityForResult(addSelectDayMemoIntent, REQUESTCODE_MAIN);
             }
         });
 //        Log.i("Main","*********************");

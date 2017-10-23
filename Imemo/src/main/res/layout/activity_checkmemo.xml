@@ -147,6 +147,11 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bababa"/>
+
     <LinearLayout
         android:id="@+id/contextLl"
         android:layout_width="match_parent"
@@ -154,7 +159,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/contextEt"

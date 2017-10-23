@@ -27,7 +27,7 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper{
             "finish_minute text," +
             "text text," +
             "is_completed integer," +
-            "is_first integer," +
+//            "is_first integer," +
             "is_chosen integer)";
 
     public MemoDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

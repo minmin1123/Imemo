@@ -18,9 +18,9 @@ public class DateUtils {
     public static String toNormalTime(int oldTime) {
         String newTime;
         if (oldTime >= 0 && oldTime <= 9) {
-            newTime = "0" + String.valueOf(oldTime);
+            newTime = "0" + oldTime;
         } else {
-            newTime = String.valueOf(oldTime);
+            newTime = oldTime+"";
         }
         return newTime;
     }
