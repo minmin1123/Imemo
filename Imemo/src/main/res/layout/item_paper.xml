@@ -58,7 +58,7 @@
                 android:tag="inc"/>
         </FrameLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
@@ -83,7 +83,17 @@
                 android:textSize="15sp"
                 android:tag="unselected"/>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/markIv"
+                android:visibility="invisible"
+                android:tag="notremind"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/mark"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

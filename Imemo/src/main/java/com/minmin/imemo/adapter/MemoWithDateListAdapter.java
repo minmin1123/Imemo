@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.activity.EditMemoActivity;
 import com.minmin.imemo.database.MemoDatabase;
 import com.minmin.imemo.model.Memo;
+import com.minmin.imemo.service.RemindService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  * </pre>
  */
 
-public class MemoListAdapter2 extends BaseAdapter {
+public class MemoWithDateListAdapter extends BaseAdapter {
 
     private final static int TYPE_DATE=1;
 
@@ -62,9 +62,13 @@ public class MemoListAdapter2 extends BaseAdapter {
 
     private final static String WEEK = "week";
 
+    private final static String NOTREMIND = "notremind";
+
+    private final static String REMIND = "remind";
+
     private static List<Memo> mMemoWithTitleList=new ArrayList<>();
 
-    public MemoListAdapter2(@NonNull Context context,  @NonNull List<Memo> objects) {
+    public MemoWithDateListAdapter(@NonNull Context context, @NonNull List<Memo> objects) {
         super();
         mContext = context;
         mMemoWithTitleList=objects;
@@ -94,7 +98,7 @@ public class MemoListAdapter2 extends BaseAdapter {
         }
     }
 
-    @Override
+    @Override//子item两种布局
     public int getViewTypeCount() {
         return 2;
     }
@@ -105,8 +109,7 @@ public class MemoListAdapter2 extends BaseAdapter {
         DateViewHolder dateViewHolder;
         PaperViewHolder paperViewHolder;
         switch (getItemViewType(position)) {
-            case DATE:
-                Log.i("Main", "视图中它是第"+position+"个item，它是日期头" );
+            case DATE://如果类型是时间标题
                 if (convertView == null) {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_date, null);
                     dateViewHolder = new DateViewHolder();
@@ -130,8 +133,7 @@ public class MemoListAdapter2 extends BaseAdapter {
                     }
                 });
                 break;
-            case PAPER:
-                Log.i("Main", "视图中它是第"+position+"个item，它是纸片" );
+            case PAPER://如果类型是纸片
                 if (convertView == null) {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_paper, null);
                     paperViewHolder = new PaperViewHolder();
@@ -140,6 +142,7 @@ public class MemoListAdapter2 extends BaseAdapter {
                     paperViewHolder.mContextTv = convertView.findViewById(R.id.contextTv);
                     paperViewHolder.mPaperRl = convertView.findViewById(R.id.mPaperRl);
                     paperViewHolder.mCompleteIv = convertView.findViewById(R.id.completeIv);
+                    paperViewHolder.mMarkIv=convertView.findViewById(R.id.markIv);
                     convertView.setTag(paperViewHolder);
                 } else {
                     paperViewHolder = (PaperViewHolder) convertView.getTag();
@@ -147,6 +150,14 @@ public class MemoListAdapter2 extends BaseAdapter {
                 paperViewHolder.mStartTimeTv.setText(memo.getStart_hour() + ":" + memo.getStart_minute());
                 paperViewHolder.mFinishTimeTv.setText(memo.getFinish_hour() + ":" + memo.getFinish_minute());
                 paperViewHolder.mContextTv.setText(memo.getText());
+                //该项是否被标注提醒
+                if (memo.getIs_remind() == 0) {
+                    paperViewHolder.mMarkIv.setTag(NOTREMIND);
+                    paperViewHolder.mMarkIv.setVisibility(View.INVISIBLE);
+                } else {
+                    paperViewHolder.mMarkIv.setTag(REMIND);
+                    paperViewHolder.mMarkIv.setVisibility(View.VISIBLE);
+                }
                 //该项item已被完成->圆圈打勾
                 if (memo.getIs_completed() == 0) {
                     paperViewHolder.mCompleteIv.setBackgroundResource(R.drawable.incomplete);
@@ -174,12 +185,16 @@ public class MemoListAdapter2 extends BaseAdapter {
                             Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
                             MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
                             selectMemo.setIs_completed(1);
+                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
+                            ((Activity) mContext).startService(remindServiceIntent);
                         } else {
                             view.setTag(INCOMPLETE);
                             view.setBackgroundResource(R.drawable.incomplete);
                             Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
                             MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
                             selectMemo.setIs_completed(0);
+                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
+                            ((Activity) mContext).startService(remindServiceIntent);
                         }
                     }
                 });
@@ -199,6 +214,7 @@ public class MemoListAdapter2 extends BaseAdapter {
         TextView mContextTv;
         RelativeLayout mPaperRl;
         ImageView mCompleteIv;
+        ImageView mMarkIv;
 
     }
 }

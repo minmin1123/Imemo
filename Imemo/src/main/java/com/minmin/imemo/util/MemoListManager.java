@@ -1,7 +1,5 @@
 package com.minmin.imemo.util;
 
-import android.util.Log;
-
 import com.minmin.imemo.model.Memo;
 
 import java.util.ArrayList;
@@ -54,6 +52,7 @@ public class MemoListManager {
         return mMemoList;
     }
 
+    //将纯净的memolist转化成不纯净的memowithtitlelist
     public static List<Memo> addDateTitle(List<Memo> mMemoList){
         mMemoWithTitleList.clear();
         mMemoWithTitleList.addAll(mMemoList);
@@ -69,11 +68,6 @@ public class MemoListManager {
                 cursor = mMemoWithTitleList.get(i).getDay();
                 mMemoWithTitleList.add(i, title);
             }
-        }
-        Log.i("Main", "未经过加工的纯净的MemoList的个数为：" + mMemoList.size());
-        Log.i("Main", "经过加工的不纯净的MemoWithTitleList的个数为：" + mMemoWithTitleList.size());
-        for(Memo eachMemo:mMemoWithTitleList){
-            Log.i("Main", "经过加工的不纯净的MemoWithTitleList的item有：" + eachMemo.getId());
         }
         return mMemoWithTitleList;
     }

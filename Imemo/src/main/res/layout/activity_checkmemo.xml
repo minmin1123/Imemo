@@ -18,6 +18,15 @@
             android:src="@drawable/back" />
 
         <ImageView
+            android:id="@+id/remindIv"
+            android:tag="notremind"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@+id/editIv"
+            android:background="@drawable/not_remind" />
+
+        <ImageView
             android:id="@+id/editIv"
             android:layout_width="30dp"
             android:layout_height="30dp"

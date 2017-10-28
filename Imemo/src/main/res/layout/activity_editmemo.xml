@@ -13,17 +13,26 @@
             android:id="@+id/backIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/back"
+            android:layout_alignParentLeft="true"
             android:layout_margin="10dp"
-            android:layout_alignParentLeft="true"/>
+            android:src="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/remindIv"
+            android:tag="notremind"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@+id/saveIv"
+            android:background="@drawable/not_remind" />
 
         <ImageView
             android:id="@+id/saveIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/save"
+            android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:layout_alignParentRight="true"/>
+            android:src="@drawable/save" />
 
     </RelativeLayout>
 

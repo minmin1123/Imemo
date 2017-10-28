@@ -42,6 +42,8 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
 
     private ImageView mBackIv;
 
+    private ImageView mRemindIv;
+
     private RelativeLayout mDateRl;
 
     private RelativeLayout mStartTimeRl;
@@ -80,6 +82,8 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
 
     private String mSelectedFinishMinute = "00";
 
+    private int IS_REMIND = 0;
+
     private final int RESULTCODE_EDIT = 2;
 
     private final static String YEAR = "year";
@@ -90,11 +94,17 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
 
     private final static String WEEK = "week";
 
+    private final static String NOTREMIND = "notremind";
+
+    private final static String REMIND = "remind";
+
     private final static String RETURN_NEWMEMO = "newMemo";
 
     private final static int START_TIME = 1;
 
     private final static int FINISH_TIME = 2;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,6 +137,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     public void initView() {
         mSaveIv = findViewById(R.id.saveIv);
         mBackIv = findViewById(R.id.backIv);
+        mRemindIv=findViewById(R.id.remindIv);
         mDateRl = findViewById(R.id.dateRl);
         mStartTimeRl = findViewById(R.id.startTimeRl);
         mFinishTimeRl = findViewById(R.id.finishTimeRl);
@@ -139,6 +150,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
         mContextLl = findViewById(R.id.contextLl);
         mSaveIv.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
+        mRemindIv.setOnClickListener(this);
         mDateRl.setOnClickListener(this);
         mStartTimeRl.setOnClickListener(this);
         mFinishTimeRl.setOnClickListener(this);
@@ -167,6 +179,10 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
             //点击了保存键
             case R.id.saveIv:
                 checkText();
+                break;
+            //点击了提醒键
+            case R.id.remindIv:
+                markIsRemind();
                 break;
             //点击了选择日期键
             case R.id.dateRl:
@@ -202,6 +218,20 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
             mFinishTimeTp.setVisibility(View.GONE);
         }
         return false;
+    }
+
+    //标记提醒功能
+    public void markIsRemind(){
+        if(mRemindIv.getTag().equals(NOTREMIND)){
+            IS_REMIND=1;
+            mRemindIv.setTag(REMIND);
+            mRemindIv.setBackgroundResource(R.drawable.remind);
+            Toast.makeText(this, R.string.remind, Toast.LENGTH_SHORT).show();
+        }else{
+            IS_REMIND=0;
+            mRemindIv.setTag(NOTREMIND);
+            mRemindIv.setBackgroundResource(R.drawable.not_remind);
+        }
     }
 
     //检查文本内容是否合法
@@ -299,7 +329,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
         memo.setFinish_minute(mSelectedFinishMinute);
         memo.setText(mContextEt.getText().toString().trim());
         memo.setIs_completed(0);
-//        memo.setIs_first(0);
+        memo.setIs_remind(IS_REMIND);
         memo.setIs_chosen(0);
         Intent saveSuccessfulIntent = new Intent();
         saveSuccessfulIntent.putExtra(RETURN_NEWMEMO, memo);

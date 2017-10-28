@@ -43,6 +43,8 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private ImageView mDeleteIv;
 
+    private ImageView mRemindIv;
+
     private RelativeLayout mDateRl;
 
     private RelativeLayout mStartTimeRl;
@@ -83,6 +85,8 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private String mSelectedFinishMinute;
 
+    private int IS_REMIND = 0;
+
     private final static int START_TIME = 1;
 
     private final static int FINISH_TIME = 2;
@@ -101,6 +105,10 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private final static String RETURN_UPDATEMEMO = "updateMemo";
 
+    private final static String NOTREMIND = "notremind";
+
+    private final static String REMIND = "remind";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,11 +124,18 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mSelectedStartMinute = memo.getStart_minute();
         mSelectedFinishHour = memo.getFinish_hour();
         mSelectedFinishMinute = memo.getFinish_minute();
+        IS_REMIND=memo.getIs_remind();
     }
 
     public void initView() {
         mDeleteIv = findViewById(R.id.deleteIv);
         mBackIv = findViewById(R.id.backIv);
+        mRemindIv = findViewById(R.id.remindIv);
+        if(memo.getIs_remind()==1){
+            mRemindIv.setBackgroundResource(R.drawable.remind);
+        }else{
+            mRemindIv.setBackgroundResource(R.drawable.not_remind);
+        }
         mDateRl = findViewById(R.id.dateRl);
         mStartTimeRl = findViewById(R.id.startTimeRl);
         mFinishTimeRl = findViewById(R.id.finishTimeRl);
@@ -150,12 +165,14 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mContextLl = findViewById(R.id.contextLl);
         mDeleteIv.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
+        mRemindIv.setOnClickListener(this);
         mDateRl.setOnClickListener(this);
         mStartTimeRl.setOnClickListener(this);
         mFinishTimeRl.setOnClickListener(this);
         mEditIv.setOnClickListener(this);
         mContextLl.setOnTouchListener(this);
         mContextEt.setOnTouchListener(this);
+        mRemindIv.setClickable(false);
         mDateRl.setClickable(false);
         mStartTimeRl.setClickable(false);
         mFinishTimeRl.setClickable(false);
@@ -185,6 +202,10 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                     finish();
                 }
                 break;
+            //点击了提醒键
+            case R.id.remindIv:
+                markIsRemind();
+                break;
             //点击了选择日期
             case R.id.dateRl:
                 newDatePickerDialog();
@@ -213,6 +234,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     //点击编辑之后的控件变化
     public void controlChange(){
+        mRemindIv.setClickable(true);
         mDateRl.setClickable(true);
         mStartTimeRl.setClickable(true);
         mFinishTimeRl.setClickable(true);
@@ -221,6 +243,20 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mEditIv.setVisibility(View.INVISIBLE);
         mDeleteIv.setBackgroundResource(R.drawable.save);
         mDeleteIv.setTag(SAVE);
+    }
+
+    //标记提醒功能
+    public void markIsRemind(){
+        if(mRemindIv.getTag().equals(NOTREMIND)){
+            IS_REMIND=1;
+            mRemindIv.setTag(REMIND);
+            mRemindIv.setBackgroundResource(R.drawable.remind);
+            Toast.makeText(this, R.string.remind, Toast.LENGTH_SHORT).show();
+        }else{
+            IS_REMIND=0;
+            mRemindIv.setTag(NOTREMIND);
+            mRemindIv.setBackgroundResource(R.drawable.not_remind);
+        }
     }
 
     //检查文本内容是否合法
@@ -354,7 +390,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         updateMemo.setFinish_minute(mSelectedFinishMinute);
         updateMemo.setText(mContextEt.getText().toString().trim());
         updateMemo.setIs_completed(0);
-//        updateMemo.setIs_first(0);
+        updateMemo.setIs_remind(IS_REMIND);
         updateMemo.setIs_chosen(0);
         Intent updateSuccessfulIntent = new Intent();
         updateSuccessfulIntent.putExtra(RETURN_UPDATEMEMO, updateMemo);
@@ -368,7 +404,8 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         if (selectedYear.equals(memo.getYear()) && mSelectedMonth.equals(memo.getMonth()) && mSelectedDay.equals(memo.getDay())
                 && mSelectedWeek.equals(memo.getWeek()) && mSelectedStartHour.equals(memo.getStart_hour())
                 && mSelectedStartMinute.equals(memo.getStart_minute()) && mSelectedFinishHour.equals(memo.getFinish_hour())
-                && mSelectedFinishMinute.equals(memo.getFinish_minute()) && mContextEt.getText().toString().trim().equals(memo.getText())) {
+                && mSelectedFinishMinute.equals(memo.getFinish_minute()) && mContextEt.getText().toString().trim().equals(memo.getText())
+                && IS_REMIND==memo.getIs_remind()) {
 
             return false;
         }

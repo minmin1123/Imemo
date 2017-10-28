@@ -37,15 +37,15 @@ public class Memo implements Serializable{
 
     private int is_completed=0;//是否完成--对应圆圈状态
 
-//    private int is_first=0;//是否是当天第一个备忘录--对应是否有日期头
+    private int is_remind=0;//是否需要被提醒--对应闹钟
 
     private int is_chosen=0;//是否被选中--对应处于编辑状态的item选中状态
 
-    private int type=TYPE_PAPER;
+    private int type=TYPE_PAPER;//默认类型为纸片
 
-    private final static int TYPE_DATE=1;
+    private final static int TYPE_DATE=1;//类型为日期
 
-    private final static int TYPE_PAPER=2;
+    private final static int TYPE_PAPER=2;//类型为纸片
 
     public String getId() {
         return id;
@@ -91,9 +91,9 @@ public class Memo implements Serializable{
         return is_completed;
     }
 
-//    public int getIs_first() {
-//        return is_first;
-//    }
+    public int getIs_remind() {
+        return is_remind;
+    }
 
     public int getIs_chosen() {
         return is_chosen;
@@ -147,9 +147,9 @@ public class Memo implements Serializable{
         this.is_completed = is_completed;
     }
 
-//    public void setIs_first(int is_first) {
-//        this.is_first = is_first;
-//    }
+    public void setIs_remind(int is_remind) {
+        this.is_remind = is_remind;
+    }
 
     public void setIs_chosen(int is_chosen) {
         this.is_chosen = is_chosen;

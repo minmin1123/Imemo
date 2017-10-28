@@ -119,4 +119,19 @@ public class DateUtils {
         }
         return false;
     }
+
+    //距离上一次时间过去的毫秒数
+    public static long turnFixedMSecond(String time) {
+        if(time.length()!=0){
+            long pastMSecond;
+            MyCalendar calendar = new MyCalendar();
+            int hour=Integer.parseInt(time.split(":")[0]);
+            int minute=Integer.parseInt(time.split(":")[1]);
+            int lastHour= Integer.parseInt(calendar.getNow_hour());
+            int lastMinute=Integer.parseInt(calendar.getNow_minute());
+            pastMSecond = ((hour - lastHour) * 60 * 60 + (minute-lastMinute) * 60)*1000;
+            return pastMSecond;
+        }
+       return 0;
+    }
 }
