@@ -1,5 +1,7 @@
 package com.minmin.imemo.util;
 
+import android.util.Log;
+
 import com.minmin.imemo.model.Memo;
 
 import java.util.ArrayList;
@@ -56,6 +58,9 @@ public class MemoListManager {
     public static List<Memo> addDateTitle(List<Memo> mMemoList){
         mMemoWithTitleList.clear();
         mMemoWithTitleList.addAll(mMemoList);
+        for(Memo memo:mMemoWithTitleList){
+            Log.i("Main",memo.getId());
+        }
         String cursor=null;
         for(int i=0;i<mMemoWithTitleList.size();i++){
             if(!mMemoWithTitleList.get(i).getDay().equals(cursor)){

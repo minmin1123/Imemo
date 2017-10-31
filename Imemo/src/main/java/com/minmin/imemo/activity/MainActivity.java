@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -204,7 +203,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         searchSelectDayMemoBuilder.setTitle(R.string.search_date);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_copy, null);
         DatePicker dialog_search_dp = view.findViewById(R.id.dialog_copy_dp);
-        dialog_search_dp.init(Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mCalendar.getNow_day()), new DatePicker.OnDateChangedListener() {
+        dialog_search_dp.init(Integer.parseInt(searchYear), Integer.parseInt(searchMonth)-1, Integer.parseInt(searchDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 searchYear = String.valueOf(year);
@@ -219,7 +218,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 mSelectedMonth =searchMonth;
                 mSelectedYear = searchYear;
                 mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
-                Log.i("Main",mSelectedYear+mSelectedMonth);
                 mMemoList=mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
                 updateMemoList();
             }
@@ -446,7 +444,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         selectDayBuilder.setTitle(R.string.select_date);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_copy, null);
         DatePicker dialog_copy_dp = view.findViewById(R.id.dialog_copy_dp);
-        dialog_copy_dp.init(Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mCalendar.getNow_day()), new DatePicker.OnDateChangedListener() {
+        dialog_copy_dp.init(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth)-1 , Integer.parseInt(mCopyDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 mCopyYear = String.valueOf(year);
@@ -491,7 +489,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                         memo.setIs_chosen(0);
                         MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
                         Memo copyMemo = new Memo();
-                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + new MyCalendar().getNow_minute() + new MyCalendar().getNow_second());
+                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour()+ memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour()+memo.getId().substring(18,22));
                         copyMemo.setYear(mCopyYear);
                         copyMemo.setMonth(mCopyMonth);
                         copyMemo.setDay(mCopyDay);
