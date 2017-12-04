@@ -31,7 +31,7 @@ import com.minmin.imemo.util.MyCalendar;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:新建一条备忘录界面
  *   version:1.0
  * </pre>
  */
@@ -104,7 +104,9 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
 
     private final static int FINISH_TIME = 2;
 
+    private AlertDialog.Builder mIsSaveMemoBuilder;
 
+    private DatePickerDialog mDatePD;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,7 +139,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     public void initView() {
         mSaveIv = findViewById(R.id.saveIv);
         mBackIv = findViewById(R.id.backIv);
-        mRemindIv=findViewById(R.id.remindIv);
+        mRemindIv = findViewById(R.id.remindIv);
         mDateRl = findViewById(R.id.dateRl);
         mStartTimeRl = findViewById(R.id.startTimeRl);
         mFinishTimeRl = findViewById(R.id.finishTimeRl);
@@ -171,7 +173,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
             //点击了返回键
             case R.id.backIv:
                 if (!TextUtils.isEmpty(mContextEt.getText())) {
-                    newSaveDialog();
+                    showSaveDialog();
                 } else {
                     finish();
                 }
@@ -186,7 +188,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
                 break;
             //点击了选择日期键
             case R.id.dateRl:
-                newDatePickerDialog();
+                showDatePickerDialog();
                 break;
             //点击了选择开始时间键
             case R.id.startTimeRl:
@@ -221,55 +223,61 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     }
 
     //标记提醒功能
-    public void markIsRemind(){
-        if(mRemindIv.getTag().equals(NOTREMIND)){
-            IS_REMIND=1;
+    public void markIsRemind() {
+        if (mRemindIv.getTag().equals(NOTREMIND)) {
+            IS_REMIND = 1;
             mRemindIv.setTag(REMIND);
             mRemindIv.setBackgroundResource(R.drawable.remind);
             Toast.makeText(this, R.string.remind, Toast.LENGTH_SHORT).show();
-        }else{
-            IS_REMIND=0;
+        } else {
+            IS_REMIND = 0;
             mRemindIv.setTag(NOTREMIND);
             mRemindIv.setBackgroundResource(R.drawable.not_remind);
         }
     }
 
     //检查文本内容是否合法
-    public void checkText(){
+    public void checkText() {
         if (TextUtils.isEmpty(mContextEt.getText())) {
             Toast.makeText(this, R.string.none_content, Toast.LENGTH_SHORT).show();
-        } else if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
-            Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
         } else {
-            saveMemo();
+            if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
+                Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
+            } else {
+                saveMemo();
+            }
         }
     }
 
     //弹出日历选择器
-    public void newDatePickerDialog(){
-        new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String weekOfday = DateUtils.getSelectedWeek(year, month, day);
-                mSelectedYear = year+"";
-                mSelectedMonth = DateUtils.toNormalTime(month + 1);
-                mSelectedDay = DateUtils.toNormalTime(day);
-                mSelectedWeek = weekOfday;
-                if (mCalendar.getNow_year().equals(mSelectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
-                    mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
-                    mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                } else {
-                    mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
+    public void showDatePickerDialog() {
+
+        if (mDatePD == null) {
+            mDatePD = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    String weekOfday = DateUtils.getSelectedWeek(year, month, day);
+                    mSelectedYear = year + "";
+                    mSelectedMonth = DateUtils.toNormalTime(month + 1);
+                    mSelectedDay = DateUtils.toNormalTime(day);
+                    mSelectedWeek = weekOfday;
+                    if (mCalendar.getNow_year().equals(mSelectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
+                        mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
+                    } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
+                        mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
+                    } else {
+                        mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
+                    }
                 }
-            }
-        }, Integer.parseInt(mCalendar.getNow_year()), Integer.parseInt(mCalendar.getNow_month()) - 1, Integer.parseInt(mCalendar.getNow_day())).show();
+            }, Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mSelectedDay));
+        }
+        mDatePD.show();
     }
 
     //时间选择器变化时文本也跟着变化
-    public void timeChange(int flag){
-        if(flag==START_TIME){
+    public void timeChange(int flag) {
+        if (flag == START_TIME) {
             mStartTimeTp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
@@ -279,7 +287,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
 
                 }
             });
-        }else if(flag==FINISH_TIME){
+        } else if (flag == FINISH_TIME) {
             mFinishTimeTp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
@@ -292,27 +300,30 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     }
 
     //当选择返回而用户有更改痕迹，弹出是否保存的对话框的提示
-    public void newSaveDialog() {
-        AlertDialog.Builder isSaveMemoBuilder_ = new AlertDialog.Builder(this);
-        isSaveMemoBuilder_.setMessage(R.string.ensure_save);
-        isSaveMemoBuilder_.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveMemo();
-            }
-        });
-        isSaveMemoBuilder_.setNegativeButton(R.string.give_up, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        isSaveMemoBuilder_.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        isSaveMemoBuilder_.create().show();
+    public void showSaveDialog() {
+
+        if (mIsSaveMemoBuilder == null) {
+            mIsSaveMemoBuilder = new AlertDialog.Builder(this);
+            mIsSaveMemoBuilder.setMessage(R.string.ensure_save);
+            mIsSaveMemoBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveMemo();
+                }
+            });
+            mIsSaveMemoBuilder.setNegativeButton(R.string.give_up, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            mIsSaveMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+        }
+        mIsSaveMemoBuilder.create().show();
     }
 
     //用户确认保存，插入数据库操作
@@ -340,7 +351,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     @Override//重写返回键事件
     public void onBackPressed() {
         if (!TextUtils.isEmpty(mContextEt.getText())) {
-            newSaveDialog();
+            showSaveDialog();
         } else {
             finish();
         }

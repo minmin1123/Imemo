@@ -27,7 +27,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/18
- *   desc:
+ *   desc:有两种item布局的Adapter
  *   version:1.0
  * </pre>
  */

@@ -17,7 +17,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:数据库
  *   version:1.0
  * </pre>
  */
@@ -131,7 +131,7 @@ public class MemoDatabase {
             values.put(YEAR,year);
             values.put(MONTH,month);
             values.put(DAY,day);
-            values.put(WEEK,DateUtils.getSelectedWeek(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day)));
+            values.put(WEEK,DateUtils.getSelectedWeek(Integer.parseInt(year),Integer.parseInt(month)-1,Integer.parseInt(day)));
             values.put(IS_COMPLETE,0);
             values.put(IS_REMIND,0);
             values.put(IS_CHOSEN,0);

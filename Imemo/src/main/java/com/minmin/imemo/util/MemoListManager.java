@@ -1,7 +1,5 @@
 package com.minmin.imemo.util;
 
-import android.util.Log;
-
 import com.minmin.imemo.model.Memo;
 
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/15
- *   desc:
+ *   desc:操作datalist的管理类
  *   version:1.0
  * </pre>
  */
@@ -58,9 +56,6 @@ public class MemoListManager {
     public static List<Memo> addDateTitle(List<Memo> mMemoList){
         mMemoWithTitleList.clear();
         mMemoWithTitleList.addAll(mMemoList);
-        for(Memo memo:mMemoWithTitleList){
-            Log.i("Main",memo.getId());
-        }
         String cursor=null;
         for(int i=0;i<mMemoWithTitleList.size();i++){
             if(!mMemoWithTitleList.get(i).getDay().equals(cursor)){

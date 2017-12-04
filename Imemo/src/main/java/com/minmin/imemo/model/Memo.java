@@ -7,7 +7,7 @@ import java.io.Serializable;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:Memo实体类
  *   version:1.0
  * </pre>
  */

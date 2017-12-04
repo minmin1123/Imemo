@@ -31,7 +31,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:主界面
  *   version:1.0
  * </pre>
  */
@@ -86,9 +86,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private final static int RIGHT = 6;
 
-    private final static int TYPE_DATE=1;
+    private final static int TYPE_DATE = 1;
 
-    private final static int TYPE_PAPER=2;
+    private final static int TYPE_PAPER = 2;
 
     private String mCopyYear = mSelectedYear;
 
@@ -96,11 +96,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private String mCopyDay = mCalendar.getNow_day();
 
-    private String searchYear= mSelectedYear;
+    private String searchYear = mSelectedYear;
 
-    private String searchMonth= mSelectedMonth;
+    private String searchMonth = mSelectedMonth;
 
-    private String searchDay= mCalendar.getNow_day();
+    private String searchDay = mCalendar.getNow_day();
 
     private int SEARCH_STATUS = 0;
 
@@ -122,6 +122,36 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private final static String RETURN_UPDATEMEMO = "updateMemo";
 
+    private AlertDialog.Builder mMoreMemoBuilder;
+
+    private AlertDialog.Builder mSearchSelectDayMemoBuilder;
+
+    private AlertDialog.Builder mSelectDayBuilder;
+
+    private AlertDialog.Builder mIsDeleteMemoBuilder;
+
+    private AlertDialog.Builder mIsCopyMemoBuilder;
+
+//    private Myhandler handler = new Myhandler(this);
+//
+//
+//    static class Myhandler extends Handler{
+
+//        WeakReference<MainActivity> context;
+//
+//        public Myhandler(MainActivity context){
+//            this.context = new WeakReference<>(context);
+//        }
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            MainActivity tmp = context.get();
+//            if (null!=tmp)
+//                tmp.checkMoreSelect();
+//        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +159,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         moreList = new String[]{getResources().getString(R.string.bulk_delete), getResources().getString(R.string.bulk_copy)};
         //初始化dataList和adapter
         mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
-        mMemoListAdapter = new MemoWithDateListAdapter(this,mMemoWithTitleList);
+        mMemoListAdapter = new MemoWithDateListAdapter(this, mMemoWithTitleList);
         //页面初始化
         initView();
         updateMemoList();
@@ -137,7 +167,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     //开启前台服务
-    public void startRemindService(){
+    public void startRemindService() {
         Intent remindServiceIntent = new Intent(this, RemindService.class);
         startService(remindServiceIntent);
     }
@@ -174,7 +204,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 break;
             //点击了标题日期,通过日历选择器搜索特定时间的备忘录
             case R.id.dateTv:
-                newDatePickerDialog();
+                showDatePickerDialog();
                 break;
             //点击了查看前一个月备忘录记录
             case R.id.leftIv:
@@ -186,7 +216,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 break;
             //点击了更多（批量删除、批量复制）
             case R.id.moreIv:
-                newMoreDialog();
+                showMoreDialog();
                 break;
             //点击了处理（批量删除、批量复制）
             case R.id.dealIv:
@@ -198,37 +228,41 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     //弹出日历选择器
-    public void newDatePickerDialog(){
-        AlertDialog.Builder searchSelectDayMemoBuilder = new AlertDialog.Builder(this);
-        searchSelectDayMemoBuilder.setTitle(R.string.search_date);
+    public void showDatePickerDialog() {
+        mSearchSelectDayMemoBuilder = new AlertDialog.Builder(this);
+        mSearchSelectDayMemoBuilder.setTitle(R.string.search_date);
+        mSearchSelectDayMemoBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SEARCH_STATUS = 1;
+                mSelectedMonth = searchMonth;
+                mSelectedYear = searchYear;
+                mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
+                mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
+                updateMemoList();
+            }
+        });
+        mSearchSelectDayMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_copy, null);
-        DatePicker dialog_search_dp = view.findViewById(R.id.dialog_copy_dp);
-        dialog_search_dp.init(Integer.parseInt(searchYear), Integer.parseInt(searchMonth)-1, Integer.parseInt(searchDay), new DatePicker.OnDateChangedListener() {
+        DatePicker dialogDp = view.findViewById(R.id.dialogDp);
+        final TextView weekTv = view.findViewById(R.id.weekTv);
+        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
+        dialogDp.init(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 searchYear = String.valueOf(year);
                 searchMonth = DateUtils.toNormalTime(month + 1);
                 searchDay = DateUtils.toNormalTime(day);
+                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
+
             }
         });
-        searchSelectDayMemoBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SEARCH_STATUS=1;
-                mSelectedMonth =searchMonth;
-                mSelectedYear = searchYear;
-                mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
-                mMemoList=mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
-                updateMemoList();
-            }
-        });
-        searchSelectDayMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        searchSelectDayMemoBuilder.setView(view);
-        searchSelectDayMemoBuilder.create().show();
+        mSearchSelectDayMemoBuilder.setView(view);
+        mSearchSelectDayMemoBuilder.create().show();
     }
 
     //查看不同月份的memoList
@@ -250,7 +284,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             }
             mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
         }
-        mMemoList=mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
+        mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
         updateMemoList();
     }
 
@@ -261,6 +295,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             Memo newMemo = (Memo) data.getSerializableExtra(RETURN_NEWMEMO);
             if (newMemo.getYear().equals(mSelectedYear) && newMemo.getMonth().equals(mSelectedMonth)) {
                 mMemoList = MemoListManager.insertMemo(mMemoList, newMemo);
+
             }
             MemoDatabase.getInstance(this).insertMemo(newMemo);
             Toast.makeText(this, R.string.save_success, Toast.LENGTH_SHORT).show();
@@ -295,7 +330,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             mNothingTv.setVisibility(View.GONE);
             mListLv.setVisibility(View.VISIBLE);
             mMemoListAdapter.notifyDataSetChanged();
-            if(SEARCH_STATUS==0){
+            if (SEARCH_STATUS == 0) {
                 if (mCalendar.getNow_year().equals(mSelectedYear) && (mCalendar.getNow_month().equals(mSelectedMonth))) {
                     int existTodayMemo = 0;
                     for (int i = 0; i < mMemoWithTitleList.size(); i++) {
@@ -311,10 +346,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 } else {
                     mListLv.setSelection(0);
                 }
-            }else{
+            } else {
                 int existSearchDayMemo = 0;
                 for (int i = 0; i < mMemoWithTitleList.size(); i++) {
-                    if (mMemoWithTitleList.get(i).getDay().equals(searchDay)){
+                    if (mMemoWithTitleList.get(i).getDay().equals(searchDay)) {
                         existSearchDayMemo = 1;
                         mListLv.setSelection(i);
                         break;
@@ -324,14 +359,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                     mListLv.setSelection(0);
                     Toast.makeText(MainActivity.this, R.string.search_none, Toast.LENGTH_SHORT).show();
                 }
-                SEARCH_STATUS=0;
+                SEARCH_STATUS = 0;
             }
         } else {
             mNothingTv.setVisibility(View.VISIBLE);
             mListLv.setVisibility(View.GONE);
-            if(SEARCH_STATUS==1){
+            if (SEARCH_STATUS == 1) {
                 Toast.makeText(MainActivity.this, R.string.search_none, Toast.LENGTH_SHORT).show();
-                SEARCH_STATUS=0;
+                SEARCH_STATUS = 0;
             }
         }
     }
@@ -340,7 +375,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
         if (MORE_STATUS == 0) {
             //非更多（批量删除、批量复制）状态，点击后查看选定子项的备忘录详情
-            if(mMemoWithTitleList.get(position).getType()==TYPE_PAPER){
+            if (mMemoWithTitleList.get(position).getType() == TYPE_PAPER) {
                 Intent toCheckMemoIntent = new Intent(MainActivity.this, CheckMemoActivity.class);
                 Memo memo = mMemoWithTitleList.get(position);
                 toCheckMemoIntent.putExtra(RETURN_MEMO, memo);
@@ -348,7 +383,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             }
         } else {
             //更多（批量删除、批量复制）状态，点击后变化是否选中
-            if(mMemoWithTitleList.get(position).getType()==TYPE_PAPER){
+            if (mMemoWithTitleList.get(position).getType() == TYPE_PAPER) {
                 final TextView mItemContextTv = view.findViewById(R.id.contextTv);
                 if (mItemContextTv.getTag().equals(UNSELECTED)) {
                     mItemContextTv.setTag(SELECTED);
@@ -376,20 +411,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     //更多选项的对话框
-    public void newMoreDialog() {
-        AlertDialog.Builder moreMemoBuilder = new AlertDialog.Builder(this);
-        moreMemoBuilder.setItems(moreList, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int position) {
-                MORE_STATUS = 1;
-                if (position == 0) {
-                    toDeleteSelectItem();
-                } else if (position == 1) {
-                    toCopySelectItem();
+    public void showMoreDialog() {
+        if (mMoreMemoBuilder == null) {
+            mMoreMemoBuilder = new AlertDialog.Builder(this);
+            mMoreMemoBuilder.setItems(moreList, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int position) {
+                    MORE_STATUS = 1;
+                    if (position == 0) {
+                        toDeleteSelectItem();
+                    } else if (position == 1) {
+                        toCopySelectItem();
+                    }
                 }
-            }
-        });
-        moreMemoBuilder.create().show();
+            });
+        }
+        mMoreMemoBuilder.create().show();
     }
 
     //批量删除状态
@@ -401,33 +438,36 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     //当点击批量删除按钮，弹出确认是否删除的对话框提示
-    public void newDeleteDialog() {
-        AlertDialog.Builder isDeleteMemoBuilder = new AlertDialog.Builder(this);
-        isDeleteMemoBuilder.setMessage(R.string.ensure_delete_selected);
-        isDeleteMemoBuilder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (Memo eachMemo : mSelectedMemoList) {
-                    mMemoList = MemoListManager.deleteMemo(mMemoList, eachMemo);
-                }
-                MemoDatabase.getInstance(MainActivity.this).deleteSelectMemoList(mSelectedMemoList);
-                recoverBulkOperateView();
-                Toast.makeText(MainActivity.this, R.string.delete_success, Toast.LENGTH_SHORT).show();
-                startRemindService();
+    public void showDeleteDialog() {
 
-            }
-        });
-        isDeleteMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (Memo memo : mSelectedMemoList) {
-                    memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+        if (mIsDeleteMemoBuilder == null) {
+            mIsDeleteMemoBuilder = new AlertDialog.Builder(this);
+            mIsDeleteMemoBuilder.setMessage(R.string.ensure_delete_selected);
+            mIsDeleteMemoBuilder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    for (Memo eachMemo : mSelectedMemoList) {
+                        mMemoList = MemoListManager.deleteMemo(mMemoList, eachMemo);
+                    }
+                    MemoDatabase.getInstance(MainActivity.this).deleteSelectMemoList(mSelectedMemoList);
+                    recoverBulkOperateView();
+                    Toast.makeText(MainActivity.this, R.string.delete_success, Toast.LENGTH_SHORT).show();
+                    startRemindService();
+
                 }
-                recoverBulkOperateView();
-            }
-        });
-        isDeleteMemoBuilder.create().show();
+            });
+            mIsDeleteMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    for (Memo memo : mSelectedMemoList) {
+                        memo.setIs_chosen(0);
+                        MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    }
+                    recoverBulkOperateView();
+                }
+            });
+        }
+        mIsDeleteMemoBuilder.create().show();
     }
 
     //批量复制状态
@@ -439,88 +479,92 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     //当点击批量复制按钮，先弹出对话框让选择创建日期
-    public void newSelectDayDialog() {
-        AlertDialog.Builder selectDayBuilder = new AlertDialog.Builder(this);
-        selectDayBuilder.setTitle(R.string.select_date);
+    public void showSelectDayDialog() {
+        mSelectDayBuilder = new AlertDialog.Builder(this);
+        mSelectDayBuilder.setTitle(R.string.select_date);
+        mSelectDayBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showCopyDialog();
+            }
+        });
+        mSelectDayBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                for (Memo memo : mSelectedMemoList) {
+                    memo.setIs_chosen(0);
+                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                }
+                recoverBulkOperateView();
+            }
+        });
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_copy, null);
-        DatePicker dialog_copy_dp = view.findViewById(R.id.dialog_copy_dp);
-        dialog_copy_dp.init(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth)-1 , Integer.parseInt(mCopyDay), new DatePicker.OnDateChangedListener() {
+        DatePicker dialogDp = view.findViewById(R.id.dialogDp);
+        final TextView weekTv = view.findViewById(R.id.weekTv);
+        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
+        dialogDp.init(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 mCopyYear = String.valueOf(year);
                 mCopyMonth = DateUtils.toNormalTime(month + 1);
                 mCopyDay = DateUtils.toNormalTime(day);
+                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
             }
         });
-        selectDayBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                newCopyDialog();
-            }
-        });
-        selectDayBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (Memo memo : mSelectedMemoList) {
-                    memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
-                }
-                recoverBulkOperateView();
-            }
-        });
-        selectDayBuilder.setView(view);
-        selectDayBuilder.create().show();
+        mSelectDayBuilder.setView(view);
+        mSelectDayBuilder.create().show();
     }
 
     //用户选择好日期后，弹出确认是否创建到该日期的对话框提示
-    public void newCopyDialog() {
-        AlertDialog.Builder isCopyMemoBuilder = new AlertDialog.Builder(this);
-        isCopyMemoBuilder.setMessage("将被创建至" + mCopyYear + "年" + mCopyMonth + "月" + mCopyDay + "日");
-        isCopyMemoBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                MemoDatabase.getInstance(MainActivity.this).insertSelectMemoList(mSelectedMemoList, mCopyYear, mCopyMonth, mCopyDay);
-                for (Memo memo : mSelectedMemoList) {
-                    memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
-                }
-                if (mCopyYear.equals(mSelectedYear) && mCopyMonth.equals(mSelectedMonth)) {
+    public void showCopyDialog() {
+
+        if (mIsCopyMemoBuilder == null) {
+            mIsCopyMemoBuilder = new AlertDialog.Builder(this);
+            mIsCopyMemoBuilder.setMessage("将被创建至" + mCopyYear + "年" + mCopyMonth + "月" + mCopyDay + "日");
+            mIsCopyMemoBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MemoDatabase.getInstance(MainActivity.this).insertSelectMemoList(mSelectedMemoList, mCopyYear, mCopyMonth, mCopyDay);
                     for (Memo memo : mSelectedMemoList) {
                         memo.setIs_chosen(0);
                         MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
-                        Memo copyMemo = new Memo();
-                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour()+ memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour()+memo.getId().substring(18,22));
-                        copyMemo.setYear(mCopyYear);
-                        copyMemo.setMonth(mCopyMonth);
-                        copyMemo.setDay(mCopyDay);
-                        copyMemo.setWeek(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth), Integer.parseInt(mCopyDay)));
-                        copyMemo.setStart_hour(memo.getStart_hour());
-                        copyMemo.setStart_minute(memo.getStart_minute());
-                        copyMemo.setFinish_hour(memo.getFinish_hour());
-                        copyMemo.setFinish_minute(memo.getFinish_minute());
-                        copyMemo.setText(memo.getText());
-                        copyMemo.setIs_remind(0);
-                        copyMemo.setIs_completed(0);
-                        copyMemo.setIs_chosen(0);
-                        mMemoList = MemoListManager.insertMemo(mMemoList, copyMemo);
                     }
+                    if (mCopyYear.equals(mSelectedYear) && mCopyMonth.equals(mSelectedMonth)) {
+                        for (Memo memo : mSelectedMemoList) {
+                            Memo copyMemo = new Memo();
+                            copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + memo.getId().substring(18, 22));
+                            copyMemo.setYear(mCopyYear);
+                            copyMemo.setMonth(mCopyMonth);
+                            copyMemo.setDay(mCopyDay);
+                            copyMemo.setWeek(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
+                            copyMemo.setStart_hour(memo.getStart_hour());
+                            copyMemo.setStart_minute(memo.getStart_minute());
+                            copyMemo.setFinish_hour(memo.getFinish_hour());
+                            copyMemo.setFinish_minute(memo.getFinish_minute());
+                            copyMemo.setText(memo.getText());
+                            copyMemo.setIs_remind(0);
+                            copyMemo.setIs_completed(0);
+                            copyMemo.setIs_chosen(0);
+                            mMemoList = MemoListManager.insertMemo(mMemoList, copyMemo);
+                        }
+                    }
+                    recoverBulkOperateView();
+                    Toast.makeText(MainActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                    startRemindService();
                 }
-                recoverBulkOperateView();
-                Toast.makeText(MainActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
-                startRemindService();
-            }
-        });
-        isCopyMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (Memo memo : mSelectedMemoList) {
-                    memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+            });
+            mIsCopyMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    for (Memo memo : mSelectedMemoList) {
+                        memo.setIs_chosen(0);
+                        MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    }
+                    recoverBulkOperateView();
                 }
-                recoverBulkOperateView();
-            }
-        });
-        isCopyMemoBuilder.create().show();
+            });
+        }
+        mIsCopyMemoBuilder.create().show();
     }
 
     //对更多操作的合法性检验
@@ -529,19 +573,19 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             if (mSelectedMemoList.size() == 0) {
                 Toast.makeText(this, R.string.nothing_to_delete, Toast.LENGTH_SHORT).show();
             } else {
-                newDeleteDialog();
+                showDeleteDialog();
             }
         } else if (mDealIv.getTag().equals(COPY)) {
             if (mSelectedMemoList.size() == 0) {
                 Toast.makeText(this, R.string.nothing_to_copy, Toast.LENGTH_SHORT).show();
             } else {
-                newSelectDayDialog();
+                showSelectDayDialog();
             }
         }
     }
 
     //批量删除、复制后的恢复
-    public void recoverBulkOperateView(){
+    public void recoverBulkOperateView() {
         MORE_STATUS = 0;
         mSelectedMemoList.clear();
         mChosenTv.setVisibility(View.INVISIBLE);

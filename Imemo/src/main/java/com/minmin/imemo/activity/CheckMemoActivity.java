@@ -30,7 +30,7 @@ import com.minmin.imemo.util.MyCalendar;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:查看单条备忘录界面
  *   version:1.0
  * </pre>
  */
@@ -69,7 +69,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private MyCalendar mCalendar = new MyCalendar();
 
-    private String selectedYear;
+    private String mSelectedYear;
 
     private String mSelectedMonth;
 
@@ -109,6 +109,12 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private final static String REMIND = "remind";
 
+    private AlertDialog.Builder mIsDeleteMemoBuilder;
+
+    private AlertDialog.Builder mIsUpdateMemoBuilder;
+
+    private DatePickerDialog mDatePD;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +122,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         //获取选定memo对象，并进行页面初始化
         memo = (Memo) getIntent().getSerializableExtra(RETURN_MEMO);
         initView();
-        selectedYear = memo.getYear();
+        mSelectedYear = memo.getYear();
         mSelectedMonth = memo.getMonth();
         mSelectedDay = memo.getDay();
         mSelectedWeek = memo.getWeek();
@@ -133,8 +139,10 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mRemindIv = findViewById(R.id.remindIv);
         if(memo.getIs_remind()==1){
             mRemindIv.setBackgroundResource(R.drawable.remind);
+            mRemindIv.setTag(REMIND);
         }else{
             mRemindIv.setBackgroundResource(R.drawable.not_remind);
+            mRemindIv.setTag(NOTREMIND);
         }
         mDateRl = findViewById(R.id.dateRl);
         mStartTimeRl = findViewById(R.id.startTimeRl);
@@ -189,7 +197,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
             //点击了删除
             case R.id.deleteIv:
                 if (mDeleteIv.getTag().equals(DELETE)) {
-                    newDeleteDialog();
+                    showDeleteDialog();
                 } else if (mDeleteIv.getTag().equals(SAVE)) {
                     checkText();
                 }
@@ -197,7 +205,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
             //点击了返回
             case R.id.backIv:
                 if (isUpdate()) {
-                    newUpdateDialog();
+                    showUpdateDialog();
                 } else {
                     finish();
                 }
@@ -208,7 +216,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                 break;
             //点击了选择日期
             case R.id.dateRl:
-                newDatePickerDialog();
+                showDatePickerDialog();
                 break;
             //点击了选择开始时间
             case R.id.startTimeRl:
@@ -263,10 +271,12 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     public void checkText(){
         if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
             Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
-        } else if (isUpdate()) {
-            updateMemo();
         } else {
-            finish();
+            if (isUpdate()) {
+                updateMemo();
+            } else {
+                finish();
+            }
         }
     }
 
@@ -280,43 +290,50 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         return false;
     }
     //弹出日历选择器
-    public void newDatePickerDialog(){
-        new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String weekOfday = DateUtils.getSelectedWeek(year, month, day);
-                selectedYear = year+"";
-                mSelectedMonth = DateUtils.toNormalTime(month + 1);
-                mSelectedDay = DateUtils.toNormalTime(day);
-                mSelectedWeek = weekOfday;
-                if (mCalendar.getNow_year().equals(selectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
-                    mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), selectedYear, mSelectedMonth, mSelectedDay)) {
-                    mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                } else {
-                    mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
+    public void showDatePickerDialog(){
+
+        if(mDatePD==null){
+            mDatePD=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    String weekOfday = DateUtils.getSelectedWeek(year, month, day);
+                    mSelectedYear = year+"";
+                    mSelectedMonth = DateUtils.toNormalTime(month + 1);
+                    mSelectedDay = DateUtils.toNormalTime(day);
+                    mSelectedWeek = weekOfday;
+                    if (mCalendar.getNow_year().equals(mSelectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
+                        mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
+                    } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
+                        mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
+                    } else {
+                        mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
+                    }
                 }
-            }
-        }, Integer.parseInt(mCalendar.getNow_year()), Integer.parseInt(mCalendar.getNow_month()) - 1, Integer.parseInt(mCalendar.getNow_day())).show();
+            }, Integer.parseInt(mSelectedYear),  Integer.parseInt(mSelectedMonth)- 1, Integer.parseInt(mSelectedDay));
+        }
+        mDatePD.show();
     }
 
     //当点击删除按钮，弹出确认是否删除的对话框提示
-    public void newDeleteDialog() {
-        AlertDialog.Builder isDeleteMemoBuilder = new AlertDialog.Builder(this);
-        isDeleteMemoBuilder.setMessage(R.string.ensure_delete);
-        isDeleteMemoBuilder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteMemo();
-            }
-        });
-        isDeleteMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        isDeleteMemoBuilder.create().show();
+    public void showDeleteDialog() {
+
+        if(mIsDeleteMemoBuilder==null){
+            mIsDeleteMemoBuilder = new AlertDialog.Builder(this);
+            mIsDeleteMemoBuilder.setMessage(R.string.ensure_delete);
+            mIsDeleteMemoBuilder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    deleteMemo();
+                }
+            });
+            mIsDeleteMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+        }
+        mIsDeleteMemoBuilder.create().show();
     }
 
     //时间选择器变化时文本也跟着变化
@@ -352,35 +369,38 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     }
 
     //当选择返回而用户有更改痕迹，弹出是否保存的对话框的提示
-    public void newUpdateDialog() {
-        AlertDialog.Builder isUpdateMemoBuilder = new AlertDialog.Builder(this);
-        isUpdateMemoBuilder.setMessage(R.string.ensure_save);
-        isUpdateMemoBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                updateMemo();
-            }
-        });
-        isUpdateMemoBuilder.setNegativeButton(R.string.give_up, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        isUpdateMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+    public void showUpdateDialog() {
 
-            }
-        });
-        isUpdateMemoBuilder.create().show();
+        if(mIsUpdateMemoBuilder==null){
+            mIsUpdateMemoBuilder = new AlertDialog.Builder(this);
+            mIsUpdateMemoBuilder.setMessage(R.string.ensure_save);
+            mIsUpdateMemoBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    updateMemo();
+                }
+            });
+            mIsUpdateMemoBuilder.setNegativeButton(R.string.give_up, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            mIsUpdateMemoBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+        }
+        mIsUpdateMemoBuilder.create().show();
     }
 
     //用户确认更改，数据库更改操作
     public void updateMemo() {
         Memo updateMemo = new Memo();
-        updateMemo.setId(selectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
-        updateMemo.setYear(selectedYear);
+        updateMemo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
+        updateMemo.setYear(mSelectedYear);
         updateMemo.setMonth(mSelectedMonth);
         updateMemo.setDay(mSelectedDay);
         updateMemo.setWeek(mSelectedWeek);
@@ -401,7 +421,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     //判断当前memo是否被修改
     public boolean isUpdate() {
-        if (selectedYear.equals(memo.getYear()) && mSelectedMonth.equals(memo.getMonth()) && mSelectedDay.equals(memo.getDay())
+        if (mSelectedYear.equals(memo.getYear()) && mSelectedMonth.equals(memo.getMonth()) && mSelectedDay.equals(memo.getDay())
                 && mSelectedWeek.equals(memo.getWeek()) && mSelectedStartHour.equals(memo.getStart_hour())
                 && mSelectedStartMinute.equals(memo.getStart_minute()) && mSelectedFinishHour.equals(memo.getFinish_hour())
                 && mSelectedFinishMinute.equals(memo.getFinish_minute()) && mContextEt.getText().toString().trim().equals(memo.getText())
@@ -415,7 +435,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     @Override//重写返回键事件
     public void onBackPressed() {
         if (isUpdate()) {
-            newUpdateDialog();
+            showUpdateDialog();
         } else {
             finish();
         }

@@ -28,7 +28,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:通过隐藏实现双布局并存的Adapter
  *   version:1.0
  * </pre>
  */

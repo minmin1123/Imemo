@@ -25,7 +25,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/25
- *   desc:
+ *   desc:实现提醒功能的服务
  *   version:1.0
  * </pre>
  */

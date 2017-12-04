@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:数据库的帮助类
  *   version:1.0
  * </pre>
  */

@@ -7,7 +7,7 @@ import android.os.Build;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
- *   desc:
+ *   desc:有关日期和时间的类
  *   version:1.0
  * </pre>
  */
