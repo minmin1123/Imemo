@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_orange"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="倒数日"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.minmin.imemo.swipemenulistview.SwipeMenuListView
+            android:id="@+id/listLv"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#0000"
+            android:descendantFocusability="blocksDescendants"
+            />
+
+        <TextView
+            android:id="@+id/nothingTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无倒数日"
+            android:textColor="@color/theme_orange"
+            android:textSize="25sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/addIv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/add_any"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

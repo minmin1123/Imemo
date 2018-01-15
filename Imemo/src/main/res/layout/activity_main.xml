@@ -4,105 +4,135 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ebebeb">
+    android:background="@color/bg_gray">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f5a631"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/chosenTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_margin="10dp"
-            android:text="选择项目"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            android:visibility="invisible" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/leftIv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/left" />
-
-            <TextView
-                android:id="@+id/dateTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2017-09"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/rightIv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/right" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/dealIv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/moreIv"
-            android:visibility="invisible" />
-
-        <ImageView
-            android:id="@+id/moreIv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/more" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/menuDl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/listLv"
-            android:visibility="gone"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#0000"
-            android:descendantFocusability="blocksDescendants"
-            />
+            android:background="@color/bg_gray">
 
-        <TextView
-            android:id="@+id/nothingTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="无备忘录"
-            android:textColor="#f5a631"
-            android:textSize="25sp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/theme_orange"
+                android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/addAnyIv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/add_any"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"/>
+                <TextView
+                    android:id="@+id/chosenTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp"
+                    android:text="选择项目"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:visibility="invisible" />
 
-    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1">
 
+                    <ImageView
+                        android:id="@+id/leftIv"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/left" />
+
+                    <TextView
+                        android:id="@+id/dateTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2017-09"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/rightIv"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/right" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/dealIv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:layout_toLeftOf="@+id/moreIv"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/moreIv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/more" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/listLv"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#0000"
+                    android:descendantFocusability="blocksDescendants"
+                    />
+
+                <TextView
+                    android:id="@+id/nothingTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无备忘录"
+                    android:textColor="@color/theme_orange"
+                    android:textSize="25sp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+                <ImageView
+                    android:id="@+id/addAnyIv"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/add_any"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="8dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!--侧拉菜单-->
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@drawable/paper_select"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listMu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

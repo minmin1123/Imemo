@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="09:00"
-                android:textColor="#858585"
+                android:textColor="@color/item_up_font_gray"
                 android:textSize="15sp" />
 
             <TextView
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="10:00"
-                android:textColor="#bababa"
+                android:textColor="@color/line_gray"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -47,7 +47,7 @@
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#bababa" />
+                android:background="@color/line_gray" />
 
             <ImageView
                 android:id="@+id/completeIv"
@@ -55,43 +55,42 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="@drawable/incomplete"
-                android:tag="inc"/>
+                android:tag="inc" />
         </FrameLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_toRightOf="@+id/item_fl_check"
-            >
+            android:layout_toRightOf="@+id/item_fl_check">
 
             <TextView
                 android:id="@+id/contextTv"
-                android:background="@drawable/paper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/paper"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
+                android:tag="unselected"
                 android:text="上课hhhhhhhhhhhhhhhhhhhhhhhh"
-                android:textColor="#545454"
-                android:textSize="15sp"
-                android:tag="unselected"/>
+                android:textColor="@color/font_gray"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/markIv"
-                android:visibility="invisible"
-                android:tag="notremind"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:src="@drawable/mark"
-                android:layout_alignParentRight="true"/>
+                android:tag="notremind"
+                android:visibility="invisible" />
 
         </RelativeLayout>
 

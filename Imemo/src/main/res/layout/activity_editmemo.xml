@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa">
+    android:background="@color/bg_edit_gray">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f5a631">
+        android:background="@color/theme_orange">
 
         <ImageView
             android:id="@+id/backIv"
@@ -53,18 +53,18 @@
             android:id="@+id/dateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="今天-9月29日,周五"
-            android:textColor="#545454"
-            android:textSize="18sp"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/edit_iv_date"/>
+            android:layout_marginLeft="8dp"
+            android:layout_toEndOf="@+id/edit_iv_date"
+            android:text="今天-9月29日,周五"
+            android:textColor="@color/font_gray"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#bababa"/>
+        android:background="@color/line_gray"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@+id/edit_iv_time_start"
                 android:text="开始-09:00"
-                android:textColor="#545454"
+                android:textColor="@color/font_gray"
                 android:textSize="18sp" />
         </RelativeLayout>
 
@@ -109,7 +109,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#bababa"/>
+        android:background="@color/line_gray"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:text="结束-10:00"
                 android:textSize="18sp"
-                android:textColor="#545454"
+                android:textColor="@color/font_gray"
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@+id/edit_iv_time_finish"
                 android:layout_centerVertical="true"/>
@@ -150,12 +150,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#bababa"/>
+        android:background="@color/line_gray"/>
 
     <LinearLayout
         android:id="@+id/contextLl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -166,8 +167,8 @@
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
                 android:hint="现在开始写点什么吧..."
-                android:background="#fafafa"
-                android:textColor="#545454"
+                android:background="@color/bg_edit_gray"
+                android:textColor="@color/font_gray"
                 android:textSize="15sp" />
         </ScrollView>
 

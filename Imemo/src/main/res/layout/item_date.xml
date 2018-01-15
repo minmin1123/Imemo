@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="09:00"
-                android:textColor="#858585"
+                android:textColor="@color/item_up_font_gray"
                 android:textSize="15sp"
                 android:visibility="invisible" />
 
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="10:00"
-                android:textColor="#bababa"
+                android:textColor="@color/line_gray"
                 android:textSize="12sp"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -47,7 +47,7 @@
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#bababa" />
+                android:background="@color/line_gray" />
 
             <ImageView
                 android:layout_width="30dp"
@@ -67,7 +67,7 @@
             android:maxLines="1"
             android:padding="5sp"
             android:text="9月29日,周五"
-            android:textColor="#858585"
+            android:textColor="@color/item_up_font_gray"
             android:textSize="18sp" />
 
         <ImageView

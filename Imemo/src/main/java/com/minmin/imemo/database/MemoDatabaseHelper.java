@@ -30,6 +30,12 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper{
             "is_remind integer," +
             "is_chosen integer)";
 
+    private final static String CREATE_MEMORY = "create table Memory(id text," +
+            "year text," +
+            "month text," +
+            "day text," +
+            "text text)";
+
     public MemoDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -37,6 +43,7 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_MEMO);
+        sqLiteDatabase.execSQL(CREATE_MEMORY);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/15
- *   desc:操作datalist的管理类
+ *   desc:操作memolist的管理类
  *   version:1.0
  * </pre>
  */

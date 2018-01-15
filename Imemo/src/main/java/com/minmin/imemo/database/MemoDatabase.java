@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minmin.imemo.model.Memo;
+import com.minmin.imemo.model.Memory;
 import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
@@ -60,7 +61,9 @@ public class MemoDatabase {
 
     private final static String IS_REMIND = "is_remind";
 
-    private final static String TABLE = "Memo";
+    private final static String TABLE_MEMO = "Memo";
+
+    private final static String TABLE_MEMORY = "Memory";
 
     private MemoDatabase(Context context){
         helper = new MemoDatabaseHelper(context, DATABASE_NAME, null, VERSION);
@@ -90,7 +93,7 @@ public class MemoDatabase {
         values.put(IS_COMPLETE,memo.getIs_completed());
         values.put(IS_REMIND, memo.getIs_remind());
         values.put(IS_CHOSEN, memo.getIs_chosen());
-        sqLiteDatabase.insert(TABLE, null, values);
+        sqLiteDatabase.insert(TABLE_MEMO, null, values);
         //之后进行是否是当天第一条的检查
 //        getEveryDayMemo(memo.getYear(),memo.getMonth(),memo.getDay());
     }
@@ -98,7 +101,7 @@ public class MemoDatabase {
     //遍历当天全部备忘录（按顺序），对is_first进行重新赋值
 //    public void getEveryDayMemo(String year,String month,String day){
 //        sqLiteDatabase=helper.getReadableDatabase();
-//        Cursor cursor=sqLiteDatabase.query(TABLE, null, YEAR+"=? and "+MONTH+"=? and "+DAY+"=?", new String[]{year,month,day}, null, null,ID+" asc");
+//        Cursor cursor=sqLiteDatabase.query(TABLE_MEMO, null, YEAR+"=? and "+MONTH+"=? and "+DAY+"=?", new String[]{year,month,day}, null, null,ID+" asc");
 //        int hasFirst=0;
 //        if(cursor!=null){
 //            while(cursor.moveToNext()){
@@ -119,7 +122,7 @@ public class MemoDatabase {
 //        sqLiteDatabase=helper.getReadableDatabase();
 //        ContentValues values = new ContentValues();
 //        values.put(IS_REMIND, isFirst);
-//        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{id});
+//        sqLiteDatabase.update(TABLE_MEMO,values,ID+"=?",new String[]{id});
 //    }
 
     //新建指定日期的备忘录列表--先将被复制备忘录改为指定日期备忘录，再插入一条被复制备忘录
@@ -135,7 +138,7 @@ public class MemoDatabase {
             values.put(IS_COMPLETE,0);
             values.put(IS_REMIND,0);
             values.put(IS_CHOSEN,0);
-            sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
+            sqLiteDatabase.update(TABLE_MEMO,values,ID+"=?",new String[]{memo.getId()});
             insertMemo(memo);
         }
         //对指定日期的备忘录Is_first进行重新赋值
@@ -146,7 +149,7 @@ public class MemoDatabase {
     public void deleteMemo(Memo memo){
         sqLiteDatabase=helper.getReadableDatabase();
         String id = memo.getId();
-        sqLiteDatabase.delete(TABLE,ID+"=?",new String[]{id});
+        sqLiteDatabase.delete(TABLE_MEMO,ID+"=?",new String[]{id});
     }
 
     //批量删除指定日期的备忘录
@@ -171,7 +174,7 @@ public class MemoDatabase {
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(IS_COMPLETE, isCompleted);
-        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
+        sqLiteDatabase.update(TABLE_MEMO,values,ID+"=?",new String[]{memo.getId()});
     }
 
     //更改备忘录的选中状态--对应is_chosen属性
@@ -179,14 +182,14 @@ public class MemoDatabase {
         sqLiteDatabase=helper.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(IS_CHOSEN, isChosen);
-        sqLiteDatabase.update(TABLE,values,ID+"=?",new String[]{memo.getId()});
+        sqLiteDatabase.update(TABLE_MEMO,values,ID+"=?",new String[]{memo.getId()});
     }
 
     //查询指定年月的所有备忘录
     public List<Memo> quaryEveryMonthMemoList(String year,String month){
         List<Memo> memoList=new ArrayList<>();
         sqLiteDatabase=helper.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.query(TABLE, null, YEAR+"=? and "+MONTH+"=?", new String[]{year,month}, null, null,ID+" asc");
+        Cursor cursor=sqLiteDatabase.query(TABLE_MEMO, null, YEAR+"=? and "+MONTH+"=?", new String[]{year,month}, null, null,ID+" asc");
         if(cursor!=null) {
             while (cursor.moveToNext()) {
                 Memo memo = new Memo();
@@ -214,7 +217,7 @@ public class MemoDatabase {
     public List<Memo> quaryEveryDayMemoList(String year,String month,String day){
         List<Memo> memoList=new ArrayList<>();
         sqLiteDatabase=helper.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.query(TABLE, null, YEAR+"=? and "+MONTH+"=? and "+DAY+"=?", new String[]{year,month,day}, null, null,ID+" asc");
+        Cursor cursor=sqLiteDatabase.query(TABLE_MEMO, null, YEAR+"=? and "+MONTH+"=? and "+DAY+"=?", new String[]{year,month,day}, null, null,ID+" asc");
         if(cursor!=null){
             while(cursor.moveToNext()){
                 Memo memo = new Memo();
@@ -232,6 +235,55 @@ public class MemoDatabase {
                 memo.setIs_remind(cursor.getInt(cursor.getColumnIndex(IS_REMIND)));
                 memo.setIs_chosen(cursor.getInt(cursor.getColumnIndex(IS_CHOSEN)));
                 memoList.add(memo);
+            }
+            cursor.close();
+        }
+        return memoList;
+    }
+
+
+    //新建一条纪念日
+    public void insertMemory(Memory memory){
+        sqLiteDatabase=helper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID,memory.getId());
+        values.put(YEAR,memory.getYear());
+        values.put(MONTH,memory.getMonth());
+        values.put(DAY,memory.getDay());
+        values.put(TEXT,memory.getText());
+        sqLiteDatabase.insert(TABLE_MEMORY, null, values);
+    }
+
+    //删除指定纪念日
+    public void deleteMemory(Memory memory){
+        sqLiteDatabase=helper.getReadableDatabase();
+        String id = memory.getId();
+        sqLiteDatabase.delete(TABLE_MEMORY,ID+"=?",new String[]{id});
+    }
+
+
+    //更改指定纪念日
+    public void updateMemory(Memory old_memory,Memory update_memory){
+        //删除原来备忘录，增添新的备忘录
+        sqLiteDatabase=helper.getReadableDatabase();
+        deleteMemory(old_memory);
+        insertMemory(update_memory);
+    }
+
+    //查询所有纪念日
+    public List<Memory> quaryAllMemoryList(){
+        List<Memory> memoList=new ArrayList<>();
+        sqLiteDatabase=helper.getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.query(TABLE_MEMORY, null, null,null,null, null,ID+" desc");
+        if(cursor!=null){
+            while(cursor.moveToNext()){
+                Memory memory = new Memory();
+                memory.setId(cursor.getString(cursor.getColumnIndex(ID)));
+                memory.setYear(cursor.getString(cursor.getColumnIndex(YEAR)));
+                memory.setMonth(cursor.getString(cursor.getColumnIndex(MONTH)));
+                memory.setDay(cursor.getString(cursor.getColumnIndex(DAY)));
+                memory.setText(cursor.getString(cursor.getColumnIndex(TEXT)));
+                memoList.add(memory);
             }
             cursor.close();
         }

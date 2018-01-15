@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,7 +39,7 @@ import java.util.List;
  * </pre>
  */
 
-public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements View.OnClickListener{
 
     private ImageView mAddAnyIv;
 
@@ -55,6 +58,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private TextView mChosenTv;
 
     private ImageView mDealIv;
+    
+    private ListView mListMu;
+
+    private DrawerLayout mMenuDl;//侧滑菜单
+
+    private ActionBarDrawerToggle mToggle;
 
     private MyCalendar mCalendar = new MyCalendar();
 
@@ -72,7 +81,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private MemoWithDateListAdapter mMemoListAdapter;
 
-    private String[] moreList;
+    private String[] mMoreList;
+    
+    private List<String> functionList= new ArrayList<>();
+
+    private ArrayAdapter<String> mAdapter;
 
     private final static int REQUESTCODE_MAIN = 1;
 
@@ -132,35 +145,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private AlertDialog.Builder mIsCopyMemoBuilder;
 
-//    private Myhandler handler = new Myhandler(this);
-//
-//
-//    static class Myhandler extends Handler{
-
-//        WeakReference<MainActivity> context;
-//
-//        public Myhandler(MainActivity context){
-//            this.context = new WeakReference<>(context);
-//        }
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            MainActivity tmp = context.get();
-//            if (null!=tmp)
-//                tmp.checkMoreSelect();
-//        }
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        moreList = new String[]{getResources().getString(R.string.bulk_delete), getResources().getString(R.string.bulk_copy)};
-        //初始化dataList和adapter
-        mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
-        mMemoListAdapter = new MemoWithDateListAdapter(this, mMemoWithTitleList);
-        //页面初始化
+        mMoreList = new String[]{getResources().getString(R.string.bulk_delete), getResources().getString(R.string.bulk_copy)};
+        initList();
         initView();
         updateMemoList();
         startRemindService();
@@ -170,6 +160,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     public void startRemindService() {
         Intent remindServiceIntent = new Intent(this, RemindService.class);
         startService(remindServiceIntent);
+    }
+    
+    //dataList数据初始化
+    public void initList(){
+       
+        mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
+        mMemoListAdapter = new MemoWithDateListAdapter(this, mMemoWithTitleList);
+        functionList.add(getResources().getString(R.string.memory));
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, functionList);
     }
 
     //页面初始化
@@ -183,15 +182,42 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         mListLv = findViewById(R.id.listLv);
         mChosenTv = findViewById(R.id.chosenTv);
         mDealIv = findViewById(R.id.dealIv);
+        mListMu = findViewById(R.id.listMu);
+        mMenuDl = findViewById(R.id.menuDl);
         mAddAnyIv.setOnClickListener(this);
         mLeftIv.setOnClickListener(this);
         mRightIv.setOnClickListener(this);
         mDealIv.setOnClickListener(this);
         mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
-        mListLv.setOnItemClickListener(this);
+        mListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                clickMemo(view,i);
+            }
+        });
         mMoreIv.setOnClickListener(this);
         mDateTv.setOnClickListener(this);
         mListLv.setAdapter(mMemoListAdapter);
+        mListMu.setAdapter(mAdapter);
+        mListMu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                clickFuntion(i);
+            }
+        });
+        mToggle = new ActionBarDrawerToggle(this, mMenuDl, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        mMenuDl.addDrawerListener(mToggle);
     }
 
     @Override
@@ -371,8 +397,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
     }
 
-    @Override//ListView的子项点击事件
-    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
+    //点击了备忘录列表
+    public void clickMemo(View view,int position){
         if (MORE_STATUS == 0) {
             //非更多（批量删除、批量复制）状态，点击后查看选定子项的备忘录详情
             if (mMemoWithTitleList.get(position).getType() == TYPE_PAPER) {
@@ -407,14 +433,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 mChosenTv.setText("已选择" + mSelectedMemoList.size() + "项");
             }
         }
+    }
 
+
+    //点击了多功能菜单栏
+    public void clickFuntion(int position){
+
+        if(functionList.get(position).equals(getResources().getString(R.string.memory))){
+            Intent toMemoryIntent = new Intent(MainActivity.this, MemoryMainActivity.class);
+            startActivity(toMemoryIntent);
+        }
     }
 
     //更多选项的对话框
     public void showMoreDialog() {
         if (mMoreMemoBuilder == null) {
             mMoreMemoBuilder = new AlertDialog.Builder(this);
-            mMoreMemoBuilder.setItems(moreList, new DialogInterface.OnClickListener() {
+            mMoreMemoBuilder.setItems(mMoreList, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int position) {
                     MORE_STATUS = 1;

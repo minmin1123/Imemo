@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
@@ -269,13 +270,18 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     //检查文本内容是否合法
     public void checkText(){
-        if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
-            Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
-        } else {
-            if (isUpdate()) {
-                updateMemo();
+        if (TextUtils.isEmpty(mContextEt.getText())) {
+            Toast.makeText(this, R.string.none_content, Toast.LENGTH_SHORT).show();
+        }else {
+
+            if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
+                Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
             } else {
-                finish();
+                if (isUpdate()) {
+                    updateMemo();
+                } else {
+                    finish();
+                }
             }
         }
     }

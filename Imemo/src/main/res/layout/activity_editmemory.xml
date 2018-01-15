@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_orange">
+
+        <ImageView
+            android:id="@+id/backIv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/saveIv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/save" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/textET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入内容"
+            android:textSize="20sp"
+            android:padding="8dp"
+            android:gravity="center"
+            android:background="@drawable/memory_title"
+            android:textColor="@color/font_gray"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/memory"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.06"
+                >
+
+                <TextView
+                    android:id="@+id/arrivedTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="还有"
+                    android:textSize="15sp"
+                    android:padding="5dp"
+                    android:layout_toLeftOf="@+id/countTv"
+                    android:layout_alignBaseline="@+id/countTv"
+                    android:textColor="@color/theme_orange"/>
+
+                <TextView
+                    android:id="@+id/countTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="100sp"
+                    android:padding="5dp"
+                    android:textColor="@color/theme_orange"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天"
+                    android:textSize="15sp"
+                    android:padding="5dp"
+                    android:layout_toRightOf="@+id/countTv"
+                    android:layout_alignBaseline="@+id/countTv"
+                    android:textColor="@color/theme_orange"
+                    />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line_gray"/>
+
+            <TextView
+                android:id="@+id/dateTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="目标日：2018年01月01日"
+                android:textSize="18sp"
+                android:padding="10dp"
+                android:gravity="center"
+                android:textColor="@color/item_up_font_gray"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

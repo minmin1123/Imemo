@@ -2,6 +2,8 @@ package com.minmin.imemo.util;
 
 import android.os.Build;
 
+import java.util.Calendar;
+
 /**
  * <pre>
  *   author:minmin
@@ -30,7 +32,7 @@ public class DateUtils {
         int week;
         String weekOfday = null;
         if (month == 0) {
-            week = (int) (year + (year - 2000) / 4 + day - 2000);
+            week = (int) (year + (year - 2000) / 4 + day - 2001);
         } else if (month == 1) {
             week = (int) (year + (year - 2000) / 4 + day - 1998);
         } else {
@@ -120,6 +122,18 @@ public class DateUtils {
         return false;
     }
 
+    //判断给定时间是当天之前还是之后
+    public static boolean isArrived(String date){
+        MyCalendar mCalendar = new MyCalendar();
+        String now = mCalendar.getNow_year() + mCalendar.getNow_month() + mCalendar.getNow_day();
+        if(date.compareTo(now)<0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
     //距离上一次时间过去的毫秒数
     public static long turnFixedMSecond(String time) {
         if(time.length()!=0){
@@ -134,4 +148,17 @@ public class DateUtils {
         }
        return 0;
     }
+
+    //计算距离当日的天数
+    public static long countSpanDays(String year,String month,String day){
+        Calendar now=Calendar.getInstance();
+        Calendar then=Calendar.getInstance();
+        then.set(Integer.parseInt(year),Integer.parseInt(month)-1,Integer.parseInt(day));
+        long t1=Math.abs(then.getTimeInMillis()-now.getTimeInMillis());
+        long t2=1000*60*60*24;
+        long days=(int)(t1/t2);
+        return days;
+    }
+
+
 }

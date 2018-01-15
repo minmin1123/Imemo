@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +29,15 @@
         </service>
         <receiver android:name=".receiver.RemindReceiver">
         </receiver>
+        <activity android:name=".activity.MemoryMainActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        </activity>
+        <activity android:name=".activity.EditMemoryActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        </activity>
+        <activity android:name=".activity.CheckMemoryActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>
