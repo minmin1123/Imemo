@@ -27,13 +27,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.minmin.imemo.swipemenulistview.SwipeMenuListView
+        <com.minmin.imemo.view.swipemenulistview.SwipeMenuListView
             android:id="@+id/listLv"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#0000"
             android:descendantFocusability="blocksDescendants"
+            android:layoutAnimation="@anim/memorylist_normal"
             />
 
         <TextView

@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,12 +16,13 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.adapter.MemoryListAdapter;
 import com.minmin.imemo.database.MemoDatabase;
 import com.minmin.imemo.model.Memory;
-import com.minmin.imemo.swipemenulistview.SwipeMenu;
-import com.minmin.imemo.swipemenulistview.SwipeMenuCreator;
-import com.minmin.imemo.swipemenulistview.SwipeMenuItem;
-import com.minmin.imemo.swipemenulistview.SwipeMenuListView;
+import com.minmin.imemo.view.swipemenulistview.SwipeMenu;
+import com.minmin.imemo.view.swipemenulistview.SwipeMenuCreator;
+import com.minmin.imemo.view.swipemenulistview.SwipeMenuItem;
+import com.minmin.imemo.view.swipemenulistview.SwipeMenuListView;
 import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MemoryListManager;
+import com.minmin.imemo.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,6 @@ import java.util.List;
  *   version:1.0
  * </pre>
  */
-
 public class MemoryMainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ImageView mAddIv;
@@ -61,7 +62,7 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
 
     private final static String RETURN_UPDATEMEMORY = "updateMemory";
 
-    private final static String RETURN_MEMORY = "memory";
+    private final static String RETURN_MEMORY = "memory_body";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,11 +80,13 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
         mListLv = findViewById(R.id.listLv);
         mAddIv.setOnClickListener(this);
         mListLv.setOnItemClickListener(this);
+        Animation rotateAnim = AnimationUtils.loadAnimation(this, R.anim.add_rotate);
+        mAddIv.startAnimation(rotateAnim);
         initList();
         mMemoryListAdapter = new MemoryListAdapter(this, R.layout.item_memory, mMemoryList);
         mListLv.setAdapter(mMemoryListAdapter);
 
-        //侧滑删除菜单
+        //创建侧滑删除菜单
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -91,8 +94,7 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
 
                 SwipeMenuItem item = new SwipeMenuItem(getApplicationContext());
                 item.setBackground(R.color.red);
-                item.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60,
-                        getResources().getDisplayMetrics()));
+                item.setWidth(Utils.dp2px(MemoryMainActivity.this,60));
                 item.setIcon(R.drawable.delete);
                 menu.addMenuItem(item);
 
@@ -104,7 +106,8 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Memory deleteMemory = mMemoryList.get(position);
                 switch (index) {
-                    case 0: //点击了删除键
+                    case 0:
+                        //点击了删除键
                         mMemoryList = MemoryListManager.deleteMemory(mMemoryList, deleteMemory);
                         MemoDatabase.getInstance(MemoryMainActivity.this).deleteMemory(deleteMemory);
                         Toast.makeText(MemoryMainActivity.this, R.string.delete_success, Toast.LENGTH_SHORT).show();
@@ -113,6 +116,8 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
                             mNothingTv.setVisibility(View.VISIBLE);
                             mListLv.setVisibility(View.GONE);
                         }
+                        break;
+                    default:
                         break;
                 }
                 return false;
@@ -127,6 +132,8 @@ public class MemoryMainActivity extends Activity implements View.OnClickListener
             case R.id.addIv:
                 Intent toEditMemoryIntent = new Intent(MemoryMainActivity.this, EditMemoryActivity.class);
                 startActivityForResult(toEditMemoryIntent, REQUESTCODE_MAIN);
+                break;
+            default:
                 break;
         }
     }

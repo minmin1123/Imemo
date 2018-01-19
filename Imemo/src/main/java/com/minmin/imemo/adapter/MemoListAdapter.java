@@ -116,7 +116,7 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
         }
         //该项item已被选中->背景由灰变为黄
         if (memo.getIs_chosen() == 0) {
-            holder.mContextTv.setBackgroundResource(R.drawable.paper);
+            holder.mContextTv.setBackgroundResource(R.drawable.paper_not_select);
             holder.mContextTv.setTag(UNSELECTED);
         } else {
             holder.mContextTv.setTag(SELECTED);

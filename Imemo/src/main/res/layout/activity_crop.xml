@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/titleRl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_orange">
+
+        <ImageView
+            android:id="@+id/backIv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/saveIv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/save" />
+
+    </RelativeLayout>
+
+    <com.minmin.imemo.view.cameraalbumview.ZoomImageView
+        android:id="@+id/zoomImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/titleRl"
+        android:background="#FFFFFF" />
+
+    <com.minmin.imemo.view.cameraalbumview.MaskView
+        android:id="@+id/maskView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/titleRl"
+        android:alpha="0.6"
+        android:background="#e0000000" />
+</RelativeLayout>

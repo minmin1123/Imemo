@@ -1,4 +1,4 @@
-package com.minmin.imemo.swipemenulistview;
+package com.minmin.imemo.view.swipemenulistview;
 
 import android.content.Context;
 

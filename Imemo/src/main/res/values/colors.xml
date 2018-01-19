@@ -3,8 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="brown">#e21414</color>
     <color name="red">#e95f23</color>
     <color name="theme_orange">#f5a631</color>
+    <color name="yellow">#f5d431</color>
     <color name="font_gray">#545454</color>
     <color name="item_up_font_gray">#858585</color>
     <color name="line_gray">#bababa</color>

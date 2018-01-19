@@ -9,15 +9,18 @@
         android:roundIcon="@drawable/imemo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
+        <activity android:name=".activity.StartActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         </activity>
         <activity android:name=".activity.EditMemoActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
@@ -38,6 +41,18 @@
         <activity android:name=".activity.CheckMemoryActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         </activity>
+        <activity android:name=".activity.CropActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        </activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.minmin.imemo.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

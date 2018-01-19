@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
 
+
+
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/menuDl"
         android:layout_width="match_parent"
@@ -92,6 +94,7 @@
                     android:layout_height="match_parent"
                     android:divider="#0000"
                     android:descendantFocusability="blocksDescendants"
+                    android:layoutAnimation="@anim/memolist_normal"
                     />
 
                 <TextView
@@ -129,7 +132,8 @@
             <ListView
                 android:id="@+id/listMu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/functionlist_normal"/>
 
         </LinearLayout>
 

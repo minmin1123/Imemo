@@ -18,6 +18,7 @@ import com.minmin.imemo.activity.EditMemoActivity;
 import com.minmin.imemo.database.MemoDatabase;
 import com.minmin.imemo.model.Memo;
 import com.minmin.imemo.service.RemindService;
+import com.minmin.imemo.view.tickview.TickView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,11 +108,11 @@ public class MemoWithDateListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Memo memo = (Memo) getItem(position);
         DateViewHolder dateViewHolder;
-        PaperViewHolder paperViewHolder;
+        final PaperViewHolder paperViewHolder;
         switch (getItemViewType(position)) {
             case DATE://如果类型是时间标题
                 if (convertView == null) {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_date, null);
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_memo_date, null);
                     dateViewHolder = new DateViewHolder();
                     dateViewHolder.mDateTv = convertView.findViewById(R.id.dateTv);
                     dateViewHolder.mAddIv = convertView.findViewById(R.id.addIv);
@@ -135,13 +136,14 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                 break;
             case PAPER://如果类型是纸片
                 if (convertView == null) {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_paper, null);
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_memo_paper, null);
                     paperViewHolder = new PaperViewHolder();
                     paperViewHolder.mStartTimeTv = convertView.findViewById(R.id.startTimeTv);
                     paperViewHolder.mFinishTimeTv = convertView.findViewById(R.id.finishTimeTv);
                     paperViewHolder.mContextTv = convertView.findViewById(R.id.contextTv);
                     paperViewHolder.mPaperRl = convertView.findViewById(R.id.mPaperRl);
-                    paperViewHolder.mCompleteIv = convertView.findViewById(R.id.completeIv);
+//                    paperViewHolder.mCompleteIv = convertView.findViewById(R.id.completeIv);
+                    paperViewHolder.mTickView=convertView.findViewById(R.id.completeTv);
                     paperViewHolder.mMarkIv=convertView.findViewById(R.id.markIv);
                     convertView.setTag(paperViewHolder);
                 } else {
@@ -160,36 +162,45 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                 }
                 //该项item已被完成->圆圈打勾
                 if (memo.getIs_completed() == 0) {
-                    paperViewHolder.mCompleteIv.setBackgroundResource(R.drawable.incomplete);
-                    paperViewHolder.mCompleteIv.setTag(INCOMPLETE);
+                    paperViewHolder.mTickView.setChecked(false);
+                    paperViewHolder.mTickView.setTag(INCOMPLETE);
+
                 } else {
-                    paperViewHolder.mCompleteIv.setBackgroundResource(R.drawable.complete);
-                    paperViewHolder.mCompleteIv.setTag(COMPLETE);
+                    paperViewHolder.mTickView.setChecked(true);
+                    paperViewHolder.mTickView.setTag(COMPLETE);
                 }
+//                if (memo.getIs_completed() == 0) {
+//                    paperViewHolder.mCompleteIv.setBackgroundResource(R.drawable.incomplete);
+//                    paperViewHolder.mCompleteIv.setTag(INCOMPLETE);
+//                } else {
+//                    paperViewHolder.mCompleteIv.setBackgroundResource(R.drawable.complete);
+//                    paperViewHolder.mCompleteIv.setTag(COMPLETE);
+//                }
                 //该项item已被选中->背景由灰变为黄
                 if (memo.getIs_chosen() == 0) {
-                    paperViewHolder.mContextTv.setBackgroundResource(R.drawable.paper);
+                    paperViewHolder.mContextTv.setBackgroundResource(R.drawable.paper_not_select);
                     paperViewHolder.mContextTv.setTag(UNSELECTED);
                 } else {
                     paperViewHolder.mContextTv.setTag(SELECTED);
                     paperViewHolder.mContextTv.setBackgroundResource(R.drawable.paper_select);
                 }
+
                 //该项item是否被完成注册的监听事件
-                paperViewHolder.mCompleteIv.setOnClickListener(new View.OnClickListener() {
+                paperViewHolder.mTickView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Memo selectMemo = mMemoWithTitleList.get(position);
                         if (view.getTag().equals(INCOMPLETE)) {
                             view.setTag(COMPLETE);
-                            view.setBackgroundResource(R.drawable.complete);
+                            paperViewHolder.mTickView.setChecked(true);
                             Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
                             MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
                             selectMemo.setIs_completed(1);
-                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
+                            Intent remindServiceIntent = new Intent((mContext), RemindService.class);
                             ((Activity) mContext).startService(remindServiceIntent);
                         } else {
                             view.setTag(INCOMPLETE);
-                            view.setBackgroundResource(R.drawable.incomplete);
+                            paperViewHolder.mTickView.setChecked(false);
                             Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
                             MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
                             selectMemo.setIs_completed(0);
@@ -198,6 +209,31 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                         }
                     }
                 });
+//                paperViewHolder.mCompleteIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Memo selectMemo = mMemoWithTitleList.get(position);
+//                        if (view.getTag().equals(INCOMPLETE)) {
+//                            view.setTag(COMPLETE);
+//                            view.setBackgroundResource(R.drawable.complete);
+//                            Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
+//                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
+//                            selectMemo.setIs_completed(1);
+//                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
+//                            ((Activity) mContext).startService(remindServiceIntent);
+//                        } else {
+//                            view.setTag(INCOMPLETE);
+//                            view.setBackgroundResource(R.drawable.incomplete);
+//                            Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
+//                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
+//                            selectMemo.setIs_completed(0);
+//                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
+//                            ((Activity) mContext).startService(remindServiceIntent);
+//                        }
+//                    }
+//                });
+                break;
+            default:
                 break;
         }
         return convertView;
@@ -213,7 +249,8 @@ public class MemoWithDateListAdapter extends BaseAdapter {
         TextView mFinishTimeTv;
         TextView mContextTv;
         RelativeLayout mPaperRl;
-        ImageView mCompleteIv;
+//        ImageView mCompleteIv;
+        TickView mTickView;
         ImageView mMarkIv;
 
     }

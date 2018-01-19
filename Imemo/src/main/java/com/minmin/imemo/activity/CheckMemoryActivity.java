@@ -62,7 +62,7 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
 
     private final static String SAVE = "save";
 
-    private final static String RETURN_MEMORY = "memory";
+    private final static String RETURN_MEMORY = "memory_body";
 
     private final static String RETURN_OLDMEMORY = "oldMemory";
 

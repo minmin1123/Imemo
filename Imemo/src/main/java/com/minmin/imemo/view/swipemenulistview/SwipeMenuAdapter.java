@@ -1,4 +1,4 @@
-package com.minmin.imemo.swipemenulistview;
+package com.minmin.imemo.view.swipemenulistview;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -8,10 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
-import com.minmin.imemo.swipemenulistview.SwipeMenuView.OnSwipeItemClickListener;
 
 public class SwipeMenuAdapter implements WrapperListAdapter,
-		OnSwipeItemClickListener {
+        SwipeMenuView.OnSwipeItemClickListener {
 
     private ListAdapter mAdapter;
     private Context mContext;

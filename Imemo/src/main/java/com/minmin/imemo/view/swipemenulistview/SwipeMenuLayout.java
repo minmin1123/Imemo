@@ -1,4 +1,4 @@
-package com.minmin.imemo.swipemenulistview;
+package com.minmin.imemo.view.swipemenulistview;
 
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;
@@ -43,9 +43,11 @@ public class SwipeMenuLayout extends FrameLayout {
 	private Interpolator mCloseInterpolator;
 	private Interpolator mOpenInterpolator;
 	private boolean mSwipEnable = true;
+
 	public SwipeMenuLayout(View contentView, SwipeMenuView menuView) {
 		this(contentView, menuView, null, null);
 	}
+
 	public SwipeMenuLayout(View contentView, SwipeMenuView menuView,
 						   Interpolator closeInterpolator, Interpolator openInterpolator) {
 		super(contentView.getContext());
@@ -60,22 +62,28 @@ public class SwipeMenuLayout extends FrameLayout {
 // defStyle) {
 // super(context, attrs, defStyle);
 // }
+
 	private SwipeMenuLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
+
 	private SwipeMenuLayout(Context context) {
 		super(context);
 	}
+
 	public int getPosition() {
 		return position;
 	}
+
 	public void setPosition(int position) {
 		this.position = position;
 		mMenuView.setPosition(position);
 	}
+
 	public void setSwipeDirection(int swipeDirection) {
 		mSwipeDirection = swipeDirection;
 	}
+
 	private void init() {
 		setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
@@ -138,14 +146,17 @@ public class SwipeMenuLayout extends FrameLayout {
 // }
 // });
 	}
+
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 	}
+
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
+
 	public boolean onSwipe(MotionEvent event) {
 		mGestureDetector.onTouchEvent(event);
 		switch (event.getAction()) {
@@ -164,7 +175,7 @@ public class SwipeMenuLayout extends FrameLayout {
 			case MotionEvent.ACTION_UP:
 				if ((isFling || Math.signum(mDownX - event.getX()) == mSwipeDirection)) {
 // open
-/**************新添加内容****防止在已被拉开的item上向拉开的方向滑动然后抬起手指时,item有很大几率关闭的问题******************/
+//防止在已被拉开的item上向拉开的方向滑动然后抬起手指时,item有很大几率关闭的问题
 					if (Math.abs(mDownX - event.getX()) > (mMenuView.getWidth() / 2)) {
 						smoothOpenMenu();
 					} else {
@@ -173,12 +184,13 @@ public class SwipeMenuLayout extends FrameLayout {
 							smoothCloseMenu();
 						}
 					}
-/*******************************************/
 				} else {
 // close
 					smoothCloseMenu();
 					return false;
 				}
+				break;
+			default:
 				break;
 		}
 		return true;

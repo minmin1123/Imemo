@@ -2,6 +2,8 @@
     <string name="app_name">I记</string>
     <string name="bulk_copy">批量复制</string>
     <string name="bulk_delete">批量删除</string>
+    <string name="take_photo">拍摄头像</string>
+    <string name="choose_from_album">从相册选择图片</string>
     <string name="memory">倒数日</string>
     <string name="update_success">修改成功</string>
     <string name="delete_success">删除成功</string>

@@ -127,7 +127,7 @@
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#bababa" />
+                android:background="@color/line_gray" />
 
             <ImageView
                 android:id="@+id/completeIv"
@@ -150,7 +150,7 @@
 
             <TextView
                 android:id="@+id/contextTv"
-                android:background="@drawable/paper"
+                android:background="@drawable/paper_not_select"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
