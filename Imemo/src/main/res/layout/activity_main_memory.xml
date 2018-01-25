@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/theme_orange"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <com.minmin.imemo.view.swipemenulistview.SwipeMenuListView
+            android:id="@+id/listLv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:divider="#0000"
+            android:layoutAnimation="@anim/memorylist_normal"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <TextView
+            android:id="@+id/nothingTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="无倒数日"
+            android:textColor="@color/theme_orange"
+            android:textSize="25sp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="20dp"
+            android:src="@drawable/add_any" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/titleTb"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/theme_orange">
 
         <TextView
             android:layout_width="wrap_content"
@@ -17,45 +53,8 @@
             android:padding="12dp"
             android:text="倒数日"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20sp" />
 
-            />
+    </android.support.v7.widget.Toolbar>
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.minmin.imemo.view.swipemenulistview.SwipeMenuListView
-            android:id="@+id/listLv"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#0000"
-            android:descendantFocusability="blocksDescendants"
-            android:layoutAnimation="@anim/memorylist_normal"
-            />
-
-        <TextView
-            android:id="@+id/nothingTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="无倒数日"
-            android:textColor="@color/theme_orange"
-            android:textSize="25sp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/addIv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/add_any"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"/>
-
-    </RelativeLayout>
-
-</LinearLayout>
+</FrameLayout>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_edit_gray">
+    android:background="@color/bg_edit_gray"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,148 +50,175 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/dateRl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/check_iv_date"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="8dp"
-            android:src="@drawable/date" />
-
-        <TextView
-            android:id="@+id/dateTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="今天-9月29日,周五"
-            android:textColor="@color/font_gray"
-            android:textSize="18sp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/check_iv_date"/>
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_gray"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/startTimeRl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/check_iv_time_start"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/time"
-                android:layout_margin="8dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
-
-            <TextView
-                android:id="@+id/startTimeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/check_iv_time_start"
-                android:text="开始-09:00"
-                android:textColor="@color/font_gray"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-        <TimePicker
-            android:id="@+id/startTimeTp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_gray"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/finishTimeRl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/check_iv_time_finish"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/time_finish"
-                android:layout_margin="8dp"
-                android:layout_alignParentLeft="true" />
-            <TextView
-                android:id="@+id/finishTimeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="结束-10:00"
-                android:textSize="18sp"
-                android:textColor="@color/font_gray"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/check_iv_time_finish"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-
-        <TimePicker
-            android:id="@+id/finishTimeTp"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_gray"/>
-
-    <LinearLayout
-        android:id="@+id/contextLl"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/contextEt"
+            <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:background="@color/bg_edit_gray"
-                android:enabled="false"
-                android:hint="现在开始写点什么吧..."
-                android:textColor="@color/font_gray"
-                android:textSize="15sp" />
-        </ScrollView>
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/bg_edit_gray"
+                    app:layout_collapseMode="parallax">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_gray"/>
+                    <RelativeLayout
+                        android:id="@+id/dateRl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/check_iv_date"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/date" />
+
+                        <TextView
+                            android:id="@+id/dateTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:layout_toEndOf="@+id/check_iv_date"
+                            android:text="今天-9月29日,周五"
+                            android:textColor="@color/font_gray"
+                            android:textSize="18sp" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/startTimeRl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/check_iv_time_start"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_margin="8dp"
+                                android:src="@drawable/time" />
+
+                            <TextView
+                                android:id="@+id/startTimeTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="8dp"
+                                android:layout_toRightOf="@+id/check_iv_time_start"
+                                android:text="开始-09:00"
+                                android:textColor="@color/font_gray"
+                                android:textSize="18sp" />
+                        </RelativeLayout>
+
+                        <TimePicker
+                            android:id="@+id/startTimeTp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/finishTimeRl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/check_iv_time_finish"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_margin="8dp"
+                                android:src="@drawable/time_finish" />
+
+                            <TextView
+                                android:id="@+id/finishTimeTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="8dp"
+                                android:layout_toRightOf="@+id/check_iv_time_finish"
+                                android:text="结束-10:00"
+                                android:textColor="@color/font_gray"
+                                android:textSize="18sp" />
+                        </RelativeLayout>
+
+                        <TimePicker
+                            android:id="@+id/finishTimeTp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_gray" />
+
+                </LinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:id="@+id/contextLl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/contextEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:background="@color/bg_edit_gray"
+                        android:enabled="false"
+                        android:hint="现在开始写点什么吧..."
+                        android:textColor="@color/font_gray"
+                        android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
 
 </LinearLayout>

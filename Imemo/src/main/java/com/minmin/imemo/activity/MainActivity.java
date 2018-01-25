@@ -12,12 +12,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,17 +30,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.minmin.imemo.R;
-import com.minmin.imemo.adapter.FunctionListAdapter;
 import com.minmin.imemo.adapter.MemoWithDateListAdapter;
 import com.minmin.imemo.database.MemoDatabase;
-import com.minmin.imemo.model.Func;
 import com.minmin.imemo.model.Memo;
 import com.minmin.imemo.service.RemindService;
 import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MemoListManager;
 import com.minmin.imemo.util.MyCalendar;
+import com.minmin.imemo.util.MyThreadPoolExecutor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -75,11 +78,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private ImageView mDealIv;
 
-    private ListView mListMu;
+    private NavigationView mViewNv;
 
-    private DrawerLayout mMenuDl;//侧滑菜单
+    private ImageView mHeadIv;
 
-    private ActionBarDrawerToggle mToggle;
+    private SwipeRefreshLayout mRefreshSl;
 
     private File outputImage;//创建File对象，用于存储拍照后的图片
 
@@ -105,11 +108,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private String[] mChooseList;
 
-    private List<Func> functionList = new ArrayList<>();
+//    private List<Func> functionList = new ArrayList<>();
 
     private Bitmap mSwipeHeadBitmap;
 
-    private FunctionListAdapter mFunctionListAdapter;
+//    private FunctionListAdapter mFunctionListAdapter;
 
     private final static int REQUESTCODE_MAIN = 1;
 
@@ -183,7 +186,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private AlertDialog.Builder mIsCopyMemoBuilder;
 
-    private  AlertDialog.Builder mGetBitmapBuilder;
+    private AlertDialog.Builder mGetBitmapBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,17 +212,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         mMemoList = mMemoDatabase.quaryEveryMonthMemoList(mSelectedYear, mSelectedMonth);
         mMemoListAdapter = new MemoWithDateListAdapter(this, mMemoWithTitleList);
-        try {
-            mSwipeHeadBitmap = BitmapFactory.decodeStream(openFileInput(HEADPORTRAITNAME));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (mSwipeHeadBitmap==null) {
-            mSwipeHeadBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.head);
-        }
-        functionList.add(new Func(HEAD, mSwipeHeadBitmap));
-        functionList.add(new Func(FONT, getResources().getString(R.string.memory)));
-        mFunctionListAdapter = new FunctionListAdapter(this, functionList);
+//        functionList.add(new Func(HEAD, mSwipeHeadBitmap));
+//        functionList.add(new Func(FONT, getResources().getString(R.string.memory)));
+//        mFunctionListAdapter = new FunctionListAdapter(this, functionList);
 
     }
 
@@ -234,15 +229,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mListLv = findViewById(R.id.listLv);
         mChosenTv = findViewById(R.id.chosenTv);
         mDealIv = findViewById(R.id.dealIv);
-        mListMu = findViewById(R.id.listMu);
-        mMenuDl = findViewById(R.id.menuDl);
+//        mListMu = findViewById(R.id.listMu);
+        mViewNv = findViewById(R.id.viewNv);
+        mRefreshSl = findViewById(R.id.refreshSl);
+
+        mRefreshSl.setColorSchemeResources(R.color.theme_orange);
+        mRefreshSl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                refreshMemolist();
+            }
+        });
+
         mAddAnyIv.setOnClickListener(this);
         mLeftIv.setOnClickListener(this);
         mRightIv.setOnClickListener(this);
+        mMoreIv.setOnClickListener(this);
+        mDateTv.setOnClickListener(this);
         mDealIv.setOnClickListener(this);
+
         mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
         Animation rotateAnim = AnimationUtils.loadAnimation(this, R.anim.add_rotate);
         mAddAnyIv.startAnimation(rotateAnim);
+
         mListLv.setAdapter(mMemoListAdapter);
         mListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -250,29 +260,93 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 clickMemo(view, i);
             }
         });
-        mMoreIv.setOnClickListener(this);
-        mDateTv.setOnClickListener(this);
-        mListMu.setAdapter(mFunctionListAdapter);
-        mListMu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        mViewNv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                clickFuntion(i);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                //NavigationView菜单项选中事件
+                switch (item.getItemId()) {
+                    case R.id.memory:
+                        Intent toMemoryIntent = new Intent(MainActivity.this, MemoryMainActivity.class);
+                        startActivity(toMemoryIntent);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
             }
         });
-        mToggle = new ActionBarDrawerToggle(this, mMenuDl, R.string.open, R.string.close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
 
-            }
-
+        //获取滑动菜单NavigationView的头布局
+        View headView = mViewNv.getHeaderView(0);
+        mHeadIv = headView.findViewById(R.id.headIv);
+        try {
+            mSwipeHeadBitmap = BitmapFactory.decodeStream(openFileInput(HEADPORTRAITNAME));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (mSwipeHeadBitmap == null) {
+            mSwipeHeadBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.head);
+        }
+        showBitmap();
+        mHeadIv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
+            public void onClick(View v) {
+
+                if (mGetBitmapBuilder == null) {
+                    mGetBitmapBuilder = new AlertDialog.Builder(MainActivity.this);
+                    mGetBitmapBuilder.setItems(mChooseList, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int position) {
+
+                            if (position == 0) {
+                                chooseTakePhoto();
+                            } else {
+                                chooseFromAlbum();
+
+                            }
+                        }
+                    });
+                }
+                mGetBitmapBuilder.create().show();
             }
-        };
-        mMenuDl.addDrawerListener(mToggle);
+        });
+//        mListMu.setAdapter(mFunctionListAdapter);
+//        mListMu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                clickFuntion(i);
+//            }
+//        });
     }
+
+    //点击了多功能菜单栏
+//    public void clickFuntion(int position) {
+//
+//        if (functionList.get(position).getFont().equals(getResources().getString(R.string.memory))) {
+//            Intent toMemoryIntent = new Intent(MainActivity.this, MemoryMainActivity.class);
+//            startActivity(toMemoryIntent);
+//        }else{
+//
+//            if (mGetBitmapBuilder == null) {
+//                mGetBitmapBuilder = new AlertDialog.Builder(this);
+//                mGetBitmapBuilder.setItems(mChooseList, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int position) {
+//
+//                        if (position == 0) {
+//                            chooseTakePhoto();
+//                        } else{
+//                            chooseFromAlbum();
+//
+//                        }
+//                    }
+//                });
+//            }
+//            mGetBitmapBuilder.create().show();
+//
+//        }
+//    }
 
     @Override
     public void onClick(View view) {
@@ -307,6 +381,49 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
+    public void showBitmap() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        mSwipeHeadBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        Glide.with(this).load(bytes).into(mHeadIv);
+    }
+
+
+    //刷新memolist，是否有不同步现象
+    public void refreshMemolist() {
+
+        //创建自定义的线程池对象
+        MyThreadPoolExecutor myExecutor=MyThreadPoolExecutor.getInstance();
+        //向线程池中提交线程
+        myExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    for (Memo memo : mMemoList) {
+                        if (memo.getIs_chosen() == 1) {
+                            mMemoDatabase.updateMemoChosenStatus(memo, 0);
+                            memo.setIs_chosen(0);
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateMemoList();
+                        mRefreshSl.setRefreshing(false);
+                    }
+                });
+            }
+        });
+        //待线程池以及缓存队列中所有的线程任务完成后关闭线程池。
+        myExecutor.shutdown();
+
+    }
+
     //弹出日历选择器
     public void showDatePickerDialog() {
         mSearchSelectDayMemoBuilder = new AlertDialog.Builder(this);
@@ -329,15 +446,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
         View view = LayoutInflater.from(this).inflate(R.layout.edit_dialog, null);
         DatePicker dialogDp = view.findViewById(R.id.dialogDp);
-        final TextView weekTv = view.findViewById(R.id.weekTv);
-        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
+//        final TextView weekTv = view.findViewById(R.id.weekTv);
+//        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
         dialogDp.init(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 searchYear = String.valueOf(year);
                 searchMonth = DateUtils.toNormalTime(month + 1);
                 searchDay = DateUtils.toNormalTime(day);
-                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
+//                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(searchYear), Integer.parseInt(searchMonth) - 1, Integer.parseInt(searchDay)));
 
             }
         });
@@ -391,7 +508,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
             MemoDatabase.getInstance(this).updateMemo(oldMemo, updateMemo);
             Toast.makeText(this, R.string.update_success, Toast.LENGTH_SHORT).show();
-            updateMemoList();
+
             startRemindService();
         } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_DELETE) {
             Memo oldMemo = (Memo) data.getSerializableExtra(RETURN_OLDMEMO);
@@ -425,9 +542,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                functionList.remove(0);
-                functionList.add(0,new Func(HEAD, mSwipeHeadBitmap));
-                mFunctionListAdapter.notifyDataSetChanged();
+                showBitmap();
+//                functionList.remove(0);
+//                functionList.add(0,new Func(HEAD, mSwipeHeadBitmap));
+//                mFunctionListAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
@@ -521,37 +639,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
-    //点击了多功能菜单栏
-    public void clickFuntion(int position) {
-
-        if (functionList.get(position).getFont().equals(getResources().getString(R.string.memory))) {
-            Intent toMemoryIntent = new Intent(MainActivity.this, MemoryMainActivity.class);
-            startActivity(toMemoryIntent);
-        }else{
-
-            if (mGetBitmapBuilder == null) {
-                mGetBitmapBuilder = new AlertDialog.Builder(this);
-                mGetBitmapBuilder.setItems(mChooseList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int position) {
-
-                        if (position == 0) {
-                            chooseTakePhoto();
-                        } else{
-                            chooseFromAlbum();
-
-                        }
-                    }
-                });
-            }
-            mGetBitmapBuilder.create().show();
-
-        }
-    }
-
     //选择拍照
-    public void chooseTakePhoto(){
+    public void chooseTakePhoto() {
 
         outputImage = new File(getExternalCacheDir(), OUTPUT_IMAGE);
         if (outputImage.exists()) {
@@ -575,10 +664,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     //选择相册
-    public void chooseFromAlbum(){
+    public void chooseFromAlbum() {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
             openAlbum();
         }
@@ -629,6 +718,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mDealIv.setVisibility(View.VISIBLE);
         mDealIv.setBackgroundResource(R.drawable.delete);
         mDealIv.setTag(DELETE);
+        mRefreshSl.setEnabled(false);
     }
 
     //当点击批量删除按钮，弹出确认是否删除的对话框提示
@@ -670,6 +760,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mDealIv.setVisibility(View.VISIBLE);
         mDealIv.setBackgroundResource(R.drawable.copy);
         mDealIv.setTag(COPY);
+        mRefreshSl.setEnabled(false);
     }
 
     //当点击批量复制按钮，先弹出对话框让选择创建日期
@@ -694,15 +785,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
         View view = LayoutInflater.from(this).inflate(R.layout.edit_dialog, null);
         DatePicker dialogDp = view.findViewById(R.id.dialogDp);
-        final TextView weekTv = view.findViewById(R.id.weekTv);
-        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
+//        final TextView weekTv = view.findViewById(R.id.weekTv);
+//        weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
         dialogDp.init(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
                 mCopyYear = String.valueOf(year);
                 mCopyMonth = DateUtils.toNormalTime(month + 1);
                 mCopyDay = DateUtils.toNormalTime(day);
-                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
+//                weekTv.setText(DateUtils.getSelectedWeek(Integer.parseInt(mCopyYear), Integer.parseInt(mCopyMonth) - 1, Integer.parseInt(mCopyDay)));
             }
         });
         mSelectDayBuilder.setView(view);
@@ -783,6 +874,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mChosenTv.setVisibility(View.INVISIBLE);
         mDealIv.setVisibility(View.INVISIBLE);
         mChosenTv.setText(R.string.select_item);
+        mRefreshSl.setEnabled(true);
         updateMemoList();
     }
 
@@ -799,4 +891,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             finish();
         }
     }
+
+
 }
