@@ -1,10 +1,11 @@
 package com.minmin.imemo.view.tickview;
 
-
 /**
- * Created by 陈岗不姓陈 on 2017/10/19.
- * <p>
- * 动画执行速率枚举配置
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/22
+ *   desc:打钩动画执行速率枚举配置
+ *   version:1.0
  */
 
 enum TickRateEnum {

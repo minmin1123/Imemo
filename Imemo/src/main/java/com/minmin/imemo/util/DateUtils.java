@@ -5,13 +5,11 @@ import android.os.Build;
 import java.util.Calendar;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:有关日期和时间的类
  *   version:1.0
- * </pre>
  */
 
 public class DateUtils {
@@ -138,11 +136,10 @@ public class DateUtils {
     public static long turnFixedMSecond(String time) {
         if(time.length()!=0){
             long pastMSecond;
-            MyCalendar calendar = new MyCalendar();
             int hour=Integer.parseInt(time.split(":")[0]);
             int minute=Integer.parseInt(time.split(":")[1]);
-            int lastHour= Integer.parseInt(calendar.getNow_hour());
-            int lastMinute=Integer.parseInt(calendar.getNow_minute());
+            int lastHour= Integer.parseInt(MyCalendar.getNow_hour());
+            int lastMinute=Integer.parseInt(MyCalendar.getNow_minute());
             pastMSecond = ((hour - lastHour) * 60 * 60 + (minute-lastMinute) * 60)*1000;
             return pastMSecond;
         }

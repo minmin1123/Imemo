@@ -21,20 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/25
  *   desc:实现提醒功能的服务
  *   version:1.0
- * </pre>
  */
 
 public class RemindService extends Service{
 
     private List<Memo> mMemoList = new ArrayList<>();
 
-    private MemoDatabase mMemoDatabase = MemoDatabase.getInstance(this);
+    private MemoDatabase mMemoDatabase = MemoDatabase.getInstance();
 
     private int mToDoCount;//今日待办memo个数
 
@@ -65,13 +63,12 @@ public class RemindService extends Service{
 
     //读取数据库关键数据
     public void getKeyData(){
-        MyCalendar mCalendar = new MyCalendar();
         int hadDoCount=0;
         int isFirstRemindTimeExist=0;
         String timeCursor="";
         String remindTime = "";
         String remindContent = "";
-        mMemoList = mMemoDatabase.quaryEveryDayMemoList(mCalendar.getNow_year(),mCalendar.getNow_month(),mCalendar.getNow_day());
+        mMemoList = mMemoDatabase.quaryEveryDayMemoList(MyCalendar.getNow_year(),MyCalendar.getNow_month(),MyCalendar.getNow_day());
         mToDoCount=mMemoList.size();
         if(mToDoCount!=0){
             for(Memo memo:mMemoList){
@@ -79,7 +76,7 @@ public class RemindService extends Service{
                     hadDoCount++;
                 }
                 if(memo.getIs_remind()==1){
-                    if(Integer.parseInt(memo.getStart_hour()+memo.getStart_minute())>Integer.parseInt(mCalendar.getNow_hour()+mCalendar.getNow_minute())){
+                    if(Integer.parseInt(memo.getStart_hour()+memo.getStart_minute())>Integer.parseInt(MyCalendar.getNow_hour()+MyCalendar.getNow_minute())){
                         if(memo.getIs_completed()==0){
                             //获取最近一条未完成待提醒的memo以及其开始时间距今的时间
                            if(isFirstRemindTimeExist==0){

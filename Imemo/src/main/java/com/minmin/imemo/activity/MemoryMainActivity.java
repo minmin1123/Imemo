@@ -35,13 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2018/01/14
  *   desc:纪念日主界面
  *   version:1.0
- * </pre>
  */
 public class MemoryMainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnTouchListener {
 
@@ -57,9 +55,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
 
     private MemoryListAdapter mMemoryListAdapter;
 
-    private MemoDatabase mMemoryDatabase = MemoDatabase.getInstance(this);
-
-    private boolean scrollFlag;
+    private MemoDatabase mMemoryDatabase = MemoDatabase.getInstance();
 
     private int mTouchSlop;
 
@@ -72,18 +68,16 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
     private ObjectAnimator mAnimator;
 
     private final static int REQUESTCODE_MAIN = 1;
-
     private final static int RESULTCODE_EDIT = 2;
-
     private final static int RESULTCODE_UPDATE = 3;
 
     private final static String RETURN_NEWMEMORY = "newMemory";
-
     private final static String RETURN_OLDMEMORY = "oldMemory";
-
     private final static String RETURN_UPDATEMEMORY = "updateMemory";
-
     private final static String RETURN_MEMORY = "memory_body";
+
+    private final static int UP = 1;
+    private final static int DOWN = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -167,7 +161,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
                     case 0:
                         //点击了删除键
                         mMemoryList = MemoryListManager.deleteMemory(mMemoryList, deleteMemory);
-                        MemoDatabase.getInstance(MemoryMainActivity.this).deleteMemory(deleteMemory);
+                        mMemoryDatabase.deleteMemory(deleteMemory);
                         mMemoryListAdapter.notifyDataSetChanged();
                         Snackbar.make(mListLv, R.string.delete_success, Snackbar.LENGTH_SHORT)
                                 .setAction(R.string.undo, new View.OnClickListener() {
@@ -178,7 +172,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
                                             mListLv.setVisibility(View.VISIBLE);
                                         }
                                         mMemoryList = MemoryListManager.insertMemory(mMemoryList, deleteMemory);
-                                        MemoDatabase.getInstance(MemoryMainActivity.this).insertMemory(deleteMemory);
+                                        mMemoryDatabase.insertMemory(deleteMemory);
                                         mMemoryListAdapter.notifyDataSetChanged();
                                     }
                                 }).show();
@@ -229,7 +223,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
 
         Intent toCheckMemoryIntent = new Intent(MemoryMainActivity.this, CheckMemoryActivity.class);
-        Memory memory = mMemoryList.get(position);
+        Memory memory = mMemoryList.get(position-1);
         toCheckMemoryIntent.putExtra(RETURN_MEMORY, memory);
         startActivityForResult(toCheckMemoryIntent, REQUESTCODE_MAIN);
 
@@ -247,7 +241,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
             }
             Memory newMemory = (Memory) data.getSerializableExtra(RETURN_NEWMEMORY);
             mMemoryList = MemoryListManager.insertMemory(mMemoryList, newMemory);
-            MemoDatabase.getInstance(this).insertMemory(newMemory);
+            mMemoryDatabase.insertMemory(newMemory);
             Toast.makeText(this, R.string.save_success, Toast.LENGTH_SHORT).show();
             mMemoryListAdapter.notifyDataSetChanged();
         } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_UPDATE) {
@@ -255,7 +249,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
             Memory oldMemo = (Memory) data.getSerializableExtra(RETURN_OLDMEMORY);
             mMemoryList = MemoryListManager.deleteMemory(mMemoryList, oldMemo);
             mMemoryList = MemoryListManager.insertMemory(mMemoryList, updateMemo);
-            MemoDatabase.getInstance(this).updateMemory(oldMemo, updateMemo);
+            mMemoryDatabase.updateMemory(oldMemo, updateMemo);
             Toast.makeText(this, R.string.update_success, Toast.LENGTH_SHORT).show();
             mMemoryListAdapter.notifyDataSetChanged();
 
@@ -275,19 +269,19 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
                 if (mCurrentY - mFirstY > mTouchSlop) {
                     //手指向下滑动，隐藏toolbar
                     if (mShow) {
-                        animToolBar(0);
+                        animToolBar(UP);
                         mShow = !mShow;
                     }
                 } else if (mFirstY - mCurrentY > mTouchSlop) {
                     //手指向上滑动，显示toolbar
                     if (!mShow) {
-                        animToolBar(1);
+                        animToolBar(DOWN);
                         mShow = !mShow;
                     }
                 }
                 if(mListLv.getFirstVisiblePosition()==0){
                     if (!mShow) {
-                        animToolBar(1);
+                        animToolBar(DOWN);
                         mShow = !mShow;
                     }
                 }
@@ -306,7 +300,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
         if (mAnimator != null && mAnimator.isRunning()) {
             mAnimator.cancel();
         }
-        if (flag == 0) {
+        if (flag == UP) {
             mAnimator = ObjectAnimator.ofFloat(mTitleTb, "translationY", mTitleTb.getTranslationY(), -mTitleTb.getHeight());
         } else {
             mAnimator = ObjectAnimator.ofFloat(mTitleTb, "translationY", mTitleTb.getTranslationY(), 0);

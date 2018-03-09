@@ -14,7 +14,6 @@ import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -22,10 +21,11 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.util.Utils;
 
 /**
- * Created by 陈岗不姓陈 on 2017/10/17.
- * <p>
- * 自定义view -- checkbox
- * 一个打钩的小动画
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/22
+ *   desc:自定义打钩view
+ *   version:1.0
  */
 
 public class TickView extends View {
@@ -371,7 +371,6 @@ public class TickView extends View {
 
     private void setTickProgress(float tickProgress) {
         this.tickProgress = tickProgress;
-        Log.i("progress", "setTickProgress: " + tickProgress);
         invalidate();
     }
 

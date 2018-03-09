@@ -5,13 +5,11 @@ import com.minmin.imemo.model.Memory;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
- *   time:2017/10/15
+ *   time:2018/01/15
  *   desc:操作memorylist的管理类
  *   version:1.0
- * </pre>
  */
 
 public class MemoryListManager {

@@ -23,13 +23,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
- *   time:2017/10/11
+ *   time:2018/1/13
  *   desc:查看单条纪念日界面
  *   version:1.0
- * </pre>
  */
 
 public class CheckMemoryActivity extends Activity implements View.OnClickListener{
@@ -47,8 +45,6 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
     private TextView mArrivedTv;
 
     private TextView mDateTv;
-    
-    private MyCalendar mCalendar = new MyCalendar();
 
     private String mSelectedYear;
 
@@ -59,13 +55,9 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
     private final int RESULTCODE_UPDATE = 3;
 
     private final static String EDIT = "edit";
-
     private final static String SAVE = "save";
-
     private final static String RETURN_MEMORY = "memory_body";
-
     private final static String RETURN_OLDMEMORY = "oldMemory";
-
     private final static String RETURN_UPDATEMEMORY = "updateMemory";
 
     private AlertDialog.Builder mIsUpdateMemoryBuilder;
@@ -205,7 +197,7 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
     //用户确认更改，数据库更改操作
     public void updateMemory() {
         Memory updateMemory = new Memory();
-        updateMemory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
+        updateMemory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
         updateMemory.setYear(mSelectedYear);
         updateMemory.setMonth(mSelectedMonth);
         updateMemory.setDay(mSelectedDay);

@@ -24,13 +24,11 @@ import com.minmin.imemo.model.Memo;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:通过隐藏实现双布局并存的Adapter
  *   version:1.0
- * </pre>
  */
 
 public class MemoListAdapter extends ArrayAdapter<Memo> {
@@ -46,19 +44,12 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
     private final int REQUESTCODE_MAIN = 1;//跳转页面请求code
 
     private final String UNSELECTED="unselected";
-
     private final String SELECTED="selected";
-
     private final String INCOMPLETE = "incomplete";
-
     private final String COMPLETE = "complete";
-
     private final static String YEAR = "year";
-
     private final static String MONTH = "month";
-
     private final static String DAY = "day";
-
     private final static String WEEK = "week";
 
     public MemoListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Memo> objects) {
@@ -88,12 +79,10 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
         holder.mAddIv = view.findViewById(R.id.addIv);
         view.setTag(holder);
         }else{
-            Log.i("Main", "该item已经存在");
             view=convertView;
             holder = (ViewHolder) view.getTag();
         }
 //        Log.i("Main", "该memo是不是第一个："+memo.getIs_first());
-        Log.i("Main", "该memo日期："+memo.getDay());
         //该项item是当日第一项->有日期头
 //        if (memo.getIs_first() == 1) {
 //            holder.mDateTv.setText(memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
@@ -131,13 +120,13 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
                     view.setTag(COMPLETE);
                     view.setBackgroundResource(R.drawable.complete);
                     Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
-                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
+                    MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 1);
                     selectMemo.setIs_completed(1);
                 } else {
                     view.setTag(INCOMPLETE);
                     view.setBackgroundResource(R.drawable.incomplete);
                     Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
-                    MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
+                    MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 0);
                     selectMemo.setIs_completed(0);
                 }
             }

@@ -19,16 +19,13 @@ import com.minmin.imemo.util.Utils;
 
 
 /**
- * Author:    Diamond_Lin
- * Version    V1.0
- * Date:      16/10/18 下午3:30
- * Description:
- * Modification  History:
- * Date         	Author        		Version        	Description
- * -----------------------------------------------------------------------------------
- * 16/10/18      Diamond_Lin            1.0                    1.0
- * Why & What is modified:
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/18
+ *   desc:开场动画view
+ *   version:1.0
  */
+
 public class LauncherView extends RelativeLayout {
     private int mHeight;
     private int mWidth;
@@ -126,14 +123,13 @@ public class LauncherView extends RelativeLayout {
         redAll.start();
         orangeAll.start();
         brownAll.start();
-
         new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showLogo();
-            }
-        }, 2400);
-    }
+        @Override
+        public void run() {
+            showLogo();
+        }
+    }, 2400);
+}
 
     //将 Path 转换成 ObjectAnimation
     private void setAnimation(final ImageView target, ViewPath path1) {

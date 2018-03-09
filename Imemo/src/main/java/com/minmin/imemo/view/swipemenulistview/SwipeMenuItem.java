@@ -5,10 +5,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 /**
- * 
- * @author baoyz
- * @date 2014-8-23
- * 
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/20
+ *   desc:listview侧滑菜单项
+ *   version:1.0
  */
 public class SwipeMenuItem {
 

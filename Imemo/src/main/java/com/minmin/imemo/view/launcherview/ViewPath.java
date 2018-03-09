@@ -3,17 +3,15 @@ package com.minmin.imemo.view.launcherview;
 import java.util.ArrayList;
 import java.util.Collection;
 
+
 /**
- * Author:    Diamond_Lin
- * Version    V1.0
- * Date:      16/10/18 下午6:47
- * Description:
- * Modification  History:
- * Date         	Author        		Version        	Description
- * -----------------------------------------------------------------------------------
- * 16/10/18      Diamond_Lin            1.0                    1.0
- * Why & What is modified:
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/18
+ *   desc:开场动画小圆点路径
+ *   version:1.0
  */
+
 public class ViewPath {
     public static final int MOVE = 0;
     public static final int LINE = 1;

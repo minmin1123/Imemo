@@ -6,13 +6,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2018/01/25
  *   desc:自定义线程池
  *   version:1.0
- * </pre>
  */
 
 public class MyThreadPoolExecutor extends ThreadPoolExecutor{

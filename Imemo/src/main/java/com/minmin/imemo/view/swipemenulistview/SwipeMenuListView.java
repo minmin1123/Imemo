@@ -10,8 +10,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 /**
- * @author baoyz
- * @date 2014-8-18
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/20
+ *   desc:listview侧滑菜单listview
+ *   version:1.0
  */
 public class SwipeMenuListView extends ListView {
 

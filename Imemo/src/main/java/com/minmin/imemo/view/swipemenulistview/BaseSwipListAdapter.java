@@ -25,11 +25,15 @@ package com.minmin.imemo.view.swipemenulistview;
 
 import android.widget.BaseAdapter;
 
+
 /**
- * Created by Abner on 15/11/20.
- * Email nimengbo@gmail.com
- * github https://github.com/nimengbo
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/20
+ *   desc:listview侧滑菜单list适配器
+ *   version:1.0
  */
+
 public abstract class BaseSwipListAdapter extends BaseAdapter {
 
     public boolean getSwipEnableByPosition(int position){

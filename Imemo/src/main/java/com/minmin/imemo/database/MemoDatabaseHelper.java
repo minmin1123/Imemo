@@ -5,13 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:数据库的帮助类
  *   version:1.0
- * </pre>
  */
 
 public class MemoDatabaseHelper extends SQLiteOpenHelper{

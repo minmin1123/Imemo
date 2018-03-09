@@ -24,23 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/18
  *   desc:有两种item布局的Adapter
  *   version:1.0
- * </pre>
  */
 
 public class MemoWithDateListAdapter extends BaseAdapter {
 
     private final static int TYPE_DATE=1;
-
     private final static int TYPE_PAPER=2;
-
     private final static int DATE=0;
-
     private final static int PAPER=1;
 
     private Context mContext;
@@ -48,23 +43,14 @@ public class MemoWithDateListAdapter extends BaseAdapter {
     private final int REQUESTCODE_MAIN = 1;//跳转页面请求code
 
     private final String UNSELECTED="unselected";
-
     private final String SELECTED="selected";
-
     private final String INCOMPLETE = "incomplete";
-
     private final String COMPLETE = "complete";
-
     private final static String YEAR = "year";
-
     private final static String MONTH = "month";
-
     private final static String DAY = "day";
-
     private final static String WEEK = "week";
-
     private final static String NOTREMIND = "notremind";
-
     private final static String REMIND = "remind";
 
     private static List<Memo> mMemoWithTitleList=new ArrayList<>();
@@ -194,7 +180,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                             view.setTag(COMPLETE);
                             paperViewHolder.mTickView.setChecked(true);
                             Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
-                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
+                            MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 1);
                             selectMemo.setIs_completed(1);
                             Intent remindServiceIntent = new Intent((mContext), RemindService.class);
                             ((Activity) mContext).startService(remindServiceIntent);
@@ -202,7 +188,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                             view.setTag(INCOMPLETE);
                             paperViewHolder.mTickView.setChecked(false);
                             Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
-                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
+                            MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 0);
                             selectMemo.setIs_completed(0);
                             Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
                             ((Activity) mContext).startService(remindServiceIntent);
@@ -217,7 +203,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
 //                            view.setTag(COMPLETE);
 //                            view.setBackgroundResource(R.drawable.complete);
 //                            Toast.makeText(mContext, R.string.complete, Toast.LENGTH_SHORT).show();
-//                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 1);
+//                            MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 1);
 //                            selectMemo.setIs_completed(1);
 //                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
 //                            ((Activity) mContext).startService(remindServiceIntent);
@@ -225,7 +211,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
 //                            view.setTag(INCOMPLETE);
 //                            view.setBackgroundResource(R.drawable.incomplete);
 //                            Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
-//                            MemoDatabase.getInstance(mContext).updateMemoCompleteStatus(selectMemo, 0);
+//                            MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 0);
 //                            selectMemo.setIs_completed(0);
 //                            Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
 //                            ((Activity) mContext).startService(remindServiceIntent);

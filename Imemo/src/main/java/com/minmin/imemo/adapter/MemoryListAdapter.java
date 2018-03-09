@@ -16,13 +16,11 @@ import com.minmin.imemo.model.Memory;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
- *   time:2017/1/15
+ *   time:2017/01/15
  *   desc:纪念日的Adapter
  *   version:1.0
- * </pre>
  */
 
 public class MemoryListAdapter extends BaseAdapter {
@@ -36,7 +34,6 @@ public class MemoryListAdapter extends BaseAdapter {
     private List<Memory> mMemoryList;
 
     private final static int ARRIVED = 1;
-
     private final static int NOT_ARRIVED = 0;
 
     public MemoryListAdapter(Context context, int resource, List<Memory> objects) {

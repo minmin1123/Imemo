@@ -27,13 +27,12 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:查看单条备忘录界面
  *   version:1.0
- * </pre>
+ *
  */
 
 public class CheckMemoActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
@@ -68,8 +67,6 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
     private TimePicker mFinishTimeTp;
 
-    private MyCalendar mCalendar = new MyCalendar();
-
     private String mSelectedYear;
 
     private String mSelectedMonth;
@@ -89,25 +86,16 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     private int IS_REMIND = 0;
 
     private final static int START_TIME = 1;
-
     private final static int FINISH_TIME = 2;
-
-    private final int RESULTCODE_DELETE = 3;
-
-    private final int RESULTCODE_UPDATE = 4;
+    private final static int RESULTCODE_DELETE = 3;
+    private final static int RESULTCODE_UPDATE = 4;
 
     private final static String DELETE = "delete";
-
     private final static String SAVE = "save";
-
     private final static String RETURN_MEMO = "memo";
-
     private final static String RETURN_OLDMEMO = "oldMemo";
-
     private final static String RETURN_UPDATEMEMO = "updateMemo";
-
     private final static String NOTREMIND = "notremind";
-
     private final static String REMIND = "remind";
 
     private AlertDialog.Builder mIsDeleteMemoBuilder;
@@ -150,9 +138,9 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mFinishTimeRl = findViewById(R.id.finishTimeRl);
         mDateTv = findViewById(R.id.dateTv);
         mEditIv = findViewById(R.id.editIv);
-        if (mCalendar.getNow_year().equals(memo.getYear()) && mCalendar.getNow_month().equals(memo.getMonth()) && mCalendar.getNow_day().equals(memo.getDay())) {
+        if (MyCalendar.getNow_year().equals(memo.getYear()) && MyCalendar.getNow_month().equals(memo.getMonth()) && MyCalendar.getNow_day().equals(memo.getDay())) {
             mDateTv.setText("今天-" + memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
-        } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), memo.getYear(), memo.getMonth(), memo.getDay())) {
+        } else if (DateUtils.isTomorrow(MyCalendar.getNow_year(), MyCalendar.getNow_month(), MyCalendar.getNow_day(), memo.getYear(), memo.getMonth(), memo.getDay())) {
             mDateTv.setText("明天-" + memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
         } else {
             mDateTv.setText(memo.getMonth() + "月" + memo.getDay() + "日," + memo.getWeek());
@@ -308,9 +296,9 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                     mSelectedMonth = DateUtils.toNormalTime(month + 1);
                     mSelectedDay = DateUtils.toNormalTime(day);
                     mSelectedWeek = weekOfday;
-                    if (mCalendar.getNow_year().equals(mSelectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
+                    if (MyCalendar.getNow_year().equals(mSelectedYear) && MyCalendar.getNow_month().equals(mSelectedMonth) && MyCalendar.getNow_day().equals(mSelectedDay)) {
                         mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                    } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
+                    } else if (DateUtils.isTomorrow(MyCalendar.getNow_year(), MyCalendar.getNow_month(), MyCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
                         mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
                     } else {
                         mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
@@ -405,7 +393,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     //用户确认更改，数据库更改操作
     public void updateMemo() {
         Memo updateMemo = new Memo();
-        updateMemo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
+        updateMemo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
         updateMemo.setYear(mSelectedYear);
         updateMemo.setMonth(mSelectedMonth);
         updateMemo.setDay(mSelectedDay);

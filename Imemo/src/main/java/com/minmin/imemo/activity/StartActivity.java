@@ -10,13 +10,11 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.view.launcherview.LauncherView;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2018/01/17
  *   desc:开场动画
  *   version:1.0
- * </pre>
  */
 
 public class StartActivity extends Activity{

@@ -3,12 +3,14 @@
     package="com.minmin.imemo">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/imemo"
         android:roundIcon="@drawable/imemo"
         android:label="I记"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false">
         <activity android:name=".activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

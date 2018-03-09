@@ -3,13 +3,11 @@ package com.minmin.imemo.model;
 import android.graphics.Bitmap;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2018/01/19
  *   desc:侧拉功能
  *   version:1.0
- * </pre>
  */
 
 public class Func {
@@ -21,7 +19,6 @@ public class Func {
     private Bitmap bitmap;
 
     private final static String HEAD="head";
-
     private final static String FONT="font";
 
     public Func(String type, String font){

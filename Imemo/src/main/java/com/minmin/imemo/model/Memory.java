@@ -3,13 +3,11 @@ package com.minmin.imemo.model;
 import java.io.Serializable;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:Memory实体类
  *   version:1.0
- * </pre>
  */
 
 

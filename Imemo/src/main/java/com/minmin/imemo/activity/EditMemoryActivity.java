@@ -23,13 +23,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
- *   time:2017/10/11
+ *   time:2018/1/13
  *   desc:新建一条纪念日界面
  *   version:1.0
- * </pre>
  */
 
 public class EditMemoryActivity extends Activity implements View.OnClickListener {
@@ -50,13 +48,11 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
     
     private DatePickerDialog mDatePD;
 
-    private MyCalendar mCalendar = new MyCalendar();
+    private String mSelectedYear = MyCalendar.getNow_year();
 
-    private String mSelectedYear = mCalendar.getNow_year();
+    private String mSelectedMonth = MyCalendar.getNow_month();
 
-    private String mSelectedMonth = mCalendar.getNow_month();
-
-    private String mSelectedDay = mCalendar.getNow_day();
+    private String mSelectedDay = MyCalendar.getNow_day();
 
     private final static String RETURN_NEWMEMORY = "newMemory";
 
@@ -108,7 +104,8 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
             case R.id.dateTv:
                 showDatePickerDialog();
                 break;
-
+            default:
+                break;
         }
     }
 
@@ -163,7 +160,7 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
     //用户确认保存，插入数据库操作
     public void saveMemory() {
         Memory memory = new Memory();
-        memory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
+        memory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
         memory.setYear(mSelectedYear);
         memory.setMonth(mSelectedMonth);
         memory.setDay(mSelectedDay);

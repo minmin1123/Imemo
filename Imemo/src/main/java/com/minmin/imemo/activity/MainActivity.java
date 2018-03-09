@@ -49,13 +49,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:主界面
  *   version:1.0
- * </pre>
  */
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -88,13 +86,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private Uri imageUri;//选中图片的uri
 
-    private MyCalendar mCalendar = new MyCalendar();
+    private String mSelectedYear = MyCalendar.getNow_year();
 
-    private String mSelectedYear = mCalendar.getNow_year();
+    private String mSelectedMonth = MyCalendar.getNow_month();
 
-    private String mSelectedMonth = mCalendar.getNow_month();
-
-    private MemoDatabase mMemoDatabase = MemoDatabase.getInstance(this);
+    private MemoDatabase mMemoDatabase = MemoDatabase.getInstance();
 
     private List<Memo> mMemoList = new ArrayList<>();
 
@@ -110,70 +106,47 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 //    private List<Func> functionList = new ArrayList<>();
 
-    private Bitmap mSwipeHeadBitmap;
-
 //    private FunctionListAdapter mFunctionListAdapter;
 
     private final static int REQUESTCODE_MAIN = 1;
-
     private final static int RESULTCODE_EDIT = 2;
-
     private final static int RESULTCODE_DELETE = 3;
-
     private final static int RESULTCODE_UPDATE = 4;
-
     private final static int LEFT = 5;
-
     private final static int RIGHT = 6;
-
     private final static int TYPE_DATE = 1;
-
     private final static int TYPE_PAPER = 2;
 
     private String mCopyYear = mSelectedYear;
 
     private String mCopyMonth = mSelectedMonth;
 
-    private String mCopyDay = mCalendar.getNow_day();
+    private String mCopyDay = MyCalendar.getNow_day();
 
     private String searchYear = mSelectedYear;
 
     private String searchMonth = mSelectedMonth;
 
-    private String searchDay = mCalendar.getNow_day();
+    private String searchDay = MyCalendar.getNow_day();
 
     private int SEARCH_STATUS = 0;
-
     private int MORE_STATUS = 0;
 
     public static final int TAKE_PHOTO = 1;
-
     public static final int CHOOSE_PHOTO = 2;
-
     public static final int CROP_PHOTO = 3;
 
     private final static String DELETE = "delete";
-
     private final static String COPY = "copy";
-
     private final static String UNSELECTED = "unselected";
-
     private final static String SELECTED = "selected";
-
     private final static String RETURN_MEMO = "memo";
-
     private final static String RETURN_NEWMEMO = "newMemo";
-
     private final static String RETURN_OLDMEMO = "oldMemo";
-
     private final static String RETURN_UPDATEMEMO = "updateMemo";
-
     private final static String HEAD = "head";
-
     private final static String FONT = "font";
-
     private final static String OUTPUT_IMAGE = "output_image.jpg";
-
     public static final String HEADPORTRAITNAME = "HEADPORTRAITNAME";
 
     private AlertDialog.Builder mMoreMemoBuilder;
@@ -277,18 +250,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         });
 
-        //获取滑动菜单NavigationView的头布局
-        View headView = mViewNv.getHeaderView(0);
-        mHeadIv = headView.findViewById(R.id.headIv);
+        Bitmap mSwipeHeadBitmap= null;
         try {
             mSwipeHeadBitmap = BitmapFactory.decodeStream(openFileInput(HEADPORTRAITNAME));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        //获取滑动菜单NavigationView的头布局
+        View headView = mViewNv.getHeaderView(0);
+        mHeadIv = headView.findViewById(R.id.headIv);
         if (mSwipeHeadBitmap == null) {
             mSwipeHeadBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.head);
         }
-        showBitmap();
+        showBitmap(mSwipeHeadBitmap);
         mHeadIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,7 +356,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
-    public void showBitmap() {
+    public void showBitmap(Bitmap mSwipeHeadBitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         mSwipeHeadBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] bytes = baos.toByteArray();
@@ -495,7 +469,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 mMemoList = MemoListManager.insertMemo(mMemoList, newMemo);
 
             }
-            MemoDatabase.getInstance(this).insertMemo(newMemo);
+            mMemoDatabase.insertMemo(newMemo);
             Toast.makeText(this, R.string.save_success, Toast.LENGTH_SHORT).show();
             updateMemoList();
             startRemindService();
@@ -506,14 +480,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (updateMemo.getYear().equals(mSelectedYear) && updateMemo.getMonth().equals(mSelectedMonth)) {
                 mMemoList = MemoListManager.insertMemo(mMemoList, updateMemo);
             }
-            MemoDatabase.getInstance(this).updateMemo(oldMemo, updateMemo);
+            mMemoDatabase.updateMemo(oldMemo, updateMemo);
             Toast.makeText(this, R.string.update_success, Toast.LENGTH_SHORT).show();
-
+            updateMemoList();
             startRemindService();
         } else if (requestCode == REQUESTCODE_MAIN && resultCode == RESULTCODE_DELETE) {
             Memo oldMemo = (Memo) data.getSerializableExtra(RETURN_OLDMEMO);
             mMemoList = MemoListManager.deleteMemo(mMemoList, oldMemo);
-            MemoDatabase.getInstance(this).deleteMemo(oldMemo);
+            mMemoDatabase.deleteMemo(oldMemo);
             Toast.makeText(this, R.string.delete_success, Toast.LENGTH_SHORT).show();
             updateMemoList();
             startRemindService();
@@ -536,13 +510,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case CROP_PHOTO:
-
+                Bitmap mSwipeHeadBitmap=null;
                 try {
                     mSwipeHeadBitmap = BitmapFactory.decodeStream(openFileInput(HEADPORTRAITNAME));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                showBitmap();
+                showBitmap(mSwipeHeadBitmap);
 //                functionList.remove(0);
 //                functionList.add(0,new Func(HEAD, mSwipeHeadBitmap));
 //                mFunctionListAdapter.notifyDataSetChanged();
@@ -561,10 +535,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mListLv.setVisibility(View.VISIBLE);
             mMemoListAdapter.notifyDataSetChanged();
             if (SEARCH_STATUS == 0) {
-                if (mCalendar.getNow_year().equals(mSelectedYear) && (mCalendar.getNow_month().equals(mSelectedMonth))) {
+                if (MyCalendar.getNow_year().equals(mSelectedYear) && (MyCalendar.getNow_month().equals(mSelectedMonth))) {
                     int existTodayMemo = 0;
                     for (int i = 0; i < mMemoWithTitleList.size(); i++) {
-                        if (mMemoWithTitleList.get(i).getDay().equals(mCalendar.getNow_day())) {
+                        if (mMemoWithTitleList.get(i).getDay().equals(MyCalendar.getNow_day())) {
                             existTodayMemo = 1;
                             mListLv.setSelection(i);
                             break;
@@ -619,13 +593,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     mItemContextTv.setTag(SELECTED);
                     mItemContextTv.setBackgroundResource(R.drawable.paper_select);
                     mMemoWithTitleList.get(position).setIs_chosen(1);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(mMemoWithTitleList.get(position), 1);
+                    mMemoDatabase.updateMemoChosenStatus(mMemoWithTitleList.get(position), 1);
                     mSelectedMemoList.add(mMemoWithTitleList.get(position));
                 } else {
                     mItemContextTv.setTag(UNSELECTED);
                     mItemContextTv.setBackgroundResource(R.drawable.paper_not_select);
                     mMemoWithTitleList.get(position).setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(mMemoWithTitleList.get(position), 0);
+                    mMemoDatabase.updateMemoChosenStatus(mMemoWithTitleList.get(position), 0);
                     mSelectedMemoList.remove(mMemoWithTitleList.get(position));
                     for (Memo selectMemo : mSelectedMemoList) {
                         if (selectMemo.getId().equals(mMemoWithTitleList.get(position).getId())) {
@@ -733,7 +707,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     for (Memo eachMemo : mSelectedMemoList) {
                         mMemoList = MemoListManager.deleteMemo(mMemoList, eachMemo);
                     }
-                    MemoDatabase.getInstance(MainActivity.this).deleteSelectMemoList(mSelectedMemoList);
+                    mMemoDatabase.deleteSelectMemoList(mSelectedMemoList);
                     recoverBulkOperateView();
                     Toast.makeText(MainActivity.this, R.string.delete_success, Toast.LENGTH_SHORT).show();
                     startRemindService();
@@ -745,7 +719,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     for (Memo memo : mSelectedMemoList) {
                         memo.setIs_chosen(0);
-                        MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                        mMemoDatabase.updateMemoChosenStatus(memo, 0);
                     }
                     recoverBulkOperateView();
                 }
@@ -778,7 +752,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onClick(DialogInterface dialogInterface, int i) {
                 for (Memo memo : mSelectedMemoList) {
                     memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    mMemoDatabase.updateMemoChosenStatus(memo, 0);
                 }
                 recoverBulkOperateView();
             }
@@ -808,10 +782,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mIsCopyMemoBuilder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                MemoDatabase.getInstance(MainActivity.this).insertSelectMemoList(mSelectedMemoList, mCopyYear, mCopyMonth, mCopyDay);
+                mMemoDatabase.insertSelectMemoList(mSelectedMemoList, mCopyYear, mCopyMonth, mCopyDay);
                 for (Memo memo : mSelectedMemoList) {
                     memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    mMemoDatabase.updateMemoChosenStatus(memo, 0);
                 }
                 if (mCopyYear.equals(mSelectedYear) && mCopyMonth.equals(mSelectedMonth)) {
                     for (Memo memo : mSelectedMemoList) {
@@ -842,7 +816,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onClick(DialogInterface dialogInterface, int i) {
                 for (Memo memo : mSelectedMemoList) {
                     memo.setIs_chosen(0);
-                    MemoDatabase.getInstance(MainActivity.this).updateMemoChosenStatus(memo, 0);
+                    mMemoDatabase.updateMemoChosenStatus(memo, 0);
                 }
                 recoverBulkOperateView();
             }
@@ -878,19 +852,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         updateMemoList();
     }
 
-    @Override//重写返回键事件
-    public void onBackPressed() {
+    @Override//重写释放activity的
+    public void finish() {
         if (MORE_STATUS == 1) {
             //更多（批量删除、批量复制）状态，恢复之前状态
             for (Memo memo : mSelectedMemoList) {
                 memo.setIs_chosen(0);
-                MemoDatabase.getInstance(this).updateMemoChosenStatus(memo, 0);
+                mMemoDatabase.updateMemoChosenStatus(memo, 0);
             }
             recoverBulkOperateView();
         } else {
             finish();
         }
     }
-
-
 }

@@ -27,15 +27,17 @@ import java.io.FileOutputStream;
 
 import static com.minmin.imemo.activity.MainActivity.HEADPORTRAITNAME;
 
-
 /**
- * Created by mathewchen on 2017/8/8.
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/1/15
+ *   desc:头像剪切界面
+ *   version:1.0
  */
 
 public class CropActivity extends Activity {
 
     public static final float STROKE_WIDTH = 5.0f;
-
     public static final float MARGIN_WIDTH = 20.0f;
 
     private ZoomImageView zoomImageView;

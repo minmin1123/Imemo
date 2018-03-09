@@ -11,7 +11,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by mathewchen on 2017/8/8.
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/17
+ *   desc:遮罩view
+ *   version:1.0
  */
 
 public class MaskView extends View {

@@ -14,13 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:数据库
  *   version:1.0
- * </pre>
  */
 
 public class MemoDatabase {
@@ -36,33 +34,19 @@ public class MemoDatabase {
     private final static int VERSION = 1;
 
     private final static String ID = "id";
-
     private final static String YEAR = "year";
-
     private final static String MONTH = "month";
-
     private final static String DAY = "day";
-
     private final static String WEEK = "week";
-
     private final static String START_HOUR = "start_hour";
-
     private final static String START_MINUTE = "start_minute";
-
     private final static String FINISH_HOUR = "finish_hour";
-
     private final static String FINISH_MINUTE = "finish_minute";
-
     private final static String TEXT = "text";
-
     private final static String IS_CHOSEN = "is_chosen";
-
     private final static String IS_COMPLETE = "is_completed";
-
     private final static String IS_REMIND = "is_remind";
-
     private final static String TABLE_MEMO = "Memo";
-
     private final static String TABLE_MEMORY = "Memory";
 
     private MemoDatabase(Context context){
@@ -73,6 +57,11 @@ public class MemoDatabase {
         if(memoDatabase==null){
             memoDatabase=new MemoDatabase(context);
         }
+        return memoDatabase;
+    }
+
+    public static MemoDatabase getInstance(){
+
         return memoDatabase;
     }
 

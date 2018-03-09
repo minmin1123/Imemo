@@ -3,16 +3,13 @@ package com.minmin.imemo.util;
 import android.content.Context;
 
 /**
- * Author:    Diamond_Lin
- * Version    V1.0
- * Date:      16/10/17 上午11:28
- * Description:
- * Modification  History:
- * Date         	Author        		Version        	Description
- * -----------------------------------------------------------------------------------
- * 16/10/17      Diamond_Lin            1.0                    1.0
- * Why & What is modified:
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/15
+ *   desc:工具类
+ *   version:1.0
  */
+
 public class Utils {
     /**
      * dp转px

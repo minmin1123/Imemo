@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-
 /**
- * 
- * @author baoyz
- * @date 2014-8-23
- * 
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/20
+ *   desc:listview侧滑菜单布局
+ *   version:1.0
  */
 public class SwipeMenuLayout extends FrameLayout {
 

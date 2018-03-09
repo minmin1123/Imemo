@@ -1,7 +1,11 @@
 package com.minmin.imemo.view.cameraalbumview;
 
 /**
- * Created by mathewchen on 2017/8/8.
+ *   author:minmin
+ *   email:775846180@qq.com
+ *   time:2018/01/25
+ *   desc:头像图片处理类
+ *   version:1.0
  */
 
 import android.annotation.SuppressLint;

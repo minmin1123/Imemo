@@ -27,13 +27,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:新建一条备忘录界面
  *   version:1.0
- * </pre>
  */
 
 public class EditMemoActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
@@ -63,45 +61,32 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     private TimePicker mFinishTimeTp;
 
     private LinearLayout mContextLl;
+    
+    private String mSelectedYear = MyCalendar.getNow_year();
 
-    private MyCalendar mCalendar = new MyCalendar();
+    private String mSelectedMonth = MyCalendar.getNow_month();
 
-    private String mSelectedYear = mCalendar.getNow_year();
+    private String mSelectedDay = MyCalendar.getNow_day();
 
-    private String mSelectedMonth = mCalendar.getNow_month();
-
-    private String mSelectedDay = mCalendar.getNow_day();
-
-    private String mSelectedWeek = mCalendar.getNow_week();
+    private String mSelectedWeek = MyCalendar.getNow_week();
 
     private String mSelectedStartHour = "09";
-
     private String mSelectedStartMinute = "00";
-
     private String mSelectedFinishHour = "10";
-
     private String mSelectedFinishMinute = "00";
 
     private int IS_REMIND = 0;
-
     private final int RESULTCODE_EDIT = 2;
 
     private final static String YEAR = "year";
-
     private final static String MONTH = "month";
-
     private final static String DAY = "day";
-
     private final static String WEEK = "week";
-
     private final static String NOTREMIND = "notremind";
-
     private final static String REMIND = "remind";
-
     private final static String RETURN_NEWMEMO = "newMemo";
 
     private final static int START_TIME = 1;
-
     private final static int FINISH_TIME = 2;
 
     private AlertDialog.Builder mIsSaveMemoBuilder;
@@ -262,9 +247,9 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
                     mSelectedMonth = DateUtils.toNormalTime(month + 1);
                     mSelectedDay = DateUtils.toNormalTime(day);
                     mSelectedWeek = weekOfday;
-                    if (mCalendar.getNow_year().equals(mSelectedYear) && mCalendar.getNow_month().equals(mSelectedMonth) && mCalendar.getNow_day().equals(mSelectedDay)) {
+                    if (MyCalendar.getNow_year().equals(mSelectedYear) && MyCalendar.getNow_month().equals(mSelectedMonth) && MyCalendar.getNow_day().equals(mSelectedDay)) {
                         mDateTv.setText("今天-" + (month + 1) + "月" + day + "日," + weekOfday);
-                    } else if (DateUtils.isTomorrow(mCalendar.getNow_year(), mCalendar.getNow_month(), mCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
+                    } else if (DateUtils.isTomorrow(MyCalendar.getNow_year(), MyCalendar.getNow_month(), MyCalendar.getNow_day(), mSelectedYear, mSelectedMonth, mSelectedDay)) {
                         mDateTv.setText("明天-" + (month + 1) + "月" + day + "日," + weekOfday);
                     } else {
                         mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
@@ -329,7 +314,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     //用户确认保存，插入数据库操作
     public void saveMemo() {
         Memo memo = new Memo();
-        memo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(mCalendar.getNow_second())));
+        memo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
         memo.setYear(mSelectedYear);
         memo.setMonth(mSelectedMonth);
         memo.setDay(mSelectedDay);

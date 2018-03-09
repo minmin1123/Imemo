@@ -3,13 +3,11 @@ package com.minmin.imemo.model;
 import java.io.Serializable;
 
 /**
- * <pre>
  *   author:minmin
  *   email:775846180@qq.com
  *   time:2017/10/11
  *   desc:Memo实体类
  *   version:1.0
- * </pre>
  */
 
 
@@ -36,15 +34,12 @@ public class Memo implements Serializable{
     private String text;//文本内容
 
     private int is_completed=0;//是否完成--对应圆圈状态
-
     private int is_remind=0;//是否需要被提醒--对应闹钟
-
     private int is_chosen=0;//是否被选中--对应处于编辑状态的item选中状态
 
     private int type=TYPE_PAPER;//默认类型为纸片
 
     private final static int TYPE_DATE=1;//类型为日期
-
     private final static int TYPE_PAPER=2;//类型为纸片
 
     public String getId() {
