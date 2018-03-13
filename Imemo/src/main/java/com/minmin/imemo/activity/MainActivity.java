@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -252,7 +253,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         Bitmap mSwipeHeadBitmap= null;
         try {
+            File file = new File(Environment.getExternalStorageDirectory().toString()+HEADPORTRAITNAME);
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             mSwipeHeadBitmap = BitmapFactory.decodeStream(openFileInput(HEADPORTRAITNAME));
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

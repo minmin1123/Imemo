@@ -102,22 +102,16 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
         mListLv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-
+                if(mListLv.getFirstVisiblePosition()==0){
+                    if (!mShow) {
+                        animToolBar(DOWN);
+                        mShow = !mShow;
+                    }
+                }
             }
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-                //滑动到顶部
-                if (i == 0) {
-                    View firstVisibleItemView = mListLv.getChildAt(0);
-                    if (firstVisibleItemView != null && firstVisibleItemView.getTop() == 0) {
-                        if (!mShow) {
-                            animToolBar(1);
-                            mShow = !mShow;
-                        }
-                    }
-                }
             }
         });
 
@@ -274,12 +268,6 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
                     }
                 } else if (mFirstY - mCurrentY > mTouchSlop) {
                     //手指向上滑动，显示toolbar
-                    if (!mShow) {
-                        animToolBar(DOWN);
-                        mShow = !mShow;
-                    }
-                }
-                if(mListLv.getFirstVisiblePosition()==0){
                     if (!mShow) {
                         animToolBar(DOWN);
                         mShow = !mShow;

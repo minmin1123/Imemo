@@ -5,6 +5,8 @@
     <string name="take_photo">拍摄头像</string>
     <string name="choose_from_album">从相册选择图片</string>
     <string name="memory">倒数日</string>
+    <string name="no_memo">无备忘录</string>
+    <string name="no_memory">无倒数日</string>
     <string name="update_success">修改成功</string>
     <string name="delete_success">删除成功</string>
     <string name="save_success">保存成功</string>

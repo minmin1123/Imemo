@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="无倒数日"
+            android:text="@string/no_memory"
             android:textColor="@color/theme_orange"
             android:textSize="25sp" />
 

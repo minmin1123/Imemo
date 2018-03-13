@@ -12,7 +12,7 @@ import java.util.Calendar;
 
 public class MyCalendar{//该类用于获取当前年月日时分秒星期，并化为标准形式
 
-    private static Calendar calendar;
+    private static Calendar calendar=Calendar.getInstance();
 
     private static String now_year;
 
