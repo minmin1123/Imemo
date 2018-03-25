@@ -175,7 +175,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //开启前台服务
     public void startRemindService() {
         Intent remindServiceIntent = new Intent(this, RemindService.class);
-        startService(remindServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(remindServiceIntent);
+        }else{
+            startService(remindServiceIntent);
+        }
     }
 
     //dataList数据初始化

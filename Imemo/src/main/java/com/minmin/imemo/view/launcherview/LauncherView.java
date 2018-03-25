@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.minmin.imemo.R;
+import com.minmin.imemo.activity.MainActivity;
 import com.minmin.imemo.util.Utils;
 
 
@@ -30,18 +33,21 @@ public class LauncherView extends RelativeLayout {
     private int mHeight;
     private int mWidth;
     private int dp80 = Utils.dp2px(getContext(), 80);
-    private boolean mHasStart;
+    private Activity context;
 
     public LauncherView(Context context) {
         super(context);
+        this.context = (Activity) context;
     }
 
     public LauncherView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = (Activity) context;
     }
 
     public LauncherView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = (Activity) context;
     }
 
     ImageView yellow, orange, red, brown;
@@ -117,6 +123,7 @@ public class LauncherView extends RelativeLayout {
 
 
     public void start() {
+
         removeAllViews();
         init();
         yellowAll.start();
@@ -237,6 +244,16 @@ public class LauncherView extends RelativeLayout {
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
             removeView((target));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
+                    context.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    context.finish();
+                }
+            }, 100);
+
         }
     }
 

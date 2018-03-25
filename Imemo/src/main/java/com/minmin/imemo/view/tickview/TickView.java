@@ -51,7 +51,7 @@ public class TickView extends View {
     //是否被点亮
     private boolean isChecked = false;
     //是否处于动画中
-    private boolean isAnimationRunning = false;
+    private boolean isAnimationRunning=true;
 
     //最后扩大缩小动画中，画笔的宽度的最大倍数
     private static final int SCALE_TIMES = 6;

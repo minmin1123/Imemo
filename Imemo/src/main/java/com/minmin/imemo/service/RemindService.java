@@ -2,9 +2,12 @@ package com.minmin.imemo.service;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -100,6 +103,10 @@ public class RemindService extends Service{
     //创建前台服务
     public void getForeSrvice(){
         Notification.Builder foreBuilder = new Notification.Builder(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("1","Channel", NotificationManager.IMPORTANCE_LOW);
+            foreBuilder.setChannelId("1");
+        }
         foreBuilder.setSmallIcon(R.drawable.imemo);
         foreBuilder.setContentTitle("今日待办"+mToDoCount+"项,已完成"+mHadDoCount+"项");
         if(mRemindContent.length()!=0){
