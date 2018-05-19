@@ -1,11 +1,11 @@
 package com.minmin.imemo.view.tickview;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/22
- *   desc:打钩动画执行速率枚举配置
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/22
+ * desc:打钩动画执行速率枚举配置
+ * version:1.0
  */
 
 enum TickRateEnum {

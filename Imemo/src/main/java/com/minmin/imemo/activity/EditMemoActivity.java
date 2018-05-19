@@ -27,11 +27,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/10/11
- *   desc:新建一条备忘录界面
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/10/11
+ * desc:新建一条备忘录界面
+ * version:1.0
  */
 
 public class EditMemoActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
@@ -61,7 +61,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     private TimePicker mFinishTimeTp;
 
     private LinearLayout mContextLl;
-    
+
     private String mSelectedYear = MyCalendar.getNow_year();
 
     private String mSelectedMonth = MyCalendar.getNow_month();
@@ -314,7 +314,7 @@ public class EditMemoActivity extends Activity implements View.OnClickListener, 
     //用户确认保存，插入数据库操作
     public void saveMemo() {
         Memo memo = new Memo();
-        memo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
+        memo.setId(mSelectedYear + mSelectedMonth + mSelectedDay + mSelectedStartHour + mSelectedStartMinute + mSelectedFinishHour + mSelectedFinishMinute + MyCalendar.getNow_hour() + MyCalendar.getNow_minute() + MyCalendar.getNow_second());
         memo.setYear(mSelectedYear);
         memo.setMonth(mSelectedMonth);
         memo.setDay(mSelectedDay);

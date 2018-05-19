@@ -10,11 +10,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/20
- *   desc:listview侧滑菜单listview
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/20
+ * desc:listview侧滑菜单listview
+ * version:1.0
  */
 public class SwipeMenuListView extends ListView {
 
@@ -68,6 +68,7 @@ public class SwipeMenuListView extends ListView {
                     mMenuCreator.create(menu);
                 }
             }
+
             @Override
             public void onItemClick(SwipeMenuView view, SwipeMenu menu,
                                     int index) {
@@ -82,6 +83,7 @@ public class SwipeMenuListView extends ListView {
             }
         });
     }
+
     public void setCloseInterpolator(Interpolator interpolator) {
         mCloseInterpolator = interpolator;
     }
@@ -152,12 +154,12 @@ public class SwipeMenuListView extends ListView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if(ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null){
+        if (ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null) {
             return super.onTouchEvent(ev);
         }
 
         int action = ev.getAction();
-        switch (action){
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 int oldPos = mTouchPosition;
                 mDownX = ev.getX();
@@ -311,17 +313,20 @@ public class SwipeMenuListView extends ListView {
 
     public static interface OnSwipeListener {
         void onSwipeStart(int position);
+
         void onSwipeEnd(int position);
     }
 
     public static interface OnMenuStateChangeListener {
         void onMenuOpen(int position);
+
         void onMenuClose(int position);
     }
 
     public void setSwipeDirection(int direction) {
         mDirection = direction;
     }
+
     /**
      * 判断点击事件是否在某个view内
      *

@@ -7,9 +7,9 @@
     >
 
 
-        <stroke
-            android:width="2dp"
-            android:color="@color/line_gray" />
+<stroke
+android:width="2dp"
+android:color="@color/line_gray" />
 
 
-</shape>
+    </shape>

@@ -16,11 +16,11 @@ import com.minmin.imemo.model.Memory;
 import java.util.List;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/01/15
- *   desc:纪念日的Adapter
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/01/15
+ * desc:纪念日的Adapter
+ * version:1.0
  */
 
 public class MemoryListAdapter extends BaseAdapter {
@@ -60,9 +60,9 @@ public class MemoryListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mMemoryList.get(position).getIs_arrived()==0) {
+        if (mMemoryList.get(position).getIs_arrived() == 0) {
             return NOT_ARRIVED;
-        } else{
+        } else {
             return ARRIVED;
         }
     }
@@ -91,8 +91,8 @@ public class MemoryListAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.mTextTv.setText(memory.getText());
-        holder.mDateTv.setText(memory.getYear()+"年"+memory.getMonth()+"月"+memory.getDay()+"日");
-        holder.mCountTv.setText(memory.getCount()+"");
+        holder.mDateTv.setText(memory.getYear() + "年" + memory.getMonth() + "月" + memory.getDay() + "日");
+        holder.mCountTv.setText(memory.getCount() + "");
 
         switch (getItemViewType(position)) {
             case NOT_ARRIVED:

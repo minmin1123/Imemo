@@ -12,11 +12,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/22
- *   desc:打钩动画的控件设置
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/22
+ * desc:打钩动画的控件设置
+ * version:1.0
  */
 
 public class TickViewConfig implements Serializable {

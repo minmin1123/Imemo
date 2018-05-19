@@ -27,19 +27,18 @@ import android.widget.BaseAdapter;
 
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/20
- *   desc:listview侧滑菜单list适配器
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/20
+ * desc:listview侧滑菜单list适配器
+ * version:1.0
  */
 
 public abstract class BaseSwipListAdapter extends BaseAdapter {
 
-    public boolean getSwipEnableByPosition(int position){
+    public boolean getSwipEnableByPosition(int position) {
         return true;
     }
-
 
 
 }

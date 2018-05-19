@@ -27,12 +27,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/10/11
- *   desc:查看单条备忘录界面
- *   version:1.0
- *
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/10/11
+ * desc:查看单条备忘录界面
+ * version:1.0
  */
 
 public class CheckMemoActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
@@ -119,17 +118,17 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         mSelectedStartMinute = memo.getStart_minute();
         mSelectedFinishHour = memo.getFinish_hour();
         mSelectedFinishMinute = memo.getFinish_minute();
-        IS_REMIND=memo.getIs_remind();
+        IS_REMIND = memo.getIs_remind();
     }
 
     public void initView() {
         mDeleteIv = findViewById(R.id.deleteIv);
         mBackIv = findViewById(R.id.backIv);
         mRemindIv = findViewById(R.id.remindIv);
-        if(memo.getIs_remind()==1){
+        if (memo.getIs_remind() == 1) {
             mRemindIv.setBackgroundResource(R.drawable.remind);
             mRemindIv.setTag(REMIND);
-        }else{
+        } else {
             mRemindIv.setBackgroundResource(R.drawable.not_remind);
             mRemindIv.setTag(NOTREMIND);
         }
@@ -230,7 +229,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     }
 
     //点击编辑之后的控件变化
-    public void controlChange(){
+    public void controlChange() {
         mRemindIv.setClickable(true);
         mDateRl.setClickable(true);
         mStartTimeRl.setClickable(true);
@@ -243,24 +242,24 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     }
 
     //标记提醒功能
-    public void markIsRemind(){
-        if(mRemindIv.getTag().equals(NOTREMIND)){
-            IS_REMIND=1;
+    public void markIsRemind() {
+        if (mRemindIv.getTag().equals(NOTREMIND)) {
+            IS_REMIND = 1;
             mRemindIv.setTag(REMIND);
             mRemindIv.setBackgroundResource(R.drawable.remind);
             Toast.makeText(this, R.string.remind, Toast.LENGTH_SHORT).show();
-        }else{
-            IS_REMIND=0;
+        } else {
+            IS_REMIND = 0;
             mRemindIv.setTag(NOTREMIND);
             mRemindIv.setBackgroundResource(R.drawable.not_remind);
         }
     }
 
     //检查文本内容是否合法
-    public void checkText(){
+    public void checkText() {
         if (TextUtils.isEmpty(mContextEt.getText())) {
             Toast.makeText(this, R.string.none_content, Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
 
             if (Integer.parseInt(mSelectedStartHour + mSelectedStartMinute) >= Integer.parseInt(mSelectedFinishHour + mSelectedFinishMinute)) {
                 Toast.makeText(this, R.string.time_error, Toast.LENGTH_SHORT).show();
@@ -283,16 +282,17 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
         }
         return false;
     }
-    //弹出日历选择器
-    public void showDatePickerDialog(){
 
-        if(mDatePD==null){
-            mDatePD=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+    //弹出日历选择器
+    public void showDatePickerDialog() {
+
+        if (mDatePD == null) {
+            mDatePD = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     String weekOfday = DateUtils.getSelectedWeek(year, month, day);
-                    mSelectedYear = year+"";
+                    mSelectedYear = year + "";
                     mSelectedMonth = DateUtils.toNormalTime(month + 1);
                     mSelectedDay = DateUtils.toNormalTime(day);
                     mSelectedWeek = weekOfday;
@@ -304,7 +304,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                         mDateTv.setText((month + 1) + "月" + day + "日," + weekOfday);
                     }
                 }
-            }, Integer.parseInt(mSelectedYear),  Integer.parseInt(mSelectedMonth)- 1, Integer.parseInt(mSelectedDay));
+            }, Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mSelectedDay));
         }
         mDatePD.show();
     }
@@ -312,7 +312,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     //当点击删除按钮，弹出确认是否删除的对话框提示
     public void showDeleteDialog() {
 
-        if(mIsDeleteMemoBuilder==null){
+        if (mIsDeleteMemoBuilder == null) {
             mIsDeleteMemoBuilder = new AlertDialog.Builder(this);
             mIsDeleteMemoBuilder.setMessage(R.string.ensure_delete);
             mIsDeleteMemoBuilder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -331,8 +331,8 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     }
 
     //时间选择器变化时文本也跟着变化
-    public void timeChange(int flag){
-        if(flag==START_TIME){
+    public void timeChange(int flag) {
+        if (flag == START_TIME) {
             mStartTimeTp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
@@ -342,7 +342,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
 
                 }
             });
-        }else if(flag==FINISH_TIME){
+        } else if (flag == FINISH_TIME) {
             mFinishTimeTp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
@@ -365,7 +365,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
     //当选择返回而用户有更改痕迹，弹出是否保存的对话框的提示
     public void showUpdateDialog() {
 
-        if(mIsUpdateMemoBuilder==null){
+        if (mIsUpdateMemoBuilder == null) {
             mIsUpdateMemoBuilder = new AlertDialog.Builder(this);
             mIsUpdateMemoBuilder.setMessage(R.string.ensure_save);
             mIsUpdateMemoBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -419,7 +419,7 @@ public class CheckMemoActivity extends Activity implements View.OnClickListener,
                 && mSelectedWeek.equals(memo.getWeek()) && mSelectedStartHour.equals(memo.getStart_hour())
                 && mSelectedStartMinute.equals(memo.getStart_minute()) && mSelectedFinishHour.equals(memo.getFinish_hour())
                 && mSelectedFinishMinute.equals(memo.getFinish_minute()) && mContextEt.getText().toString().trim().equals(memo.getText())
-                && IS_REMIND==memo.getIs_remind()) {
+                && IS_REMIND == memo.getIs_remind()) {
 
             return false;
         }

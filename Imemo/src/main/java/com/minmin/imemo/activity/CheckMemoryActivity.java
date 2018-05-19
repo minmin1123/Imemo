@@ -23,14 +23,14 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/1/13
- *   desc:查看单条纪念日界面
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/1/13
+ * desc:查看单条纪念日界面
+ * version:1.0
  */
 
-public class CheckMemoryActivity extends Activity implements View.OnClickListener{
+public class CheckMemoryActivity extends Activity implements View.OnClickListener {
 
     private Memory memory;
 
@@ -83,11 +83,11 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
         mTextEt = findViewById(R.id.textEt);
         mTextEt.setText(memory.getText());
         mCountTv = findViewById(R.id.countTv);
-        mCountTv.setText(memory.getCount()+"");
+        mCountTv.setText(memory.getCount() + "");
         mArrivedTv = findViewById(R.id.arrivedTv);
-        mArrivedTv.setText(memory.getIs_arrived()==0?"还有":"已经");
+        mArrivedTv.setText(memory.getIs_arrived() == 0 ? "还有" : "已经");
         mDateTv = findViewById(R.id.dateTv);
-        mDateTv.setText("目标日："+mSelectedYear+"年"+mSelectedMonth+"月"+mSelectedDay+"日");
+        mDateTv.setText("目标日：" + mSelectedYear + "年" + mSelectedMonth + "月" + mSelectedDay + "日");
         mEditIv.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
         mDateTv.setOnClickListener(this);
@@ -111,7 +111,7 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
                 break;
             //点击了日期栏
             case R.id.dateTv:
-                if(mDateTv.getTag().equals(EDIT)){
+                if (mDateTv.getTag().equals(EDIT)) {
                     showDatePickerDialog();
                 }
                 break;
@@ -119,13 +119,13 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
     }
 
     //点击编辑&保存键的响应时间
-    public void doEditOrSave(){
-        if(mEditIv.getTag().equals(EDIT)){
+    public void doEditOrSave() {
+        if (mEditIv.getTag().equals(EDIT)) {
             controlChange();
-        }else if(mEditIv.getTag().equals(SAVE)){
+        } else if (mEditIv.getTag().equals(SAVE)) {
             if (TextUtils.isEmpty(mTextEt.getText())) {
                 Toast.makeText(this, R.string.none_content, Toast.LENGTH_SHORT).show();
-            } else{
+            } else {
                 if (isUpdate()) {
                     updateMemory();
                 } else {
@@ -134,10 +134,10 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
             }
         }
     }
-    
+
     //点击编辑之后的控件变化
-    public void controlChange(){
-        
+    public void controlChange() {
+
         mTextEt.setEnabled(true);
         mTextEt.setSelection(memory.getText().length());
         mDateTv.setTag(EDIT);
@@ -147,21 +147,21 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
 
 
     //弹出日历选择器
-    public void showDatePickerDialog(){
+    public void showDatePickerDialog() {
 
-        if(mDatePD==null){
-            mDatePD=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        if (mDatePD == null) {
+            mDatePD = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     mSelectedYear = year + "";
                     mSelectedMonth = DateUtils.toNormalTime(month + 1);
                     mSelectedDay = DateUtils.toNormalTime(day);
-                    mDateTv.setText("目标日："+mSelectedYear+"年"+mSelectedMonth+"月"+mSelectedDay+"日");
-                    mCountTv.setText(DateUtils.countSpanDays(mSelectedYear,mSelectedMonth,mSelectedDay)+"");
-                    mArrivedTv.setText(DateUtils.isArrived(mSelectedYear + mSelectedMonth +mSelectedDay)?"已经":"还有");
+                    mDateTv.setText("目标日：" + mSelectedYear + "年" + mSelectedMonth + "月" + mSelectedDay + "日");
+                    mCountTv.setText(DateUtils.countSpanDays(mSelectedYear, mSelectedMonth, mSelectedDay) + "");
+                    mArrivedTv.setText(DateUtils.isArrived(mSelectedYear + mSelectedMonth + mSelectedDay) ? "已经" : "还有");
                 }
-            }, Integer.parseInt(mSelectedYear),  Integer.parseInt(mSelectedMonth)- 1, Integer.parseInt(mSelectedDay));
+            }, Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mSelectedDay));
         }
         mDatePD.show();
     }
@@ -169,7 +169,7 @@ public class CheckMemoryActivity extends Activity implements View.OnClickListene
     //当选择返回而用户有更改痕迹，弹出是否保存的对话框的提示
     public void showUpdateDialog() {
 
-        if(mIsUpdateMemoryBuilder==null){
+        if (mIsUpdateMemoryBuilder == null) {
             mIsUpdateMemoryBuilder = new AlertDialog.Builder(this);
             mIsUpdateMemoryBuilder.setMessage(R.string.ensure_save);
             mIsUpdateMemoryBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {

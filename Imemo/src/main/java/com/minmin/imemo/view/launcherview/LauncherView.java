@@ -22,11 +22,11 @@ import com.minmin.imemo.util.Utils;
 
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/18
- *   desc:开场动画view
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/18
+ * desc:开场动画view
+ * version:1.0
  */
 
 public class LauncherView extends RelativeLayout {
@@ -131,12 +131,12 @@ public class LauncherView extends RelativeLayout {
         orangeAll.start();
         brownAll.start();
         new Handler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-            showLogo();
-        }
-    }, 2400);
-}
+            @Override
+            public void run() {
+                showLogo();
+            }
+        }, 2400);
+    }
 
     //将 Path 转换成 ObjectAnimation
     private void setAnimation(final ImageView target, ViewPath path1) {
@@ -194,19 +194,19 @@ public class LauncherView extends RelativeLayout {
 
 
     private float getScale(ImageView target) {
-        if (target == yellow){
+        if (target == yellow) {
             return 3.0f;
         }
 
-        if (target == orange){
+        if (target == orange) {
             return 2.0f;
         }
 
-        if (target == red){
+        if (target == red) {
             return 4.5f;
         }
 
-        if (target == brown){
+        if (target == brown) {
             return 3.5f;
         }
 

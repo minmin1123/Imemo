@@ -6,19 +6,19 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/25
- *   desc:自定义线程池
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/25
+ * desc:自定义线程池
+ * version:1.0
  */
 
-public class MyThreadPoolExecutor extends ThreadPoolExecutor{
+public class MyThreadPoolExecutor extends ThreadPoolExecutor {
 
     //设置核心池大小
     private static int corePoolSize = 5;
     //设置线程池最大能接受多少线程
-    private static int maximumPoolSize=10;
+    private static int maximumPoolSize = 10;
     //当前线程数大于corePoolSize、小于maximumPoolSize时，超出corePoolSize的线程数的生命周期
     private static long keepActiveTime = 200;
     //设置时间单位，秒
@@ -32,9 +32,9 @@ public class MyThreadPoolExecutor extends ThreadPoolExecutor{
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
     }
 
-    public static MyThreadPoolExecutor getInstance(){
+    public static MyThreadPoolExecutor getInstance() {
 
-        return new MyThreadPoolExecutor(corePoolSize,maximumPoolSize,keepActiveTime,timeUnit,workQueue);
+        return new MyThreadPoolExecutor(corePoolSize, maximumPoolSize, keepActiveTime, timeUnit, workQueue);
 
     }
 

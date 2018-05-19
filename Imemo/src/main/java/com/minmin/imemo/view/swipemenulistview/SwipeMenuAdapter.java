@@ -10,11 +10,11 @@ import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/20
- *   desc:listview侧滑菜单适配器
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/20
+ * desc:listview侧滑菜单适配器
+ * version:1.0
  */
 
 public class SwipeMenuAdapter implements WrapperListAdapter,

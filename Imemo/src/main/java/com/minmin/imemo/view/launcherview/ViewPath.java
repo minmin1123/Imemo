@@ -5,11 +5,11 @@ import java.util.Collection;
 
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/18
- *   desc:开场动画小圆点路径
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/18
+ * desc:开场动画小圆点路径
+ * version:1.0
  */
 
 public class ViewPath {
@@ -25,23 +25,23 @@ public class ViewPath {
         mPoints = new ArrayList<>();
     }
 
-    public void moveTo(float x, float y){
-        mPoints.add(ViewPoint.moveTo(x,y,MOVE));
+    public void moveTo(float x, float y) {
+        mPoints.add(ViewPoint.moveTo(x, y, MOVE));
     }
 
-    public void lineTo(float x,float y){
-        mPoints.add(ViewPoint.lineTo(x,y,LINE));
+    public void lineTo(float x, float y) {
+        mPoints.add(ViewPoint.lineTo(x, y, LINE));
     }
 
-    public void curveTo(float x,float y,float x1,float y1,float x2,float y2){
-        mPoints.add(ViewPoint.curveTo(x,y,x1,y1,x2,y2,CURVE));
+    public void curveTo(float x, float y, float x1, float y1, float x2, float y2) {
+        mPoints.add(ViewPoint.curveTo(x, y, x1, y1, x2, y2, CURVE));
     }
 
-    public void quadTo(float x,float y,float x1,float y1){
-        mPoints.add(ViewPoint.quadTo(x,y,x1,y1,QUAD));
+    public void quadTo(float x, float y, float x1, float y1) {
+        mPoints.add(ViewPoint.quadTo(x, y, x1, y1, QUAD));
     }
 
-    public Collection<ViewPoint> getPoints(){
+    public Collection<ViewPoint> getPoints() {
         return mPoints;
     }
 

@@ -24,11 +24,11 @@ import com.minmin.imemo.model.Memo;
 import java.util.List;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/10/11
- *   desc:通过隐藏实现双布局并存的Adapter
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/10/11
+ * desc:通过隐藏实现双布局并存的Adapter
+ * version:1.0
  */
 
 public class MemoListAdapter extends ArrayAdapter<Memo> {
@@ -43,8 +43,8 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
 
     private final int REQUESTCODE_MAIN = 1;//跳转页面请求code
 
-    private final String UNSELECTED="unselected";
-    private final String SELECTED="selected";
+    private final String UNSELECTED = "unselected";
+    private final String SELECTED = "selected";
     private final String INCOMPLETE = "incomplete";
     private final String COMPLETE = "complete";
     private final static String YEAR = "year";
@@ -63,23 +63,23 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final Memo memo = getItem(position);
-        Log.i("Main", "该item所处的的位置是："+String.valueOf(position));
+        Log.i("Main", "该item所处的的位置是：" + String.valueOf(position));
         View view;
-        if(convertView==null){
+        if (convertView == null) {
             Log.i("Main", "该item初次被记录");
-        view = LayoutInflater.from(getContext()).inflate(resourceId, null);
-        holder = new ViewHolder();
-        holder.mDateTv = view.findViewById(R.id.dateTv);
-        holder.mStartTimeTv = view.findViewById(R.id.startTimeTv);
-        holder.mFinishTimeTv = view.findViewById(R.id.finishTimeTv);
-        holder.mContextTv = view.findViewById(R.id.contextTv);
-        holder.mDateRl = view.findViewById(R.id.dateRl);
-        holder.mPaperRl = view.findViewById(R.id.mPaperRl);
-        holder.mCompleteIv = view.findViewById(R.id.completeIv);
-        holder.mAddIv = view.findViewById(R.id.addIv);
-        view.setTag(holder);
-        }else{
-            view=convertView;
+            view = LayoutInflater.from(getContext()).inflate(resourceId, null);
+            holder = new ViewHolder();
+            holder.mDateTv = view.findViewById(R.id.dateTv);
+            holder.mStartTimeTv = view.findViewById(R.id.startTimeTv);
+            holder.mFinishTimeTv = view.findViewById(R.id.finishTimeTv);
+            holder.mContextTv = view.findViewById(R.id.contextTv);
+            holder.mDateRl = view.findViewById(R.id.dateRl);
+            holder.mPaperRl = view.findViewById(R.id.mPaperRl);
+            holder.mCompleteIv = view.findViewById(R.id.completeIv);
+            holder.mAddIv = view.findViewById(R.id.addIv);
+            view.setTag(holder);
+        } else {
+            view = convertView;
             holder = (ViewHolder) view.getTag();
         }
 //        Log.i("Main", "该memo是不是第一个："+memo.getIs_first());
@@ -125,7 +125,7 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
                 } else {
                     view.setTag(INCOMPLETE);
                     view.setBackgroundResource(R.drawable.incomplete);
-                    Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.incomplete, Toast.LENGTH_SHORT).show();
                     MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 0);
                     selectMemo.setIs_completed(0);
                 }
@@ -140,7 +140,7 @@ public class MemoListAdapter extends ArrayAdapter<Memo> {
                 addSelectDayMemoIntent.putExtra(YEAR, selectMemo.getYear());
                 addSelectDayMemoIntent.putExtra(MONTH, selectMemo.getMonth());
                 addSelectDayMemoIntent.putExtra(DAY, selectMemo.getDay());
-                addSelectDayMemoIntent.putExtra(WEEK,selectMemo.getWeek());
+                addSelectDayMemoIntent.putExtra(WEEK, selectMemo.getWeek());
                 ((Activity) mContext).startActivityForResult(addSelectDayMemoIntent, REQUESTCODE_MAIN);
             }
         });

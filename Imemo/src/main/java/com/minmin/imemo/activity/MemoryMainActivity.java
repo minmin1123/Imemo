@@ -35,11 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/14
- *   desc:纪念日主界面
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/14
+ * desc:纪念日主界面
+ * version:1.0
  */
 public class MemoryMainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnTouchListener {
 
@@ -64,8 +64,10 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
     private float mCurrentY;
 
     private boolean mShow = true;
+    private boolean mShowIv = true;
 
     private ObjectAnimator mAnimator;
+    private Animation mAnimation;
 
     private final static int REQUESTCODE_MAIN = 1;
     private final static int RESULTCODE_EDIT = 2;
@@ -78,6 +80,8 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
 
     private final static int UP = 1;
     private final static int DOWN = 2;
+    private final static int HIDE = 1;
+    private final static int SHOW = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
         mListLv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-                if(mListLv.getFirstVisiblePosition()==0){
+                if (mListLv.getFirstVisiblePosition() == 0) {
                     if (!mShow) {
                         animToolBar(DOWN);
                         mShow = !mShow;
@@ -217,7 +221,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
 
         Intent toCheckMemoryIntent = new Intent(MemoryMainActivity.this, CheckMemoryActivity.class);
-        Memory memory = mMemoryList.get(position-1);
+        Memory memory = mMemoryList.get(position - 1);
         toCheckMemoryIntent.putExtra(RETURN_MEMORY, memory);
         startActivityForResult(toCheckMemoryIntent, REQUESTCODE_MAIN);
 
@@ -250,7 +254,7 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    //设置lstview的滑动监听时间，实现toolbar跟随listview运动
+    //设置listview的滑动监听时间，实现toolbar跟随listview运动
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -261,16 +265,24 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
             case MotionEvent.ACTION_MOVE:
                 mCurrentY = motionEvent.getY();
                 if (mCurrentY - mFirstY > mTouchSlop) {
-                    //手指向下滑动，隐藏toolbar
+                    //手指向下滑动，隐藏toolbar,显示图标
                     if (mShow) {
                         animToolBar(UP);
                         mShow = !mShow;
                     }
+                    if (!mShowIv) {
+                        animAddIv(SHOW);
+                        mShowIv = !mShowIv;
+                    }
                 } else if (mFirstY - mCurrentY > mTouchSlop) {
-                    //手指向上滑动，显示toolbar
+                    //手指向上滑动，显示toolbar，隐藏图标
                     if (!mShow) {
                         animToolBar(DOWN);
                         mShow = !mShow;
+                    }
+                    if (mShowIv) {
+                        animAddIv(HIDE);
+                        mShowIv = !mShowIv;
                     }
                 }
                 break;
@@ -294,5 +306,20 @@ public class MemoryMainActivity extends AppCompatActivity implements View.OnClic
             mAnimator = ObjectAnimator.ofFloat(mTitleTb, "translationY", mTitleTb.getTranslationY(), 0);
         }
         mAnimator.start();
+    }
+
+    //控制图标显示或隐藏的动画
+    private void animAddIv(int flag) {
+
+        if (mAnimation != null && !mAnimation.hasEnded()) {
+            mAnimation.cancel();
+        }
+        if (flag == SHOW) {
+            mAnimation = AnimationUtils.loadAnimation(this, R.anim.add_rotate);
+        } else {
+            mAnimation = AnimationUtils.loadAnimation(this, R.anim.add_rotate_reverse);
+        }
+        mAnimation.setFillAfter(true);
+        mAddIv.startAnimation(mAnimation);
     }
 }

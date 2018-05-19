@@ -2,19 +2,19 @@ package com.minmin.imemo.view.launcherview;
 
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/18
- *   desc:开场动画小圆点
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/18
+ * desc:开场动画小圆点
+ * version:1.0
  */
 
 public class ViewPoint {
-    float x ,y;
+    float x, y;
 
-    float x1,y1;
+    float x1, y1;
 
-    float x2,y2;
+    float x2, y2;
 
     int operation;
 
@@ -23,21 +23,21 @@ public class ViewPoint {
         this.y = y;
     }
 
-    public static ViewPoint moveTo(float x, float y, int operation){
-        return new ViewPoint(x,y,operation);
+    public static ViewPoint moveTo(float x, float y, int operation) {
+        return new ViewPoint(x, y, operation);
     }
 
-    public static ViewPoint lineTo(float x, float y, int operation){
-        return new ViewPoint(x,y,operation);
-    }
-    public static ViewPoint curveTo(float x, float y,float x1,float y1,float x2,float y2, int operation){
-        return new ViewPoint(x,y,x1,y1,x2,y2,operation);
+    public static ViewPoint lineTo(float x, float y, int operation) {
+        return new ViewPoint(x, y, operation);
     }
 
-    public static ViewPoint quadTo(float x, float y,float x1,float y1, int operation){
-        return new ViewPoint(x,y,x1,y1,operation);
+    public static ViewPoint curveTo(float x, float y, float x1, float y1, float x2, float y2, int operation) {
+        return new ViewPoint(x, y, x1, y1, x2, y2, operation);
     }
 
+    public static ViewPoint quadTo(float x, float y, float x1, float y1, int operation) {
+        return new ViewPoint(x, y, x1, y1, operation);
+    }
 
 
     private ViewPoint(float x, float y, int operation) {

@@ -9,14 +9,14 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.view.launcherview.LauncherView;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/17
- *   desc:开场动画
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/17
+ * desc:开场动画
+ * version:1.0
  */
 
-public class StartActivity extends Activity{
+public class StartActivity extends Activity {
 
     private LauncherView launcherView;
 

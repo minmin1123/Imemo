@@ -12,7 +12,7 @@ import com.minmin.imemo.database.MemoDatabase;
  * version:1.0
  */
 
-public class MyApplication extends Application{
+public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
@@ -20,7 +20,7 @@ public class MyApplication extends Application{
         init();
     }
 
-    public void init(){
+    public void init() {
         MemoDatabase.getInstance(this);
     }
 }

@@ -21,11 +21,11 @@ import com.minmin.imemo.R;
 import com.minmin.imemo.util.Utils;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/22
- *   desc:自定义打钩view
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/22
+ * desc:自定义打钩view
+ * version:1.0
  */
 
 public class TickView extends View {
@@ -51,7 +51,7 @@ public class TickView extends View {
     //是否被点亮
     private boolean isChecked = false;
     //是否处于动画中
-    private boolean isAnimationRunning=true;
+    private boolean isAnimationRunning = true;
 
     //最后扩大缩小动画中，画笔的宽度的最大倍数
     private static final int SCALE_TIMES = 6;
@@ -133,8 +133,9 @@ public class TickView extends View {
      */
     private void initPaint() {
         //外圆画笔
-        if (mPaintRing == null){
-            mPaintRing = new Paint(Paint.ANTI_ALIAS_FLAG);}
+        if (mPaintRing == null) {
+            mPaintRing = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
         mPaintRing.setStyle(Paint.Style.STROKE);
         mPaintRing.setColor(isChecked ? mConfig.getCheckBaseColor() : mConfig.getUnCheckBaseColor());
         mPaintRing.setStrokeCap(Paint.Cap.ROUND);
@@ -145,8 +146,9 @@ public class TickView extends View {
         }
         mPaintCircle.setColor(mConfig.getCheckBaseColor());
         //钩画笔
-        if (mPaintTick == null){
-            mPaintTick = new Paint(Paint.ANTI_ALIAS_FLAG);}
+        if (mPaintTick == null) {
+            mPaintTick = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
         mPaintTick.setColor(isChecked ? mConfig.getCheckTickColor() : mConfig.getUnCheckBaseColor());
         mPaintTick.setStyle(Paint.Style.STROKE);
         mPaintTick.setStrokeCap(Paint.Cap.ROUND);

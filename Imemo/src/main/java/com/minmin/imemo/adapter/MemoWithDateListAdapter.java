@@ -24,26 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/10/18
- *   desc:有两种item布局的Adapter
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/10/18
+ * desc:有两种item布局的Adapter
+ * version:1.0
  */
 
 public class MemoWithDateListAdapter extends BaseAdapter {
 
-    private final static int TYPE_DATE=1;
-    private final static int TYPE_PAPER=2;
-    private final static int DATE=0;
-    private final static int PAPER=1;
+    private final static int TYPE_DATE = 1;
+    private final static int TYPE_PAPER = 2;
+    private final static int DATE = 0;
+    private final static int PAPER = 1;
 
     private Context mContext;
 
     private final int REQUESTCODE_MAIN = 1;//跳转页面请求code
 
-    private final String UNSELECTED="unselected";
-    private final String SELECTED="selected";
+    private final String UNSELECTED = "unselected";
+    private final String SELECTED = "selected";
     private final String INCOMPLETE = "incomplete";
     private final String COMPLETE = "complete";
     private final static String YEAR = "year";
@@ -53,12 +53,12 @@ public class MemoWithDateListAdapter extends BaseAdapter {
     private final static String NOTREMIND = "notremind";
     private final static String REMIND = "remind";
 
-    private static List<Memo> mMemoWithTitleList=new ArrayList<>();
+    private static List<Memo> mMemoWithTitleList = new ArrayList<>();
 
     public MemoWithDateListAdapter(@NonNull Context context, @NonNull List<Memo> objects) {
         super();
         mContext = context;
-        mMemoWithTitleList=objects;
+        mMemoWithTitleList = objects;
     }
 
     @Override
@@ -78,9 +78,9 @@ public class MemoWithDateListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mMemoWithTitleList.get(position).getType()==TYPE_DATE) {
+        if (mMemoWithTitleList.get(position).getType() == TYPE_DATE) {
             return DATE;
-        } else{
+        } else {
             return PAPER;
         }
     }
@@ -115,7 +115,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                         addSelectDayMemoIntent.putExtra(YEAR, selectMemo.getYear());
                         addSelectDayMemoIntent.putExtra(MONTH, selectMemo.getMonth());
                         addSelectDayMemoIntent.putExtra(DAY, selectMemo.getDay());
-                        addSelectDayMemoIntent.putExtra(WEEK,selectMemo.getWeek());
+                        addSelectDayMemoIntent.putExtra(WEEK, selectMemo.getWeek());
                         ((Activity) mContext).startActivityForResult(addSelectDayMemoIntent, REQUESTCODE_MAIN);
                     }
                 });
@@ -129,8 +129,8 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                     paperViewHolder.mContextTv = convertView.findViewById(R.id.contextTv);
                     paperViewHolder.mPaperRl = convertView.findViewById(R.id.mPaperRl);
 //                    paperViewHolder.mCompleteIv = convertView.findViewById(R.id.completeIv);
-                    paperViewHolder.mTickView=convertView.findViewById(R.id.completeTv);
-                    paperViewHolder.mMarkIv=convertView.findViewById(R.id.markIv);
+                    paperViewHolder.mTickView = convertView.findViewById(R.id.completeTv);
+                    paperViewHolder.mMarkIv = convertView.findViewById(R.id.markIv);
                     convertView.setTag(paperViewHolder);
                 } else {
                     paperViewHolder = (PaperViewHolder) convertView.getTag();
@@ -187,7 +187,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
                         } else {
                             view.setTag(INCOMPLETE);
                             paperViewHolder.mTickView.setChecked(false);
-                            Toast.makeText(mContext,R.string.incomplete, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.incomplete, Toast.LENGTH_SHORT).show();
                             MemoDatabase.getInstance().updateMemoCompleteStatus(selectMemo, 0);
                             selectMemo.setIs_completed(0);
                             Intent remindServiceIntent = new Intent(((Activity) mContext), RemindService.class);
@@ -235,7 +235,7 @@ public class MemoWithDateListAdapter extends BaseAdapter {
         TextView mFinishTimeTv;
         TextView mContextTv;
         RelativeLayout mPaperRl;
-//        ImageView mCompleteIv;
+        //        ImageView mCompleteIv;
         TickView mTickView;
         ImageView mMarkIv;
 

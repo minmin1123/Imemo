@@ -1,11 +1,11 @@
 package com.minmin.imemo.view.cameraalbumview;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/25
- *   desc:头像图片处理类
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/25
+ * desc:头像图片处理类
+ * version:1.0
  */
 
 import android.annotation.SuppressLint;
@@ -84,7 +84,7 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
                 new SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
-                        if (isAutoScale){
+                        if (isAutoScale) {
                             return true;
                         }
 
@@ -180,7 +180,7 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         float scale = getScale();
         float scaleFactor = detector.getScaleFactor();
 
-        if (getDrawable() == null){
+        if (getDrawable() == null) {
             return true;
         }
 
@@ -283,7 +283,7 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
 
         //4.自由拖动
 
-        if (mGestureDetector.onTouchEvent(event)){
+        if (mGestureDetector.onTouchEvent(event)) {
             return true;
         }
 
@@ -401,7 +401,7 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
     public void onGlobalLayout() {
         if (once) {
             Drawable d = getDrawable();
-            if (d == null){
+            if (d == null) {
                 return;
             }
             Log.e(TAG, d.getIntrinsicWidth() + " , " + d.getIntrinsicHeight());
@@ -446,8 +446,8 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
     }
 
     //5.裁剪
-    public Bitmap getCropedImage(){
-        return getCropedImage(0,0,0,0);
+    public Bitmap getCropedImage() {
+        return getCropedImage(0, 0, 0, 0);
     }
 
     /*
@@ -466,18 +466,18 @@ public class ZoomImageView extends android.support.v7.widget.AppCompatImageView 
         float effectiveW = getWidth() - 2 * effectiveX;
         float effectiveH = getWidth() - 2 * effectiveX;
         float effectiveY = getHeight() / 2f - effectiveW / 2f;
-        if (x > 0){
+        if (x > 0) {
             effectiveX = x;
         }
-        if (y > 0){
+        if (y > 0) {
             effectiveY = y;
         }
 
-        if (witdh > 0){
+        if (witdh > 0) {
             effectiveW = witdh;
         }
 
-        if (height > 0){
+        if (height > 0) {
             effectiveH = height;
         }
 

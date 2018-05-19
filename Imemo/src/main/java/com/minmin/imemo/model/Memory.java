@@ -3,15 +3,15 @@ package com.minmin.imemo.model;
 import java.io.Serializable;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2017/10/11
- *   desc:Memory实体类
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2017/10/11
+ * desc:Memory实体类
+ * version:1.0
  */
 
 
-public class Memory implements Serializable{
+public class Memory implements Serializable {
 
     private String id;//唯一id
 
@@ -23,7 +23,7 @@ public class Memory implements Serializable{
 
     private String text;//文本内容
 
-    private int is_arrived=0;//是否到达，"还有"/"已经"
+    private int is_arrived = 0;//是否到达，"还有"/"已经"
 
     private long count;//天数
 

@@ -3,11 +3,11 @@ package com.minmin.imemo.util;
 import android.content.Context;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/15
- *   desc:工具类
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/15
+ * desc:工具类
+ * version:1.0
  */
 
 public class Utils {

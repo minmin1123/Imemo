@@ -28,11 +28,11 @@ import java.io.FileOutputStream;
 import static com.minmin.imemo.activity.MainActivity.HEADPORTRAITNAME;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/1/15
- *   desc:头像剪切界面
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/1/15
+ * desc:头像剪切界面
+ * version:1.0
  */
 
 public class CropActivity extends Activity {
@@ -56,18 +56,18 @@ public class CropActivity extends Activity {
         maskView.setMargin(MARGIN_WIDTH);
         maskView.setStrokeWidth(STROKE_WIDTH);
 
-        if (intent!=null){
+        if (intent != null) {
 
             Bitmap bitmap = null;
 
-                Uri imageUri = Uri.parse(intent.getStringExtra(MediaStore.EXTRA_OUTPUT));
-                try {
-                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+            Uri imageUri = Uri.parse(intent.getStringExtra(MediaStore.EXTRA_OUTPUT));
+            try {
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             zoomImageView.setImageBitmap(bitmap);
-        }else{
+        } else {
             zoomImageView.setImageResource(R.drawable.head);
         }
 
@@ -84,16 +84,16 @@ public class CropActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Bitmap bitmap = getCircleBitmap(zoomImageView.getCropedImage());
-                writeFileData(HEADPORTRAITNAME,bitmap);
+                writeFileData(HEADPORTRAITNAME, bitmap);
                 Intent intent = new Intent();
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
     //向指定的文件中写入指定的数据
-    public void writeFileData(String filename, Bitmap message){
+    public void writeFileData(String filename, Bitmap message) {
         try {
             //获得FileOutputStream
             FileOutputStream fout = openFileOutput(filename, MODE_PRIVATE);

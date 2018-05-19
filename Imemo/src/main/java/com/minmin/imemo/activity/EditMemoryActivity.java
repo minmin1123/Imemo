@@ -23,11 +23,11 @@ import com.minmin.imemo.util.DateUtils;
 import com.minmin.imemo.util.MyCalendar;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/1/13
- *   desc:新建一条纪念日界面
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/1/13
+ * desc:新建一条纪念日界面
+ * version:1.0
  */
 
 public class EditMemoryActivity extends Activity implements View.OnClickListener {
@@ -45,7 +45,7 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
     private TextView mDateTv;
 
     private AlertDialog.Builder mIsSaveMemoryBuilder;
-    
+
     private DatePickerDialog mDatePD;
 
     private String mSelectedYear = MyCalendar.getNow_year();
@@ -74,7 +74,7 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
         mCountTv = findViewById(R.id.countTv);
         mArrivedTv = findViewById(R.id.arrivedTv);
         mDateTv = findViewById(R.id.dateTv);
-        mDateTv.setText("目标日："+mSelectedYear+"年"+mSelectedMonth+"月"+mSelectedDay+"日");
+        mDateTv.setText("目标日：" + mSelectedYear + "年" + mSelectedMonth + "月" + mSelectedDay + "日");
         mSaveIv.setOnClickListener(this);
         mBackIv.setOnClickListener(this);
         mDateTv.setOnClickListener(this);
@@ -109,7 +109,7 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
         }
     }
 
-    
+
     //弹出日历选择器
     public void showDatePickerDialog() {
 
@@ -121,9 +121,9 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
                     mSelectedYear = year + "";
                     mSelectedMonth = DateUtils.toNormalTime(month + 1);
                     mSelectedDay = DateUtils.toNormalTime(day);
-                    mDateTv.setText("目标日："+mSelectedYear+"年"+mSelectedMonth+"月"+mSelectedDay+"日");
-                    mCountTv.setText(DateUtils.countSpanDays(mSelectedYear,mSelectedMonth,mSelectedDay)+"");
-                    mArrivedTv.setText(DateUtils.isArrived(mSelectedYear + mSelectedMonth +mSelectedDay)?"已经":"还有");
+                    mDateTv.setText("目标日：" + mSelectedYear + "年" + mSelectedMonth + "月" + mSelectedDay + "日");
+                    mCountTv.setText(DateUtils.countSpanDays(mSelectedYear, mSelectedMonth, mSelectedDay) + "");
+                    mArrivedTv.setText(DateUtils.isArrived(mSelectedYear + mSelectedMonth + mSelectedDay) ? "已经" : "还有");
                 }
             }, Integer.parseInt(mSelectedYear), Integer.parseInt(mSelectedMonth) - 1, Integer.parseInt(mSelectedDay));
         }
@@ -160,7 +160,7 @@ public class EditMemoryActivity extends Activity implements View.OnClickListener
     //用户确认保存，插入数据库操作
     public void saveMemory() {
         Memory memory = new Memory();
-        memory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_hour())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_minute())) + DateUtils.toNormalTime(Integer.parseInt(MyCalendar.getNow_second())));
+        memory.setId(mSelectedYear + mSelectedMonth + mSelectedDay + MyCalendar.getNow_hour() + MyCalendar.getNow_minute() + MyCalendar.getNow_second());
         memory.setYear(mSelectedYear);
         memory.setMonth(mSelectedMonth);
         memory.setDay(mSelectedDay);

@@ -11,16 +11,17 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/01/17
- *   desc:遮罩view
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/01/17
+ * desc:遮罩view
+ * version:1.0
  */
 
 public class MaskView extends View {
     private float margin = 20f;
     private float strokeWidth = 5f;
+
     public MaskView(Context context) {
         super(context);
     }
@@ -45,10 +46,10 @@ public class MaskView extends View {
         //设置画出的线的 粗细程度
         paint.setStrokeWidth(strokeWidth);
         //画圆
-        canvas.drawCircle(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth()/2-margin, paint);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, canvas.getWidth() / 2 - margin, paint);
         paint.setAlpha(0);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawCircle(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth()/2-margin-strokeWidth, paint);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, canvas.getWidth() / 2 - margin - strokeWidth, paint);
 
 
     }

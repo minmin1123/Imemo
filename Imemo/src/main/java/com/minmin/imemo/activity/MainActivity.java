@@ -21,7 +21,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -57,56 +59,39 @@ import java.util.List;
  *   version:1.0
  */
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mAddAnyIv;
-
     private TextView mDateTv;
-
     private ImageView mLeftIv;
-
     private ImageView mRightIv;
-
     private ImageView mMoreIv;
-
     private TextView mNothingTv;
-
     private ListView mListLv;
-
     private TextView mChosenTv;
-
     private ImageView mDealIv;
-
     private NavigationView mViewNv;
-
     private ImageView mHeadIv;
-
     private SwipeRefreshLayout mRefreshSl;
 
     private File outputImage;//创建File对象，用于存储拍照后的图片
-
     private Uri imageUri;//选中图片的uri
 
     private String mSelectedYear = MyCalendar.getNow_year();
-
     private String mSelectedMonth = MyCalendar.getNow_month();
 
     private MemoDatabase mMemoDatabase = MemoDatabase.getInstance();
 
     private List<Memo> mMemoList = new ArrayList<>();
-
     private List<Memo> mMemoWithTitleList = new ArrayList<>();
-
     private List<Memo> mSelectedMemoList = new ArrayList<>();
 
     private MemoWithDateListAdapter mMemoListAdapter;
 
     private String[] mMoreList;
-
     private String[] mChooseList;
 
 //    private List<Func> functionList = new ArrayList<>();
-
 //    private FunctionListAdapter mFunctionListAdapter;
 
     private final static int REQUESTCODE_MAIN = 1;
@@ -119,15 +104,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private final static int TYPE_PAPER = 2;
 
     private String mCopyYear = mSelectedYear;
-
     private String mCopyMonth = mSelectedMonth;
-
     private String mCopyDay = MyCalendar.getNow_day();
-
     private String searchYear = mSelectedYear;
-
     private String searchMonth = mSelectedMonth;
-
     private String searchDay = MyCalendar.getNow_day();
 
     private int SEARCH_STATUS = 0;
@@ -136,6 +116,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     public static final int CROP_PHOTO = 3;
+    private final static int HIDE = 1;
+    private final static int SHOW = 2;
 
     private final static String DELETE = "delete";
     private final static String COPY = "copy";
@@ -151,16 +133,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public static final String HEADPORTRAITNAME = "HEADPORTRAITNAME";
 
     private AlertDialog.Builder mMoreMemoBuilder;
-
     private AlertDialog.Builder mSearchSelectDayMemoBuilder;
-
     private AlertDialog.Builder mSelectDayBuilder;
-
     private AlertDialog.Builder mIsDeleteMemoBuilder;
-
     private AlertDialog.Builder mIsCopyMemoBuilder;
-
     private AlertDialog.Builder mGetBitmapBuilder;
+
+    private float mFirstY;
+    private float mCurrentY;
+    private boolean mShow = true;
+    private Animation mAnimation;
+    private int mTouchSlop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +177,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        functionList.add(new Func(FONT, getResources().getString(R.string.memory)));
 //        mFunctionListAdapter = new FunctionListAdapter(this, functionList);
 
+        //获取系统定义的最低滑动距离
+        mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+
     }
 
     //页面初始化
@@ -226,6 +212,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mMoreIv.setOnClickListener(this);
         mDateTv.setOnClickListener(this);
         mDealIv.setOnClickListener(this);
+        mListLv.setOnTouchListener(this);
 
         mDateTv.setText(mSelectedYear + "-" + mSelectedMonth);
         Animation rotateAnim = AnimationUtils.loadAnimation(this, R.anim.add_rotate);
@@ -804,7 +791,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (mCopyYear.equals(mSelectedYear) && mCopyMonth.equals(mSelectedMonth)) {
                     for (Memo memo : mSelectedMemoList) {
                         Memo copyMemo = new Memo();
-                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + new MyCalendar().getNow_hour() + memo.getId().substring(18, 22));
+                        copyMemo.setId(mCopyYear + mCopyMonth + mCopyDay + memo.getStart_hour() + memo.getStart_minute() + memo.getFinish_hour() + memo.getFinish_minute() + MyCalendar.getNow_hour() + memo.getId().substring(18, 22));
                         copyMemo.setYear(mCopyYear);
                         copyMemo.setMonth(mCopyMonth);
                         copyMemo.setDay(mCopyDay);
@@ -866,7 +853,52 @@ public class MainActivity extends Activity implements View.OnClickListener {
         updateMemoList();
     }
 
-    @Override//重写释放activity的
+    @Override//设置listview的滑动监听时间，实现toolbar跟随listview运动
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mFirstY = motionEvent.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mCurrentY = motionEvent.getY();
+                if (mCurrentY - mFirstY > mTouchSlop) {
+                    //手指向下滑动，显示toolbar
+                    if (!mShow) {
+                        animAddIv(SHOW);
+                        mShow = !mShow;
+                    }
+                } else if (mFirstY - mCurrentY > mTouchSlop) {
+                    //手指向上滑动，隐藏toolbar
+                    if (mShow) {
+                        animAddIv(HIDE);
+                        mShow = !mShow;
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    //控制图标显示或隐藏的动画
+    private void animAddIv(int flag) {
+
+        if (mAnimation != null && !mAnimation.hasEnded()) {
+            mAnimation.cancel();
+        }
+        if (flag == SHOW) {
+            mAnimation = AnimationUtils.loadAnimation(this, R.anim.add_rotate);
+        } else {
+            mAnimation = AnimationUtils.loadAnimation(this, R.anim.add_rotate_reverse);
+        }
+        mAnimation.setFillAfter(true);
+        mAddAnyIv.startAnimation(mAnimation);
+    }
+
+    @Override//重写释放activity的销毁事件
     public void finish() {
         if (MORE_STATUS == 1) {
             //更多（批量删除、批量复制）状态，恢复之前状态
@@ -879,4 +911,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             finish();
         }
     }
+
+
 }

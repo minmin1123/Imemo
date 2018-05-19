@@ -16,29 +16,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *   author:minmin
- *   email:775846180@qq.com
- *   time:2018/1/19
- *   desc:侧滑菜单栏适配器
- *   version:1.0
+ * author:minmin
+ * email:775846180@qq.com
+ * time:2018/1/19
+ * desc:侧滑菜单栏适配器
+ * version:1.0
  */
 
 public class FunctionListAdapter extends BaseAdapter {
 
-    private final static int TYPE_HEAD=0;
-    private final static int TYPE_FONT=1;
+    private final static int TYPE_HEAD = 0;
+    private final static int TYPE_FONT = 1;
 
-    private final static String HEAD="head";
-    private final static String FONT="font";
-    
+    private final static String HEAD = "head";
+    private final static String FONT = "font";
+
     private Context mContext;
-    
-    private static List<Func> mFunctionList=new ArrayList<>();
+
+    private static List<Func> mFunctionList = new ArrayList<>();
 
     public FunctionListAdapter(@NonNull Context context, @NonNull List<Func> objects) {
         super();
         mContext = context;
-        mFunctionList=objects;
+        mFunctionList = objects;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FunctionListAdapter extends BaseAdapter {
     public int getItemViewType(int position) {
         if (mFunctionList.get(position).getType().equals(HEAD)) {
             return TYPE_HEAD;
-        } else{
+        } else {
             return TYPE_FONT;
         }
     }
